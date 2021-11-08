@@ -1,8 +1,6 @@
 #ifndef IS_INTEGRAL_HPP
 # define IS_INTEGRAL_HPP
 
-# include <type_traits>
-
 namespace	ft 
 {
 	template< class T >
@@ -19,18 +17,6 @@ namespace	ft
 
 	template<>
 	struct	is_integral<char>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<char16_t>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<char32_t>
 	{
 		static bool const	value = true;
 	};

@@ -1,11 +1,15 @@
 NAME		= ft_containers
 
+UTILS_TEST	= testIsIntegral.cpp
+
 SRC			= main.cpp \
+			  $(UTILS_TEST)
 
-UTILS		= is_integral.hpp
+UTILS		= is_integral.hpp \
+			  enable_if.hpp
 
-OBJ			= $(SRC:.cpp=.o)
 INC			= -I.
+OBJ			= $(SRC:.cpp=.o)
 DEPS		= $(SRC:.cpp=.d)
 
 CXXFLAGS	= -Wall -Wextra -Werror -MD -std=c++98 $(INC)
@@ -16,8 +20,10 @@ SANITIZE	= -fsanitize=address
 
 all:		$(NAME)
 
+-include	$(DEPS)
+
 $(NAME):	$(OBJ)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $^ -o $@
 
 clean:
 	$(RM) $(DEPS)
