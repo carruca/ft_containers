@@ -1,116 +1,37 @@
+#include "is_integral.hpp"
 #include <type_traits>
 #include <iostream>
 #include <type_traits>
 
 class	A {};
 
-namespace	ft 
+void	testIsIntegral( void )
 {
-	template< class T >
-	struct	is_integral
-	{
-		static bool const	value = false;
-	};
+	std::cout << std::boolalpha;
 
-	template<>
-	struct	is_integral<bool>
-	{
-		static bool const	value = true;
-	};
+	std::cout << "std -bool:		" << ft::is_integral<unsigned int>::value << std::endl;
+	std::cout << "ft  -bool:		" << std::is_integral<unsigned int>::value << std::endl;
 
-	template<>
-	struct	is_integral<char>
-	{
-		static bool const	value = true;
-	};
+	std::cout << "std -char:		" << ft::is_integral<char>::value << std::endl;
+	std::cout << "ft  -char:		" << std::is_integral<char>::value << std::endl;
 
-	template<>
-	struct	is_integral<char16_t>
-	{
-		static bool const	value = true;
-	};
+	std::cout << "std -unsigned int:	" << ft::is_integral<unsigned int>::value << std::endl;
+	std::cout << "ft  -unsigned int:	" << std::is_integral<unsigned int>::value << std::endl;
 
-	template<>
-	struct	is_integral<char32_t>
-	{
-		static bool const	value = true;
-	};
+	std::cout << "std -long long int:	" << ft::is_integral<long long int>::value << std::endl;
+	std::cout << "ft  -long long int:	" << std::is_integral<long long int>::value << std::endl;
 
-	template<>
-	struct	is_integral<wchar_t>
-	{
-		static bool const	value = true;
-	};
+	std::cout << "std -float:		" << std::is_integral<float>::value << std::endl;
+	std::cout << "ft  -float:		" << ft::is_integral<float>::value << std::endl;
 
-	template<>
-	struct	is_integral<signed char>
-	{
-		static bool const	value = true;
-	};
+	std::cout << "std -class A:		" << std::is_integral<A>::value << std::endl;
+	std::cout << "ft  -class A:		" << ft::is_integral<A>::value << std::endl;
 
-	template<>
-	struct	is_integral<short int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<long int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<long long int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<unsigned char>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<unsigned short int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<unsigned int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<unsigned long int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
-	struct	is_integral<unsigned long long int>
-	{
-		static bool const	value = true;
-	};
-};
+	return ;
+}
 
 int	main( void )
 {
-	std::cout << std::boolalpha;
-	std::cout << "unsigned int: " << ft::is_integral<unsigned int>::value << std::endl;
-	std::cout << "unsigned int: " << std::is_integral<unsigned int>::value << std::endl;
-
-	std::cout << "float: " << std::is_integral<float>::value << std::endl;
-	std::cout << "float: " << ft::is_integral<float>::value << std::endl;
-
+	testIsIntegral();
 	return 0;
 }
