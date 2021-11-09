@@ -1,2 +1,4 @@
 ft_containers
 tags
+*.d
+*.o
