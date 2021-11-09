@@ -1,15 +1,16 @@
 NAME		= ft_containers
 
+TEST_DIR	= test/
 UTILS_TEST	= testIs_integral.cpp \
 			  testEnable_if.cpp
 
-SRC			= main.cpp \
-			  $(UTILS_TEST)
-
-UTILS		= is_integral.hpp \
+UTILS_DIR	= utils/
+UTILS_INC	= is_integral.hpp \
 			  enable_if.hpp
 
-INC			= -I.
+SRC			= $(addprefix $(TEST_DIR), main.cpp $(UTILS_TEST))
+
+INC			= -I$(UTILS_DIR)
 OBJ			= $(SRC:.cpp=.o)
 DEPS		= $(SRC:.cpp=.d)
 
