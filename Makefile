@@ -1,6 +1,7 @@
 NAME		= ft_containers
 
-UTILS_TEST	= testIsIntegral.cpp
+UTILS_TEST	= testIs_integral.cpp \
+			  testEnable_if.cpp
 
 SRC			= main.cpp \
 			  $(UTILS_TEST)
