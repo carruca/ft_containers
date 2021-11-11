@@ -1,5 +1,5 @@
-#ifndef	ENABLE_IF_HPP
-# define ENABLE_IF_HPP
+#ifndef	FT_ENABLE_IF_HPP
+# define FT_ENABLE_IF_HPP
 
 namespace	ft
 {

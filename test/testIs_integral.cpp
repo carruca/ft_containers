@@ -1,4 +1,4 @@
-#include "is_integral.hpp"
+#include "ft_is_integral.hpp"
 #include <type_traits>
 #include <iostream>
 

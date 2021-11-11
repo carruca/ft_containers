@@ -1,5 +1,5 @@
-#ifndef IS_INTEGRAL_HPP
-# define IS_INTEGRAL_HPP
+#ifndef FT_IS_INTEGRAL_HPP
+# define FT_IS_INTEGRAL_HPP
 
 namespace	ft 
 {

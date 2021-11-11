@@ -5,8 +5,9 @@ UTILS_TEST	= testIs_integral.cpp \
 			  testEnable_if.cpp
 
 UTILS_DIR	= utils/
-UTILS_INC	= is_integral.hpp \
-			  enable_if.hpp
+UTILS_INC	= ft_is_integral.hpp \
+			  ft_enable_if.hpp \
+			  ft_pair.hpp
 
 SRC			= $(addprefix $(TEST_DIR), main.cpp $(UTILS_TEST))
 
@@ -34,8 +35,8 @@ clean:
 fclean:		clean
 	$(RM) $(NAME)
 
-sanitize: CXXFLAGS += $(SANITIZE) $(DEBUG)
-sanitize: all
+sanitize:	CXXFLAGS += $(SANITIZE) $(DEBUG)
+sanitize:	all
 
 run:		all
 	./$(NAME)

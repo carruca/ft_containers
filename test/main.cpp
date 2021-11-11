@@ -1,7 +1,3 @@
-#include "is_integral.hpp"
-#include <type_traits>
-#include <iostream>
-
 void	testIs_integral( void );
 void	testEnable_if( void );
 
