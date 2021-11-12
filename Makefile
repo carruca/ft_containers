@@ -2,7 +2,8 @@ NAME		= ft_containers
 
 TEST_DIR	= test/
 UTILS_TEST	= testIs_integral.cpp \
-			  testEnable_if.cpp
+			  testEnable_if.cpp \
+			  testPair.cpp
 
 UTILS_DIR	= utils/
 UTILS_INC	= ft_is_integral.hpp \
