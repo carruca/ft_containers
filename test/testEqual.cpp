@@ -14,7 +14,8 @@ void	testEqual( void )
 	int					a[] = { 10, 21, 22, 45, 12, 34 };
 	std::vector<int>	v1( a, a + 5 );
 
-		std::cout << std::endl << "* utils: equal TEST *" << std::endl;
+	std::cout << std::endl << "* utils: equal TEST *" << std::endl;
+
 	if ( std::equal( v1.begin(), v1.end(), a ) & ft::equal( v1.begin(), v1.end(), a ) )
 		std::cout << "Contents are equal:			CHECK!" << std::endl;
 	else

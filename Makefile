@@ -4,13 +4,15 @@ TEST_DIR	= test/
 UTILS_TEST	= testIs_integral.cpp \
 			  testEnable_if.cpp \
 			  testPair.cpp \
-			  testEqual.cpp
+			  testEqual.cpp \
+			  testLexicographical_compare.cpp
 
 UTILS_DIR	= utils/
 UTILS_INC	= ft_is_integral.hpp \
 			  ft_enable_if.hpp \
 			  ft_pair.hpp \
-			  ft_equal.hpp
+			  ft_equal.hpp \
+			  ft_lexicographical_compare.hpp
 
 SRC			= $(addprefix $(TEST_DIR), main.cpp $(UTILS_TEST))
 
