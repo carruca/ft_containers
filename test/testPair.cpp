@@ -18,7 +18,7 @@ void	testPair( void )
 	std_p1 = std::make_pair( std::string( "oranges" ), 5 );
 	ft_p1 = ft::make_pair( std::string( "oranges" ), 5 );
 
-	std::cout << std::endl << "* test: pair: TEST *" << std::endl;
+	std::cout << std::endl << "* utils: pair: TEST *" << std::endl;
 	if ( std_p2 == std_p3 && ft_p2 == ft_p3 )
 		std::cout << "constructors:				CHECK!" << std::endl;
 	else

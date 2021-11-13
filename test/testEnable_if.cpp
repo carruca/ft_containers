@@ -19,7 +19,7 @@ void	testEnable_if( void )
 {
 	short int	i = 2;
 
-	std::cout << std::endl << "* test: enable_if: TEST *" << std::endl;
+	std::cout << std::endl << "* utils: enable_if: TEST *" << std::endl;
 	if ( isOdd( i ) == ft_isOdd( i ) )
 		std::cout << "enable_if:				CHECK!" << std::endl;
 	else
