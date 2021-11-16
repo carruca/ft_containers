@@ -7,7 +7,7 @@ namespace	ft
 	class	reverse_iterator
 	: public std::iterator< ft::iterator_traits<Iterator>::iterator_category,
 							ft::iterator_traits<Iterator>::value_type,
-							ft::iterator_traits<Iterator>::difference_categpry,
+							ft::iterator_traits<Iterator>::difference_category,
 							ft::iterator_traits<Iterator>::pointer,
 							ft::iterator_traits<Iterator>::reference >
 	{
@@ -21,7 +21,6 @@ namespace	ft
 
 		/*	default constructor	*/
 		reverse_iterator( void ) {};
-
 	};
 };
 
