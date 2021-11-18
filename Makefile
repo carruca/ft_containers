@@ -7,6 +7,10 @@ UTILS_TEST	= testIs_integral.cpp \
 			  testEqual.cpp \
 			  testLexicographical_compare.cpp
 
+ITER_DIR	= iterators/
+ITER_INC	= ft_iterators_traits.hpp \
+			  ft_reverse_iterator.hpp
+
 UTILS_DIR	= utils/
 UTILS_INC	= ft_is_integral.hpp \
 			  ft_enable_if.hpp \
@@ -16,7 +20,7 @@ UTILS_INC	= ft_is_integral.hpp \
 
 SRC			= $(addprefix $(TEST_DIR), main.cpp $(UTILS_TEST))
 
-INC			= -I$(UTILS_DIR)
+INC			= -I$(UTILS_DIR) -I$(ITER_DIR)
 OBJ_DIR		= obj/
 OBJ			= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
 DEPS		= $(OBJ:.o=.d)
