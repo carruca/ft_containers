@@ -1,26 +1,31 @@
 #ifndef FT_REVERSE_ITERATOR_HPP
 # define FT_REVERSE_ITERATOR_HPP
 
+#include "ft_iterators_traits.hpp"
+#include <iterator>
+
 namespace	ft
 {
 	template< typename Iterator >
 		class	reverse_iterator
-		: public std::iterator< ft::iterator_traits<Iterator>::iterator_category,
-							ft::iterator_traits<Iterator>::value_type,
-							ft::iterator_traits<Iterator>::difference_category,
-							ft::iterator_traits<Iterator>::pointer,
-							ft::iterator_traits<Iterator>::reference >
+		: public std::iterator< typename std::iterator_traits<Iterator>::iterator_category,
+							typename std::iterator_traits<Iterator>::value_type,
+							typename std::iterator_traits<Iterator>::difference_type,
+							typename std::iterator_traits<Iterator>::pointer,
+							typename std::iterator_traits<Iterator>::reference >
 		{
 		protected:
 			Iterator	current;
 
+			typedef ft::iterator_traits<Iterator>				traits_type;
+
 		public:
-			typedef typename Iterator											iterator_type;
-			typedef typename ft::iterator_traits<Iterator>::iterator_category	iterator_category;
-			typedef typename ft::iterator_traits<Iterator>::value_type			value_type;
-			typedef typename ft::iterator_traits<Iterator>::difference_category	difference_category;
-			typedef typename ft::iterator_traits<Iterator>::pointer				pointer;
-			typedef typename ft::iterator_traits<Iterator>::reference			reference;
+			typedef Iterator									iterator_type;
+			typedef typename traits_type::iterator_category		iterator_category;
+			typedef typename traits_type::value_type			value_type;
+			typedef typename traits_type::difference_type		difference_type;
+			typedef typename traits_type::pointer				pointer;
+			typedef typename traits_type::reference				reference;
 
 			/*	default constructor	*/
 			reverse_iterator( void ) : current()
@@ -37,7 +42,7 @@ namespace	ft
 				reverse_iterator&
 				operator=( const reverse_iterator<Iter>& other )
 				{
-					if ( this = &other )
+					if ( this == &other )
 						return *this;
 					this->current = other.base();
 					return *this;
@@ -53,7 +58,7 @@ namespace	ft
 			reference
 			operator*( void ) const
 			{
-				Iterator	tmp = this-	>current;
+				Iterator	tmp = this->current;
 
 				return *--tmp;
 			}
@@ -180,7 +185,7 @@ namespace	ft
 	template< typename Iterator >
 		inline typename reverse_iterator<Iterator>::difference_type
 		operator-( const reverse_iterator<Iterator>& lhs,
-					const reverse_iterator<Iteraor>& rhs )
+					const reverse_iterator<Iterator>& rhs )
 		{
 			return rhs.base() - lhs.base();
 		}

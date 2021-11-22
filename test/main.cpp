@@ -3,6 +3,7 @@ void	testEnable_if( void );
 void	testPair( void );
 void	testEqual( void );
 void	testLexicographical_compare( void );
+void	testReverseIterator( void );
 
 int	main( void )
 {
@@ -11,5 +12,6 @@ int	main( void )
 	testPair();
 	testEqual();
 	testLexicographical_compare();
+	testReverseIterator();
 	return 0;
 }

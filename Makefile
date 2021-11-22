@@ -5,7 +5,8 @@ UTILS_TEST	= testIs_integral.cpp \
 			  testEnable_if.cpp \
 			  testPair.cpp \
 			  testEqual.cpp \
-			  testLexicographical_compare.cpp
+			  testLexicographical_compare.cpp \
+			  testReverseIterator.cpp
 
 ITER_DIR	= iterators/
 ITER_INC	= ft_iterators_traits.hpp \
