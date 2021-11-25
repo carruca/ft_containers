@@ -35,8 +35,14 @@ void	testReverseIterator( void )
 			std::cout << "constructor:				CHECK!" << std::endl;
 	}
 
-	ft_rev_iterator_type	ft_revFrom2(intVector.end());
-	std_rev_iterator_type	std_revFrom2(intVector.end());
+	ft_rev_iterator_type	ft_revFrom2(ft_revFrom);
+	std_rev_iterator_type	std_revFrom2(std_revFrom);
+
+	if ( *ft_revFrom2.base() == *std_revFrom2.base() )
+		std::cout << "base=:					CHECK!" << std::endl;
+	else
+		std::cout << "base=:					WRONG!" << std::endl;
+
 
 	ft_revIt = ft_revFrom2;
 	std_revIt = std_revFrom2;
@@ -45,5 +51,4 @@ void	testReverseIterator( void )
 		std::cout << "operator=:				CHECK!" << std::endl;
 	else
 		std::cout << "operator=:				WRONG!" << std::endl;
-		
 }
