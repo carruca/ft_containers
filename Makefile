@@ -1,27 +1,31 @@
 NAME		= ft_containers
 
 TEST_DIR	= test/
-UTILS_TEST	= testIs_integral.cpp \
-			  testEnable_if.cpp \
-			  testPair.cpp \
-			  testEqual.cpp \
-			  testLexicographical_compare.cpp \
-			  testReverseIterator.cpp
+TEST_SRC	= is_integralTest.cpp \
+			  enable_ifTest.cpp \
+			  pairTest.cpp \
+			  equalTest.cpp \
+			  lexicographical_compareTest.cpp \
+			  reverse_iteratorTest.cpp
 
-ITER_DIR	= iterators/
+ITER_DIR	= iterator/
 ITER_INC	= ft_iterators_traits.hpp \
 			  ft_reverse_iterator.hpp
 
-UTILS_DIR	= utils/
-UTILS_INC	= ft_is_integral.hpp \
-			  ft_enable_if.hpp \
-			  ft_pair.hpp \
-			  ft_equal.hpp \
+TYPES_DIR	= types/
+TYPES_INC	= ft_is_integral.hpp \
+			  ft_enable_if.hpp
+
+ALG_DIR		= algorithm/
+ALG_INC		= ft_equal.hpp \
 			  ft_lexicographical_compare.hpp
 
-SRC			= $(addprefix $(TEST_DIR), main.cpp $(UTILS_TEST))
+UTIL_DIR	= utility/
+UTIL_INC	= ft_pair.hpp
 
-INC			= -I$(UTILS_DIR) -I$(ITER_DIR)
+SRC			= $(addprefix $(TEST_DIR), main.cpp $(TEST_SRC))
+
+INC			= -I$(UTIL_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR)
 OBJ_DIR		= obj/
 OBJ			= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
 DEPS		= $(OBJ:.o=.d)

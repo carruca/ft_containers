@@ -9,10 +9,10 @@ namespace	ft
 	template< typename Iterator >
 		class	reverse_iterator
 		: public std::iterator< typename std::iterator_traits<Iterator>::iterator_category,
-							typename std::iterator_traits<Iterator>::value_type,
-							typename std::iterator_traits<Iterator>::difference_type,
-							typename std::iterator_traits<Iterator>::pointer,
-							typename std::iterator_traits<Iterator>::reference >
+								typename std::iterator_traits<Iterator>::value_type,
+								typename std::iterator_traits<Iterator>::difference_type,
+								typename std::iterator_traits<Iterator>::pointer,
+								typename std::iterator_traits<Iterator>::reference >
 		{
 		protected:
 			Iterator	current;
@@ -27,11 +27,15 @@ namespace	ft
 			typedef typename traits_type::pointer				pointer;
 			typedef typename traits_type::reference				reference;
 
-			/*	default constructor	*/
+			/* default constructor */
 			reverse_iterator( void ) : current()
 			{}
 
-			explicit reverse_iterator( iterator_type x ) : current( x )
+			explicit
+			reverse_iterator( iterator_type x ) : current( x )
+			{}
+
+			reverse_iterator( const reverse_iterator& x ) : current( x.current )
 			{}
 
 			template< typename Iter >
@@ -104,7 +108,7 @@ namespace	ft
 			reverse_iterator
 			operator+( difference_type n ) const
 			{
-				return reverse_iterator( this->base() - n );
+				return reverse_iterator( this->current - n );
 			}
 
 			reverse_iterator&
@@ -117,7 +121,7 @@ namespace	ft
 			reverse_iterator
 			operator-( difference_type n ) const
 			{
-				return reverse_iterator( this->base() + n );
+				return reverse_iterator( this->current + n );
 			}
 
 			reverse_iterator&
