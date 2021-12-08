@@ -2,6 +2,7 @@
 # define FT_VECTOR_HPP
 
 # include <cstddef>
+# include <exception>
 
 namespace	ft
 {
@@ -128,7 +129,106 @@ namespace	ft
 		void
 		reserve( size_type n )
 		{}
+
+		reference
+		operator[]( size_type n )
+		{}
+
+		const_reference
+		operator[]( size_type n ) const
+		{}
+
+		reference
+		at( size_type n )
+		{
+			if ( n >= this->size() )
+				throw std::out_of_range();
+			return (*this)[n];
+		}
+
+		const_reference
+		at( size_type n ) const
+		{
+			if ( n >= this->size() )
+				throw std::out_of_range();
+			return (*this)[n];
+		}
+
+		reference
+		front( void )
+		{
+			return *this->begin();
+		}
+
+		const_reference
+		front( void ) const
+		{
+			return *this->begin();
+		}
+
+		reference
+		back( void )
+		{
+			return *(this->end() - 1);
+		}
+
+		const_reference
+		back( void ) const
+		{
+			return *(this->end() - 1);
+		}
+
+		T*
+		data( void )
+		{
+			return &this->front();
+		}
+
+		void
+		push_back( const value_type& x )
+		{}
+
+		void
+		pop_back()
+		{}
+
+		iterator
+		insert( iterator position, const value_type& x )
+		{}
+
+		void
+		insert( iterator position, size_type n, const value_type& x )
+		{}
+
+		template< typename InputIterator >
+			void
+			insert( iterator pos, InputIterator first, InputIterator last )
+			{}
+
+		iterator
+		erase( iterator position )
+		{}
+
+		iterator
+		erase( iterator first, iterator last )
+		{}
+
+		void
+		swap( vector& other )
+		{}
+
+		void
+		clear( void )
+		{}
 	};
+
+	template< typename T, typename Alloc >
+		inline bool
+		operator==( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
+		{
+			return (lhs.size() == rhs.size()
+				&& ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		}
 }
 
 #endif
