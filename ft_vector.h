@@ -2,14 +2,18 @@
 # define FT_VECTOR_HPP
 
 # include <cstddef>
-# include <exception>
+# include <memory>
+# include <stdexcept>
 
 namespace	ft
 {
 	template< typename T, typename Alloc = std::allocator<T> >
 		class	vector
 	{
-	protected:
+	private:
+		T*		arr;
+		T*		start;
+		T*		finish;
 		Alloc	alloc;
 
 	public:
@@ -228,6 +232,48 @@ namespace	ft
 		{
 			return (lhs.size() == rhs.size()
 				&& ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		}
+
+	template< typename T, typename Alloc >
+		inline bool
+		operator!=( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
+		{
+			return !(lhs == rhs);
+		}
+
+	template< typename T, typename Alloc >
+		inline bool
+		operator<( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
+		{
+			return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		}
+
+	template< typename T, typename Alloc >
+		inline bool
+		operator>( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
+		{
+			return rhs < lhs;
+		}
+
+	template< typename T, typename Alloc >
+		inline bool
+		operator<=( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
+		{
+			return !(rhs < lhs);
+		}
+
+	template< typename T, typename Alloc >
+		inline bool
+		operator>=( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
+		{
+			return !(lhs < rhs);
+		}
+
+	template< typename T, typename Alloc >
+		inline void
+		swap( vector<T, Alloc>& lhs, vector<T, Alloc>& rhs)
+		{
+			lhs.swap(rhs);
 		}
 }
 
