@@ -19,16 +19,16 @@ namespace	ft
 			allocator_type		allocator;
 
 			vector_base( void )
-			: start()
-			, finish()
-			, end_of_storage()
+			: start(0)
+			, finish(0)
+			, end_of_storage(0)
 			, allocator()
 			{}
 
 			vector_base( const allocator_type& a )
-			: start()
-			, finish()
-			, end_of_storage()
+			: start(0)
+			, finish(0)
+			, end_of_storage(0)
 			, allocator(a)
 			{}
 
@@ -49,7 +49,20 @@ namespace	ft
 
 			~vector_base( void )
 			{
-				allocator.deallocate(this->start, this->end_of_storage - this->start);
+				this->deallocate(this->start, std::distance(this->end_of_storage - this->start));
+			}
+
+			pointer
+			allocate( size_t n )
+			{
+				return n != 0 ? this->allocator.allocate(n) : 0;
+			}
+
+			void
+			deallocate( pointer ptr, size_t n )
+			{
+				if ( ptr )
+					this->allocator.deallocate(ptr, n);
 			}
 		};
 
@@ -91,19 +104,47 @@ namespace	ft
 
 			template< typename InputIterator >
 				vector( InputIterator first, InputIterator last, const Alloc& a = Alloc() )
-				: base(a)
+				: base(std::distance(first, last), a)
 				{
-					const size_type	n = std::distance( first, last);
-
-					this->start = this->allocator.allocate(n);
-					this->end_of_storage = this->start + n;
-					this->finish = this->_copy_range_init(first, last);
+					this->finish = this->_range_copy_init(first, last, this->start);
 				}
 
 			vector( const vector& other )
 			: base(other.size(), other.get_allocator())
 			{
-				this->finish = this->_copy_range_init(first, last);
+				this->finish = this->_range_copy_init(first, last, this->start);
+			}
+
+			/*	default destructor	*/
+			~vector( void )
+			{}
+
+			vector&
+			operator=( const vector& other )
+			{
+				if ( this != &other )
+				{
+					const size_type	other_len = other.size();
+
+					if ( other_len > this->capacity() )
+					{
+						pointer	tmp = this->allocate(other_len);
+
+						this->_range_copy_init(other.begin(), other.end(), result);
+						this->_range_destroy(this->start, this->finish);
+						this->deallocate(this->start, std::distance(this->end_of_storage - this->start));
+						this->start = tmp;
+						this->end_of_storage = this->start + other_len;
+					}
+					else
+					{
+						if ( other_len <= this->size() )
+							this->_range_destroy(this->start, this->finish);
+						this->_range_copy_init(other.begin(), other.end(), this->start);
+					}
+					this->finish = this->start + other_len;
+				}
+				return *this;
 			}
 
 		private:
@@ -113,31 +154,32 @@ namespace	ft
 				pointer	current = this->start;
 
 				for ( ; n > 0; --n, ++current )
-					allocator.construct(current, value);
+					this->allocator.construct(current, value);
 				this->finish = this->end_of_storage;
 			}
 
 			template< typename InputIterator >
 				pointer
-				_copy_range_init( InputIterator first, InputIterator last )
+				_range_copy_init( InputIterator first, InputIterator last, pointer result )
 				{
-					pointer	current = this->start;
+					pointer	current = result;
 
 					for ( ; first != last; ++first, ++current )
-						allocator.construct(current, *first);
+						this->allocator.construct(current, *first);
 					return current;
 				}
+
+			template< typename InputIterator >
+				void
+				_range_destroy( InputIterator first, InputIterator last )
+				{
+					pointer	current = first;
+
+					for ( ; current != last; ++current )
+						this->allocator.destroy(current);
+				}
+
 		public:
-			/*	default destructor	*/
-			~vector( void )
-			{}
-
-			vector&
-			operator=( const vector& other )
-			{
-				return *this;
-			}
-
 			void
 			assign( size_type n, const T& value )
 			{}
