@@ -4,6 +4,7 @@
 # include <cstddef>
 # include <memory>
 # include <stdexcept>
+# include <algorithm>
 
 namespace	ft
 {
@@ -99,7 +100,7 @@ namespace	ft
 			vector( size_type n, const T& value = T(), const Alloc& a = Alloc() )
 			: base(n, a)
 			{
-				this->_fill_init(n, value);
+				this->_fill_init(this->start, n, value);
 			}
 
 			template< typename InputIterator >
@@ -117,7 +118,9 @@ namespace	ft
 
 			/*	default destructor	*/
 			~vector( void )
-			{}
+			{
+				this->_range_destroy(this->start, this->finish);
+			}
 
 			vector&
 			operator=( const vector& other )
@@ -148,14 +151,42 @@ namespace	ft
 			}
 
 		private:
-			void
-			_fill_init( size_type n, value_type value )
+
+			allocator_type&
+			_get_allocator( void )
 			{
-				pointer	current = this->start;
+				return this->allocator;
+			}
+
+			void
+			_fill_init( pointer first, size_type n, const value_type& value )
+			{
+				pointer	current = first;
 
 				for ( ; n > 0; --n, ++current )
 					this->allocator.construct(current, value);
 				this->finish = this->end_of_storage;
+			}
+
+			void
+			_fill_assign( size_type n, const value_type& value )
+			{
+				if ( n > this->capacity() )
+				{
+					vector	tmp(n, value, this->_get_allocator());
+
+					tmp.swap(*this);
+				}
+				else if ( n > this->size() )
+				{
+					std::fill(this->begin(), this->end(), value);
+					this->_fill_init(this->finish, n - this->size(), value);
+					this->finish += n - this->size();
+				}
+				else
+				{
+					//_erase_at_end
+				}
 			}
 
 			template< typename InputIterator >
@@ -179,6 +210,13 @@ namespace	ft
 						this->allocator.destroy(current);
 				}
 
+			void
+			_erase_at_end( pointer pos )
+			{
+
+			}
+
+
 		public:
 			void
 			assign( size_type n, const T& value )
@@ -192,7 +230,7 @@ namespace	ft
 			allocator_type
 			get_allocator( void ) const
 			{
-				return alloc;
+				return this-allocator;
 			}
 
 			iterator
