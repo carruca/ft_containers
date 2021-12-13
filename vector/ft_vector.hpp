@@ -5,14 +5,15 @@
 # include <memory>
 # include <stdexcept>
 # include <algorithm>
+# include <iterator>
 
 namespace	ft
 {
 	template< typename T, typename Alloc = std::allocator<T> >
 		struct	vector_base
 		{
-			typedef Alloc					allocator_type;
-			typedef	allocator_type::pointer	pointer;
+			typedef Alloc								allocator_type;
+			typedef	typename allocator_type::pointer	pointer;
 
 			pointer				start;
 			pointer				finish;
@@ -68,17 +69,17 @@ namespace	ft
 		};
 
 	template< typename T, typename Alloc = std::allocator<T> >
-		class	vector : protected vector_base
+		class	vector : protected vector_base<T, Alloc>
 		{
 			typedef vector_base<T, Alloc>							base;
 
 		public:
 			typedef T												value_type;
 			typedef Alloc											allocator_type;
-			typedef allocator_type::reference						reference;
-			typedef allocator_type::const_reference					const_reference;
-			typedef allocator_type::pointer							pointer;
-			typedef allocator_type::const_pointer					const_pointer;
+			typedef typename allocator_type::reference				reference;
+			typedef typename allocator_type::const_reference		const_reference;
+			typedef typename allocator_type::pointer				pointer;
+			typedef typename allocator_type::const_pointer			const_pointer;
 //			typedef 												iterator;
 //			typedef													const_iterator;
 //			typedef ft::reverse_iterator<iterator>					reverse_iterator;
@@ -113,7 +114,7 @@ namespace	ft
 			vector( const vector& other )
 			: base(other.size(), other.get_allocator())
 			{
-				this->finish = this->_range_copy_init(first, last, this->start);
+				this->finish = this->_range_copy_init(other.begin(), other.end(), this->start);
 			}
 
 			/*	default destructor	*/
@@ -133,7 +134,7 @@ namespace	ft
 					{
 						pointer	tmp = this->allocate(other_len);
 
-						this->_range_copy_init(other.begin(), other.end(), result);
+						this->_range_copy_init(other.begin(), other.end(), tmp);
 						this->_range_destroy(this->start, this->finish);
 						this->deallocate(this->start, std::distance(this->end_of_storage - this->start));
 						this->start = tmp;
@@ -185,9 +186,21 @@ namespace	ft
 				}
 				else
 				{
-					//_erase_at_end
+					std::fill_n(this->start, n, value);
+					this->_erase_at_end(this->start + n);
 				}
 			}
+
+			template< typename InputIterator >
+				void
+				_range_fill_assign( InputIterator first, InputIterator last)
+				{
+					const size_type	len = std::distance(first, last);
+
+					if ( len > this->capacity() )
+					{
+					}
+				}
 
 			template< typename InputIterator >
 				pointer
@@ -213,26 +226,28 @@ namespace	ft
 			void
 			_erase_at_end( pointer pos )
 			{
-
+				this->_range_destroy(pos, this->finish);
+				this->finish = pos;
 			}
-
 
 		public:
 			void
 			assign( size_type n, const T& value )
-			{}
-
+			{
+				this->_fill_assign(n, value);
+			}
+/*
 			template< typename InputIterator >
 				void
 				assign( InputIterator first, InputIterator last)
 				{}
-
+*/
 			allocator_type
 			get_allocator( void ) const
 			{
 				return this-allocator;
 			}
-
+/*
 			iterator
 			begin( void )
 			{}
@@ -264,11 +279,13 @@ namespace	ft
 			const_reverse_iterator
 			rend( void ) const
 			{}
-
+*/
 			size_type
 			size( void ) const
-			{}
-
+			{
+				return size_type(this->finish - this->start);
+			}
+/*
 			size_type
 			max_size( void ) const
 			{
@@ -383,6 +400,7 @@ namespace	ft
 			void
 			clear( void )
 			{}
+*/
 		};
 
 	template< typename T, typename Alloc >
@@ -390,7 +408,7 @@ namespace	ft
 		operator==( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
 		{
 			return (lhs.size() == rhs.size()
-				&& ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+				&& std::equal(lhs.begin(), lhs.end(), rhs.begin())); //cambiar por ft namespace
 		}
 
 	template< typename T, typename Alloc >
@@ -404,7 +422,7 @@ namespace	ft
 		inline bool
 		operator<( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
 		{
-			return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+			return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); //cambiar por ft namespace
 		}
 
 	template< typename T, typename Alloc >
