@@ -199,6 +199,10 @@ namespace	ft
 
 					if ( len > this->capacity() )
 					{
+						pointer	tmp = this->allocate(other_len);
+
+						this->_range_copy_init(first, last, tmp);
+						this->_range_destroy(this->start, //aqui estamos
 					}
 				}
 
