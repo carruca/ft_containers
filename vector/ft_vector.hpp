@@ -15,10 +15,10 @@ namespace	ft
 			typedef Alloc								allocator_type;
 			typedef	typename allocator_type::pointer	pointer;
 
-			pointer				start;
-			pointer				finish;
-			pointer				end_of_storage;
-			allocator_type		allocator;
+			pointer			start;
+			pointer			finish;
+			pointer			end_of_storage;
+			allocator_type	allocator;
 
 			vector_base( void )
 			: start(0)
@@ -252,12 +252,14 @@ namespace	ft
 			{
 				this->_fill_assign(n, value);
 			}
-/*
+
 			template< typename InputIterator >
 				void
 				assign( InputIterator first, InputIterator last)
-				{}
-*/
+				{
+					this->_range_fill_assign(first, last);
+				}
+
 			allocator_type
 			get_allocator( void ) const
 			{
@@ -301,13 +303,13 @@ namespace	ft
 			{
 				return size_type(this->finish - this->start);
 			}
-/*
+
 			size_type
 			max_size( void ) const
 			{
 				return alloc.max_size();
 			}
-
+/*
 			void
 			resize( size_type n, T value = T() )
 			{}
