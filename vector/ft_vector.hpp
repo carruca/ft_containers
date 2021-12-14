@@ -55,13 +55,13 @@ namespace	ft
 			}
 
 			pointer
-			allocate( size_t n )
+			allocate( std::size_t n )
 			{
 				return n != 0 ? this->allocator.allocate(n) : 0;
 			}
 
 			void
-			deallocate( pointer ptr, size_t n )
+			deallocate( pointer ptr, std::size_t n )
 			{
 				if ( ptr )
 					this->allocator.deallocate(ptr, n);
@@ -152,7 +152,6 @@ namespace	ft
 			}
 
 		private:
-
 			allocator_type&
 			_get_allocator( void )
 			{
@@ -199,10 +198,23 @@ namespace	ft
 
 					if ( len > this->capacity() )
 					{
-						pointer	tmp = this->allocate(other_len);
+						pointer	tmp = this->allocate(len);
 
 						this->_range_copy_init(first, last, tmp);
-						this->_range_destroy(this->start, //aqui estamos
+						this->_range_destroy(this->start, this->finish);
+						this->deallocate(this->start, std::distance(this->end_of_storage - this->start));
+						this->start = tmp;
+						this->finish = this->start + len;
+						this->end_of_storage = this->start + len;
+					}
+					else if ( len <= this->size() )
+						this->erase_at_end(std::copy(first, last, this->start));
+					else
+					{
+						InputIterator	mid = first;
+						std::advance(mid, this->size());
+						std::copy(first, mid, this->start);
+						this->finish = this->_range_copy_init(mid, last, this->finish);
 					}
 				}
 
@@ -396,15 +408,22 @@ namespace	ft
 			iterator
 			erase( iterator first, iterator last )
 			{}
-
+*/
 			void
 			swap( vector& other )
-			{}
+			{
+				std::swap(this->start, other.start);
+				std::swap(this->finish. other.finish);
+				std::swap(this->end_of_storage, other.end_of_storage);
+				std::swap(this->allocator, other.allocator);
+			}
 
 			void
 			clear( void )
-			{}
-*/
+			{
+				this->erase_at_end(this->start);
+			}
+
 		};
 
 	template< typename T, typename Alloc >
