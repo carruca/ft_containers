@@ -191,7 +191,7 @@ namespace	ft
 		operator-( const reverse_iterator<Iterator>& lhs,
 					const reverse_iterator<Iterator>& rhs )
 		{
-			return rhs.base() - lhs.base();
+			return lhs.base() - rhs.base();
 		}
 
 	template< typename Iterator >
