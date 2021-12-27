@@ -6,6 +6,8 @@
 # include <stdexcept>
 # include <algorithm>
 # include <iterator>
+# include "ft_normal_iterator.hpp"
+# include "ft_reverse_iterator.hpp"
 # include "ft_lexicographical_compare.hpp"
 # include "ft_equal.hpp"
 
@@ -16,6 +18,7 @@ namespace	ft
 		{
 			typedef Alloc								allocator_type;
 			typedef	typename allocator_type::pointer	pointer;
+			typedef std::size_t							size_type;
 
 			pointer			start;
 			pointer			finish;
@@ -36,7 +39,7 @@ namespace	ft
 			, allocator(a)
 			{}
 
-			vector_base( std::size_t n, const allocator_type& a )
+			vector_base( size_type n, const allocator_type& a )
 			: allocator(a)
 			{
 				this->start = this->allocator.allocate(n);
@@ -53,17 +56,17 @@ namespace	ft
 
 			~vector_base( void )
 			{
-				this->deallocate(this->start, std::distance(this->end_of_storage - this->start));
+				this->deallocate(this->start, size_type(this->end_of_storage - this->start));
 			}
 
 			pointer
-			allocate( std::size_t n )
+			allocate( size_type n )
 			{
 				return n != 0 ? this->allocator.allocate(n) : 0;
 			}
 
 			void
-			deallocate( pointer ptr, std::size_t n )
+			deallocate( pointer ptr, size_type n )
 			{
 				if ( ptr )
 					this->allocator.deallocate(ptr, n);
@@ -85,7 +88,7 @@ namespace	ft
 			typedef ft::normal_iterator<pointer, vector>			iterator;
 			typedef ft::normal_iterator<const_pointer, vector>		const_iterator;
 			typedef ft::reverse_iterator<iterator>					reverse_iterator;
-			typedef ft::reverse_iterator<const_reverse_iterator>	const_reverse_iterator
+			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 			typedef std::size_t										size_type;
 			typedef std::ptrdiff_t									difference_type;
 
@@ -265,7 +268,7 @@ namespace	ft
 			allocator_type
 			get_allocator( void ) const
 			{
-				return this-allocator;
+				return this->allocator;
 			}
 
 			iterator
@@ -325,7 +328,7 @@ namespace	ft
 			size_type
 			max_size( void ) const
 			{
-				return alloc.max_size();
+				return this->allocator.max_size();
 			}
 
 			void
@@ -333,6 +336,7 @@ namespace	ft
 			{
 				if (n > this->size())
 				{
+					(void)value;
 					//insert
 				}
 				else if (n < this->size())
@@ -367,19 +371,26 @@ namespace	ft
 				return *(this->start + n);
 			}
 
+		protected:
+			void
+			_range_check( size_type n ) const
+			{
+				if ( n >= this->size() )
+					throw std::out_of_range("vector::_range_check");
+			}
+
+		public:
 			reference
 			at( size_type n )
 			{
-				if ( n >= this->size() )
-					throw std::out_of_range();
+				this->_range_check(n);
 				return (*this)[n];
 			}
 
 			const_reference
 			at( size_type n ) const
 			{
-				if ( n >= this->size() )
-					throw std::out_of_range();
+				this->_range_check(n);
 				return (*this)[n];
 			}
 
@@ -416,23 +427,72 @@ namespace	ft
 			void
 			push_back( const value_type& x )
 			{}
-
+*/
 			void
 			pop_back()
-			{}
+			{
+				--this->finish;
+				this->allocator.destroy(this->finish);
+			}
 
+		protected:
+			void
+			_insert_aux(iterator position, const value_type& value)
+			{
+				if (this->finish != this->end_of_storage)
+				{
+					this->allocator.construct(this->finish, *(this->finish - 1));
+					++this->finish;
+					std::move_backward(position.base(), this->finish, this->finish - 2);
+					*position = value;
+				}
+				else
+				{
+					const size_type	len = this->_check_length(1);
+					const size_type	elements_before = position - this->begin();
+					pointer			new_start(this->allocate(len));
+					pointer			new_finish(new_start);
+
+				}
+			}
+
+			size_type
+			_check_length(size_type n)
+			{
+				const size_type	len = this->size() + n;
+
+				if (this->max_size() - this->size() < n)
+					throw std::length_error("vector::check_length");
+				return (len < this->size() || len > this->max_size()) ? this->max_size() ? len;
+			}
+
+		public:
 			iterator
 			insert( iterator position, const value_type& x )
-			{}
+			{
+				const size_type	n = position - this->begin();
 
+				if (this->finish != this->end_of_storage
+					&& position == this->end())
+				{
+					this->allocator.construct(this->finish, x);
+					++this->finish;
+				}
+				else
+					_insert_aux(position, x);
+				return iterator(this->start + n);
+			}
+/*
 			void
 			insert( iterator position, size_type n, const value_type& x )
-			{}
+			{
+			}
 
 			template< typename InputIterator >
 				void
 				insert( iterator pos, InputIterator first, InputIterator last )
-				{}
+				{
+				}
 
 			iterator
 			erase( iterator position )

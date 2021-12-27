@@ -1,26 +1,28 @@
 NAME		= ft_containers
 
 TEST_DIR	= test/
-TEST_SRC	= is_integralTest.cpp \
-			  enable_ifTest.cpp \
-			  pairTest.cpp \
-			  equalTest.cpp \
-			  lexicographical_compareTest.cpp \
-			  reverse_iteratorTest.cpp
+TEST_SRC	= is_integralTest.cpp				\
+			  enable_ifTest.cpp					\
+			  pairTest.cpp						\
+			  equalTest.cpp						\
+			  lexicographical_compareTest.cpp 	\
+			  reverse_iteratorTest.cpp			\
+			  vectorTest.cpp
 
 VECTOR_DIR	= vector/
 VECTOR_INC	= ft_vector.hpp
 
 ITER_DIR	= iterator/
-ITER_INC	= ft_iterators_traits.hpp \
-			  ft_reverse_iterator.hpp
+ITER_INC	= ft_iterators_traits.hpp			\
+			  ft_reverse_iterator.hpp			\
+			  ft_normal_iterator.hpp
 
 TYPES_DIR	= types/
-TYPES_INC	= ft_is_integral.hpp \
+TYPES_INC	= ft_is_integral.hpp				\
 			  ft_enable_if.hpp
 
 ALG_DIR		= algorithm/
-ALG_INC		= ft_equal.hpp \
+ALG_INC		= ft_equal.hpp						\
 			  ft_lexicographical_compare.hpp
 
 UTIL_DIR	= utility/

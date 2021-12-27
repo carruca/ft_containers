@@ -4,6 +4,7 @@ void	testPair( void );
 void	testEqual( void );
 void	testLexicographical_compare( void );
 void	testReverseIterator( void );
+void	testVector( void );
 
 int	main( void )
 {
@@ -13,5 +14,6 @@ int	main( void )
 	testEqual();
 	testLexicographical_compare();
 	testReverseIterator();
+	testVector();
 	return 0;
 }

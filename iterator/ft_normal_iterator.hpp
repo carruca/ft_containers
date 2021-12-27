@@ -1,7 +1,7 @@
 #ifndef FT_NORMAL_ITERATOR_HPP
 # define FT_NORMAL_ITERATOR_HPP
 
-# include "ft_iterator_traits.hpp"
+# include "ft_iterators_traits.hpp"
 
 namespace	ft
 {
@@ -138,7 +138,7 @@ namespace	ft
 		operator<=( const normal_iterator<IteratorL, Container>& lhs,
 			const normal_iterator<IteratorR, Container>& rhs )
 		{
-			return !(rhs < rhs);
+			return !(rhs < lhs);
 		}
 
 	template< typename IteratorL, typename IteratorR, typename Container >
