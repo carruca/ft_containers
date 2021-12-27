@@ -448,11 +448,11 @@ namespace	ft
 				}
 				else
 				{
-					const size_type	len = this->_check_length(1);
+			/*		const size_type	len = this->_check_length(1);
 					const size_type	elements_before = position - this->begin();
 					pointer			new_start(this->allocate(len));
 					pointer			new_finish(new_start);
-
+*/
 				}
 			}
 
@@ -463,7 +463,7 @@ namespace	ft
 
 				if (this->max_size() - this->size() < n)
 					throw std::length_error("vector::check_length");
-				return (len < this->size() || len > this->max_size()) ? this->max_size() ? len;
+				return (len < this->size() || len > this->max_size()) ? this->max_size() : len;
 			}
 
 		public:
