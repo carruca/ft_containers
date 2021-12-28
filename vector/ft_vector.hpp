@@ -156,7 +156,7 @@ namespace	ft
 				return *this;
 			}
 
-		private:
+		protected:
 			allocator_type&
 			_get_allocator( void )
 			{
@@ -335,10 +335,7 @@ namespace	ft
 			resize( size_type n, T value = T() )
 			{
 				if (n > this->size())
-				{
-					(void)value;
-					//insert
-				}
+					this->insert(this->end(), n - this->size(), value);
 				else if (n < this->size())
 					this->_erase_at_end(this->start + n);
 			}
@@ -346,7 +343,7 @@ namespace	ft
 			size_type
 			capacity( void ) const
 			{
-				return size_type(this->end_of_capacity - this->start);
+				return size_type(this->end_of_storage - this->start);
 			}
 
 			bool
@@ -423,11 +420,7 @@ namespace	ft
 			{
 				return &this->front();
 			}
-/*
-			void
-			push_back( const value_type& x )
-			{}
-*/
+
 			void
 			pop_back()
 			{
@@ -436,37 +429,70 @@ namespace	ft
 			}
 
 		protected:
-			void
-			_insert_aux(iterator position, const value_type& value)
-			{
-				if (this->finish != this->end_of_storage)
-				{
-					this->allocator.construct(this->finish, *(this->finish - 1));
-					++this->finish;
-					std::move_backward(position.base(), this->finish, this->finish - 2);
-					*position = value;
-				}
-				else
-				{
-			/*		const size_type	len = this->_check_length(1);
-					const size_type	elements_before = position - this->begin();
-					pointer			new_start(this->allocate(len));
-					pointer			new_finish(new_start);
-*/
-				}
-			}
-
 			size_type
-			_check_length(size_type n)
+			_check_length( size_type n )
 			{
-				const size_type	len = this->size() + n;
+				const size_type	len = this->size() + std::max(this->size(), n);
 
 				if (this->max_size() - this->size() < n)
 					throw std::length_error("vector::check_length");
 				return (len < this->size() || len > this->max_size()) ? this->max_size() : len;
 			}
 
+			void
+			_move_backward( pointer first, pointer last, pointer result)
+			{
+				while (first != last)
+				{
+					*(--result) = *(--last);
+				}
+			}
+
+//			void
+//			_insert_
+			void
+			_insert_aux( iterator position, const value_type& value )
+			{
+				if (this->finish != this->end_of_storage)
+				{
+					this->allocator.construct(this->finish, *(this->finish - 1));
+					++this->finish;
+					this->_move_backward(position.base(), this->finish - 2, this->finish - 1);
+					*position = value;
+				}
+				else
+				{
+					const size_type	len = this->_check_length(1);
+					const size_type	elems_before = position - this->begin();
+					pointer			new_start(this->allocate(len));
+					pointer			new_finish(new_start);
+
+					this->allocator.construct(new_start + elems_before, value);
+					new_finish = this->_range_copy_init(this->start, position.base(), new_start);
+					++new_finish;
+					new_finish = this->_range_copy_init(position.base(), this->finish, new_finish);
+					this->_range_destroy(this->finish, this->start);
+					this->deallocate(this->start, this->end_of_storage - this->start);
+					this->start = new_start;
+					this->finish = new_finish;
+					this->end_of_storage = new_start + len;
+				}
+			}
+
 		public:
+
+			void
+			push_back( const value_type& x )
+			{
+				if (this->finish != this->end_of_storage)
+				{
+					this->allocator.construct(this->finish, x);
+					++this->finish;
+				}
+				else
+					this->_insert_aux(this->end(), x);
+			}
+
 			iterator
 			insert( iterator position, const value_type& x )
 			{
@@ -479,7 +505,7 @@ namespace	ft
 					++this->finish;
 				}
 				else
-					_insert_aux(position, x);
+					this->_insert_aux(position, x);
 				return iterator(this->start + n);
 			}
 /*
