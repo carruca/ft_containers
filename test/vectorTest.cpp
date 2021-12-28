@@ -28,6 +28,9 @@ void	testVector(void)
 		std::cout << "std::vector::capacity() = " << std_v1.capacity() << std::endl;
 		ft_v1.push_back(1);
 		ft_v1.push_back(7);
+		ft_v1.push_back(12);
+		ft_v1.push_back(23);
+		ft_v1.push_back(324);
 		std::cout << "ft::vector::capacity() = " << ft_v1.capacity() << std::endl;
 		std_v1.resize(std_v1.max_size() + 1);
 	}

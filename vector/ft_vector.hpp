@@ -442,7 +442,7 @@ namespace	ft
 			void
 			_move_backward( pointer first, pointer last, pointer result)
 			{
-				while (first != last)
+				while (last != first)
 				{
 					*(--result) = *(--last);
 				}
@@ -471,7 +471,7 @@ namespace	ft
 					new_finish = this->_range_copy_init(this->start, position.base(), new_start);
 					++new_finish;
 					new_finish = this->_range_copy_init(position.base(), this->finish, new_finish);
-					this->_range_destroy(this->finish, this->start);
+					this->_range_destroy(this->start, this->finish);
 					this->deallocate(this->start, this->end_of_storage - this->start);
 					this->start = new_start;
 					this->finish = new_finish;
