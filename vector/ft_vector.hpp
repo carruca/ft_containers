@@ -434,14 +434,27 @@ namespace	ft
 			}
 
 		protected:
+/*
 			size_type
-			_check_length( size_type n )
+			_gcc_check_length( size_type n )
 			{
-				const size_type	new_len = this->size() + std::max(this->size(), n);
+				const size_type	new_len = this->capacity() + std::max(this->size(), n);
 
 				if (this->max_size() - this->size() < n)
 					throw std::length_error("vector::check_length");
 				return new_len > this->max_size() ? this->max_size() : new_len;
+			}
+*/
+			size_type
+			_check_length( size_type n )
+			{
+				size_type new_len = this->capacity() + this->capacity();
+
+				if (this->max_size() - this->size() < n)
+					throw std::length_error("vector::check_length");
+				if (n >= new_len)
+					new_len = n + this->size();
+				return new_len;
 			}
 
 			void

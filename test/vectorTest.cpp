@@ -45,14 +45,14 @@ void	testVector(void)
 	std::cout << "ft::vector::capacity() = " << ft_vec_int1.capacity() << std::endl;
 	std_vec_int1.push_back(23);
 	std_vec_int1.push_back(12);
-//	std_vec_int1.push_back(7);
+	std_vec_int1.push_back(7);
 	std_vec_int1.push_back(989);
 	std_vec_int1.push_back(7);
 
 	std::cout << "std::vector::capacity() = " << std_vec_int1.capacity() << std::endl;
 	ft_vec_int1.push_back(1);
 	ft_vec_int1.push_back(7);
-//	ft_vec_int1.push_back(12);
+	ft_vec_int1.push_back(12);
 	ft_vec_int1.push_back(23);
 	ft_vec_int1.push_back(324);
 	std::cout << "ft::vector::capacity() = " << ft_vec_int1.capacity() << std::endl;
@@ -109,11 +109,13 @@ void	testVector(void)
 	for_each(ft_vec_string.begin(), ft_vec_string.end(), display_string);
 
 	std::cout << "<<	std_vec_int1" << std::endl;
+	std::cout << "std::vector::size() = " << std_vec_int1.size() << std::endl;
+	std::cout << "std::vector::capacity() = " << std_vec_int1.capacity() << std::endl;
 	std::vector<int>::iterator	it_int = std_vec_int1.begin();
 //	std_vec_int1.insert(it_int, 0, 34);
 	std::cout << "std_vec_int" << std::endl;
 	for_each(std_vec_int1.begin(), std_vec_int1.end(), display_int);
-	std_vec_int1.insert(it_int + 1, 3, 34);
+	std_vec_int1.insert(it_int + 1, 7, 34);
 	//std_vec_int1.insert(it_int, 2, 2);
 	std::cout << "std_vec_int" << std::endl;
 	for_each(std_vec_int1.begin(), std_vec_int1.end(), display_int);
@@ -121,11 +123,13 @@ void	testVector(void)
 	std::cout << "std::vector::capacity() = " << std_vec_int1.capacity() << std::endl;
 
 	std::cout << "<<	ft_vec_int1" << std::endl;
+	std::cout << "ft::vector::size() = " << ft_vec_int1.size() << std::endl;
+	std::cout << "ft::vector::capacity() = " << ft_vec_int1.capacity() << std::endl;
 	ft::vector<int>::iterator	ft_it_int = ft_vec_int1.begin();
 //	ft_vec_int1.insert(ft_it_int, 0, 34);
 	std::cout << "ft_vec_int" << std::endl;
 	for_each(ft_vec_int1.begin(), ft_vec_int1.end(), display_int);
-	ft_vec_int1.insert(ft_it_int + 1, 3, 34);
+	ft_vec_int1.insert(ft_it_int + 1, 7, 34);
 	//std_vec_int1.insert(ft_it_int, 2, 2);
 	std::cout << "ft_vec_int" << std::endl;
 	for_each(ft_vec_int1.begin(), ft_vec_int1.end(), display_int);
