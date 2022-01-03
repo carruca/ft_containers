@@ -467,7 +467,7 @@ namespace	ft
 
 				new_finish = std::copy(this->start, position.base(),
 									new_start);
-				std::fill(new_mid, new_mid + n, value);
+				std::fill_n(new_mid, n, value);
 				new_finish += n;
 				new_finish = std::copy(position.base(), this->finish,
 									new_finish);
