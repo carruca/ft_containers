@@ -10,6 +10,8 @@
 # include "ft_reverse_iterator.hpp"
 # include "ft_lexicographical_compare.hpp"
 # include "ft_equal.hpp"
+# include "ft_is_integral.hpp"
+# include "ft_enable_if.hpp"
 
 namespace	ft
 {
@@ -207,21 +209,20 @@ namespace	ft
 					{
 						pointer	tmp = this->allocate(len);
 
-						this->_range_copy_init(first, last, tmp);
-						this->_range_destroy(this->start, this->finish);
+						std::copy(first, last, tmp);
 						this->deallocate(this->start, this->capacity());
 						this->start = tmp;
 						this->finish = this->start + len;
 						this->end_of_storage = this->start + len;
 					}
 					else if ( len <= this->size() )
-						this->erase_at_end(std::copy(first, last, this->start));
+						this->_erase_at_end(std::copy(first, last, this->start));
 					else
 					{
 						InputIterator	mid = first;
 						std::advance(mid, this->size());
 						std::copy(first, mid, this->start);
-						this->finish = this->_range_copy_init(mid, last, this->finish);
+						this->finish = std::copy(mid, last, this->finish);
 					}
 				}
 
@@ -262,7 +263,8 @@ namespace	ft
 
 			template< typename InputIterator >
 				void
-				assign( InputIterator first, InputIterator last)
+				assign( typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+					InputIterator last)
 				{
 					this->_range_fill_assign(first, last);
 				}
@@ -357,8 +359,6 @@ namespace	ft
 			void
 			reserve( size_type n )
 			{
-//				if (n > this->max_size())
-//					throw std::length_error("vector");
 				if (n > this->capacity())
 				{
 					const size_type	old_size = this->size();
@@ -539,10 +539,11 @@ namespace	ft
 						this->_resize_insert(position, n, value);
 				}
 			}
-/*
+
 			template< typename InputIterator >
 				void
-				insert( iterator position, InputIterator first, InputIterator last )
+				insert( iterator position,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last )
 				{
 					for (; first != last; ++first)
 					{
@@ -550,7 +551,7 @@ namespace	ft
 						++position;
 					}
 				}
-*/
+
 			iterator
 			erase( iterator position )
 			{
@@ -578,7 +579,7 @@ namespace	ft
 			swap( vector& other )
 			{
 				std::swap(this->start, other.start);
-				std::swap(this->finish. other.finish);
+				std::swap(this->finish, other.finish);
 				std::swap(this->end_of_storage, other.end_of_storage);
 				std::swap(this->allocator, other.allocator);
 			}
@@ -586,7 +587,7 @@ namespace	ft
 			void
 			clear( void )
 			{
-				this->erase_at_end(this->start);
+				this->_erase_at_end(this->start);
 			}
 
 		};

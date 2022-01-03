@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
+#include <list>
 #include "ft_vector.hpp"
 
 void	display_int( int target ) {
@@ -211,4 +212,149 @@ void	testVector(void)
 	{
 		std::cout << "Lenght error: " << e.what() << std::endl;
 	}
+
+	std::vector<int>	vct(7);
+	std::vector<int>	vct_two(4);
+	std::vector<int>	vct_three;
+	std::vector<int>	vct_four;
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	for (unsigned long int i = 0; i < vct_two.size(); ++i)
+		vct_two[i] = (vct_two.size() - i) * 5;
+	std::cout << "\t### std::vector<int>::assign(): ###" << std::endl;
+	std::cout << "size of std::vector<int> = " << vct.size() << std::endl;
+	std::cout << "size of std::vector<int> = " << vct_two.size() << std::endl;
+
+	vct_three.assign(vct.begin(), vct.end());
+	vct.assign(vct_two.begin(), vct_two.end());
+	vct_two.assign(2, 42);
+	vct_four.assign(4, 21);
+
+	std::cout << "\t### After assign(): ###" << std::endl;
+
+	std::cout << "size of std::vector<int> = " << vct.size() << std::endl;
+	std::cout << "size of std::vector<int> = " << vct_two.size() << std::endl;
+	std::cout << "size of std::vector<int> = " << vct_three.size() << std::endl;
+	std::cout << "size of std::vector<int> = " << vct_four.size() << std::endl;
+
+	vct_four.assign(6, 84);
+	std::cout << "size of std::vector<int> = " << vct_four.size() << std::endl;
+
+	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
+
+	vct.assign(5, 53);
+	vct_two.assign(vct_three.begin(), vct_three.begin() + 3);
+
+	std::cout << "size of std::vector<int> = " << vct.size() << std::endl;
+	std::cout << "size of std::vector<int> = " << vct_two.size() << std::endl;
+
+	ft::vector<int>	ft_vct(7);
+	ft::vector<int>	ft_vct_two(4);
+	ft::vector<int>	ft_vct_three;
+	ft::vector<int>	ft_vct_four;
+
+	for (unsigned long int i = 0; i < ft_vct.size(); ++i)
+		ft_vct[i] = (ft_vct.size() - i) * 3;
+	for (unsigned long int i = 0; i < ft_vct_two.size(); ++i)
+		ft_vct_two[i] = (ft_vct_two.size() - i) * 5;
+	std::cout << "\t### ft::vector<int>::assign(): ###" << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vct.size() << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vct_two.size() << std::endl;
+
+	ft_vct_three.assign(ft_vct.begin(), ft_vct.end());
+	ft_vct.assign(ft_vct_two.begin(), ft_vct_two.end());
+	ft_vct_two.assign(2, 42);
+	ft_vct_four.assign(4, 21);
+
+	std::cout << "\t### After assign(): ###" << std::endl;
+
+	std::cout << "size of ft::vector<int> = " << ft_vct.size() << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vct_two.size() << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vct_three.size() << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vct_four.size() << std::endl;
+
+	ft_vct_four.assign(6, 84);
+	std::cout << "size of ft::vector<int> = " << ft_vct_four.size() << std::endl;
+
+	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
+
+	ft_vct.assign(5, 53);
+	ft_vct_two.assign(ft_vct_three.begin(), ft_vct_three.begin() + 3);
+
+	std::cout << "size of ft::vector<int> = " << ft_vct.size() << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vct_two.size() << std::endl;
+
+	std::cout << "\t### bidirection: ###" << std::endl;
+	std::list<int>				lst;
+	std::list<int>::iterator	lst_it;
+
+	for (int i = 1; i < 5; ++i)
+		lst.push_back(i * 3);
+
+	std::vector<int>	vct_bi(lst.begin(), lst.end());
+	std::cout << "size of std::vector<int> = " << vct_bi.size() << std::endl;
+
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+		*lst_it++ = i * 5;
+	vct_bi.assign(lst.begin(), lst.end());
+	std::cout << "size of std::vector<int> = " << vct_bi.size() << std::endl;
+
+	vct_bi.insert(vct_bi.end(), lst.rbegin(), lst.rend());
+	std::cout << "size of std::vector<int> = " << vct_bi.size() << std::endl;
+
+	std::list<int>				lst2;
+	std::list<int>::iterator	lst_it2;
+
+	for (int i = 1; i < 5; ++i)
+		lst2.push_back(i * 3);
+
+	ft::vector<int>	ft_vct_bi(lst2.begin(), lst2.end());
+	std::cout << "size of ft::vector<int> = " << ft_vct_bi.size() << std::endl;
+
+	lst_it2 = lst2.begin();
+	for (int i = 1; lst_it2 != lst2.end(); ++i)
+		*lst_it2++ = i * 5;
+	ft_vct_bi.assign(lst2.begin(), lst2.end());
+	std::cout << "size of ft::vector<int> = " << ft_vct_bi.size() << std::endl;
+
+	ft_vct_bi.insert(ft_vct_bi.end(), lst2.rbegin(), lst2.rend());
+	std::cout << "size of ft::vector<int> = " << ft_vct_bi.size() << std::endl;
+
+	std::cout << "\t### copy construct: ###" << std::endl;
+	ft::vector<int>				ft_vec_int2(5);
+	ft::vector<int>::iterator	ft_it_int2 = ft_vec_int2.begin(), ft_it_int2e = ft_vec_int2.end();
+
+	std::cout << "len: " << (ft_it_int2e - ft_it_int2) << std::endl;
+	for (; ft_it_int2 != ft_it_int2e; ++ft_it_int2)
+		*ft_it_int2 = (ft_it_int2e - ft_it_int2);
+
+	ft_it_int2 = ft_vec_int2.begin();
+
+	ft::vector<int>				ft_vec_int_range(ft_it_int2, --(--ft_it_int2e));
+
+	for (int i = 0; ft_it_int2 != ft_it_int2e; ++ft_it_int2)
+		*ft_it_int2 = ++i * 5;
+
+	ft_it_int2 = ft_vec_int2.begin();
+	ft::vector<int>				ft_vec_int_copy(ft_vec_int2);
+	for (int i = 0; ft_it_int2 != ft_it_int2e; ++ft_it_int2)
+		*ft_it_int2 = ++i * 7;
+	ft_vec_int_copy.push_back(42);
+	ft_vec_int_copy.push_back(21);
+
+	std::cout << "\t-- PART ONE --" << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vec_int2.size() << std::endl;
+	std::cout << "size of ft::vector<int> range = " << ft_vec_int_range.size() << std::endl;
+	std::cout << "size of ft::vector<int> copy = " << ft_vec_int_copy.size() << std::endl;
+
+	ft_vec_int2 = ft_vec_int_copy;
+	ft_vec_int_copy = ft_vec_int_range;
+	ft_vec_int_range.clear();
+
+	std::cout << "\t-- PART TWO --" << std::endl;
+	std::cout << "size of ft::vector<int> = " << ft_vec_int2.size() << std::endl;
+	std::cout << "size of ft::vector<int> range = " << ft_vec_int_range.size() << std::endl;
+	std::cout << "size of ft::vector<int> copy = " << ft_vec_int_copy.size() << std::endl;
 }

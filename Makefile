@@ -36,7 +36,7 @@ OBJ_DIR		= obj/
 OBJ			= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
 DEPS		= $(OBJ:.o=.d)
 
-CXXFLAGS	= -Wall -Wextra -Werror -MD -std=c++98 $(INC) $(COMMONFLAGS)
+CXXFLAGS	= -Wall -Wextra -Werror -MD $(INC) $(COMMONFLAGS)
 CXX			= clang++
 COMMONFLAGS	=
 LDFLAGS		= $(COMMONFLAGS)
