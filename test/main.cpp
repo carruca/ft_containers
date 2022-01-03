@@ -15,13 +15,13 @@ void	check_leaks( void )
 
 int	main( void )
 {
-	atexit(check_leaks);
+//	atexit(check_leaks);
 	testIs_integral();
 	testEnable_if();
 	testPair();
 	testEqual();
 	testLexicographical_compare();
-	testReverseIterator();
+//	testReverseIterator();
 	testVector();
 	return 0;
 }

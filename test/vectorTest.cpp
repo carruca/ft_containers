@@ -65,7 +65,7 @@ void	testVector(void)
 	{
 		std::cout << "Length error: " << e.what() << std::endl;
 	}
-/*	try
+	try
 	{
 		ft_vec_int1.resize(ft_vec_int1.max_size() + 1);
 	}
@@ -73,7 +73,7 @@ void	testVector(void)
 	{
 		std::cout << "Length error: " << e.what() << std::endl;
 	}
-*/
+
 	for_each(std_vec_int1.begin(), std_vec_int1.end(), display_int);
 	for_each(ft_vec_int1.begin(), ft_vec_int1.end(), display_int);
 	std_vec_int1.resize(2);
@@ -100,10 +100,22 @@ void	testVector(void)
 	std_vec_string.push_back("hola");
 	std_vec_string.push_back("que");
 	std_vec_string.push_back("tal");
+	std_vec_string.push_back("estas");
+	std_vec_string.push_back("yo");
+	std_vec_string.push_back("bien");
+	std_vec_string.push_back("en");
+	std_vec_string.push_back("casa");
 
 	ft_vec_string.push_back("hola");
 	ft_vec_string.push_back("que");
 	ft_vec_string.push_back("tal");
+	ft_vec_string.push_back("estas");
+	ft_vec_string.push_back("yo");
+	ft_vec_string.push_back("bien");
+	ft_vec_string.push_back("en");
+	ft_vec_string.push_back("casa");
+
+	/********* VECTOR<INT> - insert tests **********/
 
 	for_each(std_vec_string.begin(), std_vec_string.end(), display_string);
 	for_each(ft_vec_string.begin(), ft_vec_string.end(), display_string);
@@ -115,7 +127,8 @@ void	testVector(void)
 //	std_vec_int1.insert(it_int, 0, 34);
 	std::cout << "std_vec_int" << std::endl;
 	for_each(std_vec_int1.begin(), std_vec_int1.end(), display_int);
-	std_vec_int1.insert(it_int + 1, 7, 34);
+	std_vec_int1.insert(it_int + 1, 17, 34);
+	std_vec_int1.push_back(18);
 	//std_vec_int1.insert(it_int, 2, 2);
 	std::cout << "std_vec_int" << std::endl;
 	for_each(std_vec_int1.begin(), std_vec_int1.end(), display_int);
@@ -129,10 +142,73 @@ void	testVector(void)
 //	ft_vec_int1.insert(ft_it_int, 0, 34);
 	std::cout << "ft_vec_int" << std::endl;
 	for_each(ft_vec_int1.begin(), ft_vec_int1.end(), display_int);
-	ft_vec_int1.insert(ft_it_int + 1, 7, 34);
+	ft_vec_int1.insert(ft_it_int + 1, 17, 34);
+	ft_vec_int1.push_back(18);
 	//std_vec_int1.insert(ft_it_int, 2, 2);
 	std::cout << "ft_vec_int" << std::endl;
 	for_each(ft_vec_int1.begin(), ft_vec_int1.end(), display_int);
 	std::cout << "ft::vector::size() = " << ft_vec_int1.size() << std::endl;
 	std::cout << "ft::vector::capacity() = " << ft_vec_int1.capacity() << std::endl;
+
+	/********* VECTOR<STRING> - insert test **********/
+
+	std_vec_string.resize(4);
+	ft_vec_string.resize(4);
+
+	std::cout << "<<	std_vec_string" << std::endl;
+	std::cout << "std::vector<std::string>::size() = " << std_vec_string.size() << std::endl;
+	std::cout << "std::vector<std::string>::capacity() = " << std_vec_string.capacity() << std::endl;
+	std::vector<std::string>::iterator	it_string = std_vec_string.begin();
+//	std_vec_string.insert(it_string, 0, 34);
+	std::cout << "std_vec_string" << std::endl;
+	for_each(std_vec_string.begin(), std_vec_string.end(), display_string);
+	std_vec_string.insert(it_string + 1, 17, "e");
+	std_vec_string.push_back("me escuchas");
+	//std_vec_string.insert(it_string, 2, 2);
+	std::cout << "std_vec_string" << std::endl;
+	for_each(std_vec_string.begin(), std_vec_string.end(), display_string);
+	std::cout << "std::vector<std::string>::size() = " << std_vec_string.size() << std::endl;
+	std::cout << "std::vector<std::string>::capacity() = " << std_vec_string.capacity() << std::endl;
+
+
+	std::cout << "<<	ft_vec_string" << std::endl;
+	std::cout << "ft::vector<std::string>::size() = " << ft_vec_string.size() << std::endl;
+	std::cout << "ft::vector<std::string>::capacity() = " << ft_vec_string.capacity() << std::endl;
+	ft::vector<std::string>::iterator	ft_it_string = ft_vec_string.begin();
+//	ft_vec_string.insert(ft_it_string, 0, 34);
+	std::cout << "ft_vec_string" << std::endl;
+	for_each(ft_vec_string.begin(), ft_vec_string.end(), display_string);
+	ft_vec_string.insert(ft_it_string + 1, 17, "e");
+	ft_vec_string.push_back("me escuchas");
+	//std_vec_string.insert(ft_it_string, 2, 2);
+	std::cout << "ft_vec_string" << std::endl;
+	for_each(ft_vec_string.begin(), ft_vec_string.end(), display_string);
+	std::cout << "ft::vector<std::string>::size() = " << ft_vec_string.size() << std::endl;
+	std::cout << "ft::vector<std::string>::capacity() = " << ft_vec_string.capacity() << std::endl;
+
+	std::cout << "reserve funtion:" << std::endl;
+	try
+	{
+		std::cout << "<<	std_vec_string" << std::endl;
+		std_vec_string.reserve(80);
+		std::cout << "std::vector<std::string>::capacity() = " << std_vec_string.capacity() << std::endl;
+		for_each(std_vec_string.begin(), std_vec_string.end(), display_string);
+		std_vec_string.reserve(std_vec_string.max_size() + 1);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "Lenght error: " << e.what() << std::endl;
+	}
+	try
+	{
+		std::cout << "<<	ft_vec_string" << std::endl;
+		ft_vec_string.reserve(80);
+		std::cout << "ft::vector<std::string>::capacity() = " << ft_vec_string.capacity() << std::endl;
+		for_each(ft_vec_string.begin(), ft_vec_string.end(), display_string);
+		ft_vec_string.reserve(ft_vec_string.max_size() + 1);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "Lenght error: " << e.what() << std::endl;
+	}
 }

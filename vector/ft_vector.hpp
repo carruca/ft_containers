@@ -209,7 +209,7 @@ namespace	ft
 
 						this->_range_copy_init(first, last, tmp);
 						this->_range_destroy(this->start, this->finish);
-						this->deallocate(this->start, std::distance(this->end_of_storage - this->start));
+						this->deallocate(this->start, this->capacity());
 						this->start = tmp;
 						this->finish = this->start + len;
 						this->end_of_storage = this->start + len;
@@ -337,10 +337,7 @@ namespace	ft
 			resize( size_type n, T value = T() )
 			{
 				if (n > this->size())
-				{
-					(void)value;
-			//		this->insert(this->end(), n - this->size(), value);
-				}
+					this->insert(this->end(), n - this->size(), value);
 				else if (n < this->size())
 					this->_erase_at_end(this->start + n);
 			}
@@ -356,11 +353,25 @@ namespace	ft
 			{
 				return this->begin() == this->end();
 			}
-/*
+
 			void
 			reserve( size_type n )
-			{}
-*/
+			{
+//				if (n > this->max_size())
+//					throw std::length_error("vector");
+				if (n > this->capacity())
+				{
+					const size_type	old_size = this->size();
+					pointer			tmp = this->allocate(n);
+
+					std::copy(this->start, this->finish, tmp);
+					this->deallocate(this->start, this->capacity());
+					this->start = tmp;
+					this->finish = this->start + old_size;
+					this->end_of_storage = this->start + n;
+				}
+			}
+
 			reference
 			operator[]( size_type n )
 			{
@@ -434,46 +445,37 @@ namespace	ft
 			}
 
 		protected:
-/*
-			size_type
-			_gcc_check_length( size_type n )
-			{
-				const size_type	new_len = this->capacity() + std::max(this->size(), n);
-
-				if (this->max_size() - this->size() < n)
-					throw std::length_error("vector::check_length");
-				return new_len > this->max_size() ? this->max_size() : new_len;
-			}
-*/
 			size_type
 			_check_length( size_type n )
 			{
-				size_type new_len = this->capacity() + this->capacity();
+				const size_type	cap = this->capacity() + this->capacity();
+				const size_type	size = this->size() + n;
 
 				if (this->max_size() - this->size() < n)
-					throw std::length_error("vector::check_length");
-				if (n >= new_len)
-					new_len = n + this->size();
-				return new_len;
+					throw std::length_error("vector");
+				return cap < size ? size : cap;
 			}
 
 			void
-			_resize_insert( iterator position, const value_type& value, size_type n)
+			_resize_insert( iterator position, size_type n, const value_type& value )
 			{
-				const size_type	len = this->_check_length(n);
+				const size_type	new_len = this->_check_length(n);
 				const size_type	elems_before = position - this->begin();
-				pointer			new_start(this->allocate(len));
+				pointer			new_start(this->allocate(new_len));
 				pointer			new_finish(new_start);
+				pointer			new_mid(new_start + elems_before);
 
-				*(new_start + elems_before) = value;
-				new_finish = this->_range_copy_init(this->start, position.base(), new_start);
-				++new_finish;
-				new_finish = this->_range_copy_init(position.base(), this->finish, new_finish);
-				this->_range_destroy(this->start, this->finish);
-				this->deallocate(this->start, this->end_of_storage - this->start);
+				new_finish = std::copy(this->start, position.base(),
+									new_start);
+				std::fill(new_mid, new_mid + n, value);
+				new_finish += n;
+				new_finish = std::copy(position.base(), this->finish,
+									new_finish);
+				this->deallocate(this->start,
+							this->end_of_storage - this->start);
 				this->start = new_start;
 				this->finish = new_finish;
-				this->end_of_storage = new_start + len;
+				this->end_of_storage = new_start + new_len;
 			}
 
 			void
@@ -494,30 +496,30 @@ namespace	ft
 					*position = value;
 				}
 				else
-					this->_resize_insert(position, value, 1);
+					this->_resize_insert(position, 1, value);
 			}
 
 		public:
 
 			void
-			push_back( const value_type& x )
+			push_back( const value_type& value )
 			{
 				if (this->finish != this->end_of_storage)
-					this->_insert_at_end(x);
+					this->_insert_at_end(value);
 				else
-					this->_insert_aux(this->end(), x);
+					this->_insert_aux(this->end(), value);
 			}
 
 			iterator
-			insert( iterator position, const value_type& x )
+			insert( iterator position, const value_type& value )
 			{
 				const size_type	n = position - this->begin();
 
 				if (this->finish != this->end_of_storage
 					&& position == this->end())
-					this->_insert_at_end(x);
+					this->_insert_at_end(value);
 				else
-					this->_insert_aux(position, x);
+					this->_insert_aux(position, value);
 				return iterator(this->start + n);
 			}
 
@@ -526,51 +528,52 @@ namespace	ft
 			{
 				if (n != 0)
 				{
-					if (this->capacity() - this->size() < n)
-					{
-						const size_type	new_len = this->_check_length(n);
-						const size_type	elems_before = position - this->begin();
-						pointer			new_start(this->allocate(new_len));
-						pointer			new_finish(new_start);
-						pointer			new_mid(new_start + elems_before);
-
-						std::cout << "aqui" << std::endl;
-						new_finish = std::copy(this->start, position.base(),
-											new_start);
-						std::fill(new_mid, new_mid + n, value);
-						new_finish += n;
-						new_finish = std::copy(position.base(), this->finish,
-											new_finish);
-						this->deallocate(this->start,
-									this->end_of_storage - this->start);
-						this->start = new_start;
-						this->finish = new_finish;
-						this->end_of_storage = new_start + new_len;
-					}
-					else
+					if (this->capacity() - this->size() >= n)
 					{
 						std::copy_backward(position, this->end(),
 										this->finish + difference_type(n));
 						std::fill(position.base(), position.base() + n, value);
 						this->finish += n;
 					}
+					else
+						this->_resize_insert(position, n, value);
 				}
 			}
 /*
 			template< typename InputIterator >
 				void
-				insert( iterator pos, InputIterator first, InputIterator last )
+				insert( iterator position, InputIterator first, InputIterator last )
 				{
+					for (; first != last; ++first)
+					{
+						position = this->insert(position, *first);
+						++position;
+					}
 				}
-
+*/
 			iterator
 			erase( iterator position )
-			{}
+			{
+				if (position != this->end())
+				{
+					if (position + 1 != this->end())
+						std::copy(position + 1, this->finish, position);
+					--this->finish;
+					this->allocator.destroy(this->finish);
+				}
+			}
 
 			iterator
 			erase( iterator first, iterator last )
-			{}
-*/
+			{
+				if (first != last)
+				{
+					if (last != this->end())
+						std::copy(last, this->finish, first);
+					this->_erase_at_end(first.base() + (this->finish - last.base()));
+				}
+			}
+
 			void
 			swap( vector& other )
 			{
