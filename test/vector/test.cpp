@@ -5,6 +5,11 @@
 #include <list>
 #include "ft_vector.hpp"
 
+void	default_constructor_test(void);
+void	erase_test(void);
+void	iterator_test(void);
+void	iterator_test2(void);
+
 void	display_int( int target ) {
 
 	std::cout << "elem = " << target << std::endl;
@@ -30,10 +35,25 @@ public:
 	}
 };
 
+void	swap_test( void )
+{
+	ft::vector<int>	vect(5, 23);
+	ft::vector<int>	vect2(4, 2);
+
+	vect.swap(vect2);
+}
+
 void	testVector(void)
 {
+	default_constructor_test();
+	erase_test();
+	iterator_test();
+	iterator_test2();
+	swap_test();
+/*
 	std::vector<int>	std_vec_int1;
 	ft::vector<int>		ft_vec_int1;
+
 	std::allocator<int>	alloc1;
 
 	std::cout << "Size of empty std::vector = " << sizeof(std_vec_int1) << std::endl;
@@ -116,7 +136,7 @@ void	testVector(void)
 	ft_vec_string.push_back("en");
 	ft_vec_string.push_back("casa");
 
-	/********* VECTOR<INT> - insert tests **********/
+	////////// VECTOR<INT> - insert tests //////////
 
 	for_each(std_vec_string.begin(), std_vec_string.end(), display_string);
 	for_each(ft_vec_string.begin(), ft_vec_string.end(), display_string);
@@ -151,7 +171,7 @@ void	testVector(void)
 	std::cout << "ft::vector::size() = " << ft_vec_int1.size() << std::endl;
 	std::cout << "ft::vector::capacity() = " << ft_vec_int1.capacity() << std::endl;
 
-	/********* VECTOR<STRING> - insert test **********/
+	////// VECTOR<STRING> - insert test ///////
 
 	std_vec_string.resize(4);
 	ft_vec_string.resize(4);
@@ -357,4 +377,5 @@ void	testVector(void)
 	std::cout << "size of ft::vector<int> = " << ft_vec_int2.size() << std::endl;
 	std::cout << "size of ft::vector<int> range = " << ft_vec_int_range.size() << std::endl;
 	std::cout << "size of ft::vector<int> copy = " << ft_vec_int_copy.size() << std::endl;
+*/
 }

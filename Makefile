@@ -1,48 +1,54 @@
-NAME		= ft_containers
+NAME			= ft_containers
 
-TEST_DIR	= test/
-TEST_SRC	= is_integralTest.cpp				\
-			  enable_ifTest.cpp					\
-			  pairTest.cpp						\
-			  equalTest.cpp						\
-			  lexicographical_compareTest.cpp 	\
-			  reverse_iteratorTest.cpp			\
-			  vectorTest.cpp
 
-VECTOR_DIR	= vector/
-VECTOR_INC	= ft_vector.hpp
+TEST_DIR		= test/
+TEST_VECTOR		= test.cpp							\
+				  constructor.cpp					\
+				  erase.cpp
+TEST_UTILS		= is_integralTest.cpp				\
+				  enable_ifTest.cpp					\
+				  pairTest.cpp						\
+				  equalTest.cpp						\
+				  lexicographical_compareTest.cpp 	\
+				  reverse_iteratorTest.cpp
 
-ITER_DIR	= iterator/
-ITER_INC	= ft_iterators_traits.hpp			\
-			  ft_reverse_iterator.hpp			\
-			  ft_normal_iterator.hpp
+VECTOR_DIR		= vector/
+VECTOR_INC		= ft_vector.hpp
 
-TYPES_DIR	= types/
-TYPES_INC	= ft_is_integral.hpp				\
-			  ft_enable_if.hpp
+ITER_DIR		= iterator/
+ITER_INC		= ft_iterators_traits.hpp			\
+				  ft_reverse_iterator.hpp			\
+				  ft_normal_iterator.hpp
 
-ALG_DIR		= algorithm/
-ALG_INC		= ft_equal.hpp						\
-			  ft_lexicographical_compare.hpp
+TYPES_DIR		= types/
+TYPES_INC		= ft_is_integral.hpp				\
+				  ft_enable_if.hpp
 
-UTIL_DIR	= utility/
-UTIL_INC	= ft_pair.hpp
+ALG_DIR			= algorithm/
+ALG_INC			= ft_equal.hpp						\
+				  ft_lexicographical_compare.hpp
 
-SRC			= $(addprefix $(TEST_DIR), main.cpp $(TEST_SRC))
+UTIL_DIR		= utility/
+UTIL_INC		= ft_pair.hpp
 
-INC			= -I$(VECTOR_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR)
+SRC				= $(addprefix $(TEST_DIR),	\
+				  main.cpp					\
+				  $(TEST_UTILS)				\
+				  $(addprefix $(VECTOR_DIR), $(TEST_VECTOR)))
 
-OBJ_DIR		= obj/
-OBJ			= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
-DEPS		= $(OBJ:.o=.d)
+INC				= -I$(VECTOR_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR)
 
-CXXFLAGS	= -Wall -Wextra -Werror -MD $(INC) $(COMMONFLAGS)
-CXX			= clang++
-COMMONFLAGS	=
-LDFLAGS		= $(COMMONFLAGS)
+OBJ_DIR			= obj/
+OBJ				= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
+DEPS			= $(OBJ:.o=.d)
 
-DEBUG		= -g3
-SANITIZE	= -fsanitize=address
+CXXFLAGS		= -Wall -Wextra -Werror -MD $(INC) $(COMMONFLAGS)
+CXX				= clang++
+COMMONFLAGS		=
+LDFLAGS			= $(COMMONFLAGS)
+
+DEBUG			= -g3
+SANITIZE		= -fsanitize=address
 
 all:		$(NAME)
 

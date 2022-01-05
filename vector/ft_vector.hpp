@@ -112,7 +112,8 @@ namespace	ft
 			}
 
 			template< typename InputIterator >
-				vector( InputIterator first, InputIterator last, const Alloc& a = Alloc() )
+				vector( typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+					InputIterator last, const Alloc& a = Alloc() )
 				: base(std::distance(first, last), a)
 				{
 					this->finish = this->_range_copy_init(first, last, this->start);
@@ -126,9 +127,7 @@ namespace	ft
 
 			/*	default destructor	*/
 			~vector( void )
-			{
-		//		this->deallocate(this->start, this->capacity());
-			}
+			{}
 
 			vector&
 			operator=( const vector& other )
@@ -558,10 +557,11 @@ namespace	ft
 				if (position != this->end())
 				{
 					if (position + 1 != this->end())
-						std::copy(position + 1, this->finish, position);
+						std::copy(position.base() + 1, this->finish, position.base());
 					--this->finish;
 					this->allocator.destroy(this->finish);
 				}
+				return position;
 			}
 
 			iterator
@@ -570,9 +570,10 @@ namespace	ft
 				if (first != last)
 				{
 					if (last != this->end())
-						std::copy(last, this->finish, first);
+						std::copy(last.base(), this->finish, first.base());
 					this->_erase_at_end(first.base() + (this->finish - last.base()));
 				}
+				return first;
 			}
 
 			void
