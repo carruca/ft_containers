@@ -2,6 +2,8 @@ NAME			= ft_containers
 
 
 TEST_DIR		= test/
+
+VECTOR_DIR		= vector/
 TEST_VECTOR		= test.cpp							\
 				  constructor.cpp					\
 				  erase.cpp
@@ -12,7 +14,7 @@ TEST_UTILS		= is_integralTest.cpp				\
 				  lexicographical_compareTest.cpp 	\
 				  reverse_iteratorTest.cpp
 
-VECTOR_DIR		= vector/
+CONTAINER_DIR	= containers/
 VECTOR_INC		= ft_vector.hpp
 
 ITER_DIR		= iterator/
@@ -36,7 +38,7 @@ SRC				= $(addprefix $(TEST_DIR),	\
 				  $(TEST_UTILS)				\
 				  $(addprefix $(VECTOR_DIR), $(TEST_VECTOR)))
 
-INC				= -I$(VECTOR_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR)
+INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR)
 
 OBJ_DIR			= obj/
 OBJ				= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))

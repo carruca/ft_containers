@@ -187,8 +187,10 @@ namespace	ft
 				}
 				else if ( n > this->size() )
 				{
-					std::fill(this->begin(), this->end(), value);
-					this->_fill_init(this->finish, n - this->size(), value);
+					std::fill(this->begin(), n - this->size(), value);
+			//		std::fill(this->begin(), this->end(), value);
+			//		std::fill(this->finish, n - this->size(), value);
+			//		this->_fill_init(this->finish, n - this->size(), value);
 					this->finish += n - this->size();
 				}
 				else
@@ -200,7 +202,7 @@ namespace	ft
 
 			template< typename InputIterator >
 				void
-				_range_fill_assign( InputIterator first, InputIterator last)
+				_range_assign( InputIterator first, InputIterator last)
 				{
 					const size_type	len = std::distance(first, last);
 
@@ -262,10 +264,11 @@ namespace	ft
 
 			template< typename InputIterator >
 				void
-				assign( typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
-					InputIterator last)
+				assign(
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+					InputIterator last )
 				{
-					this->_range_fill_assign(first, last);
+					this->_range_assign(first, last);
 				}
 
 			allocator_type
