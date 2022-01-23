@@ -53,10 +53,21 @@ void	testVector(void)
 	iterator_test2();
 	swap_test();
 
-/*
 	std::vector<int>	std_vec_int1;
+	std::vector<int>	std_vec_int2;
 	ft::vector<int>		ft_vec_int1;
+	std::string			str1;
+	std::string			str2;
 
+	std_vec_int1.assign(3, 12);
+	std_vec_int1.assign(std_vec_int2.begin(), std_vec_int2.begin());
+	for_each(std_vec_int1.begin(), std_vec_int1.end(), display_int);
+
+	ft_vec_int1.assign(3, 12);
+	ft_vec_int1.assign(2, 4);
+	ft_vec_int1.assign(3, 4);
+	for_each(ft_vec_int1.begin(), ft_vec_int1.end(), display_int);
+/*
 	std::allocator<int>	alloc1;
 
 	std::cout << "Size of empty std::vector = " << sizeof(std_vec_int1) << std::endl;

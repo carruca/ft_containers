@@ -160,11 +160,11 @@ namespace	ft
 			}
 
 		protected:
-			allocator_type&
+		/*	allocator_type&
 			_get_allocator( void )
 			{
 				return this->allocator;
-			}
+			}*/
 
 			void
 			_fill_init( pointer first, size_type n, const value_type& value )
@@ -181,22 +181,17 @@ namespace	ft
 			{
 				if ( n > this->capacity() )
 				{
-					vector	tmp(n, value, this->_get_allocator());
+					vector	tmp(n, value, this->get_allocator());
 
 					tmp.swap(*this);
-				}
-				else if ( n > this->size() )
-				{
-					std::fill(this->begin(), n - this->size(), value);
-			//		std::fill(this->begin(), this->end(), value);
-			//		std::fill(this->finish, n - this->size(), value);
-			//		this->_fill_init(this->finish, n - this->size(), value);
-					this->finish += n - this->size();
 				}
 				else
 				{
 					std::fill_n(this->start, n, value);
-					this->_erase_at_end(this->start + n);
+					if ( n > this->size() )
+						this->finish += (n - this->size());
+					else
+						this->_erase_at_end(this->start + n);
 				}
 			}
 
@@ -266,11 +261,18 @@ namespace	ft
 				void
 				assign(
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
-					InputIterator last )
+					InputIterator last ) //TODO el error de compilacion difiere con el std
 				{
 					this->_range_assign(first, last);
 				}
-
+/*
+			template< typename InputIterator >
+				void
+				assign( InputIterator first, InputIterator last )
+				{
+					this->_range_assign(first, last);
+				}
+*/
 			allocator_type
 			get_allocator( void ) const
 			{
