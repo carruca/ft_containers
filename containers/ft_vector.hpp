@@ -603,7 +603,7 @@ namespace	ft
 		operator==( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
 		{
 			return (lhs.size() == rhs.size()
-				&& std::equal(lhs.begin(), lhs.end(), rhs.begin())); //cambiar por ft namespace
+				&& ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 		}
 
 	template< typename T, typename Alloc >
@@ -617,7 +617,7 @@ namespace	ft
 		inline bool
 		operator<( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs )
 		{
-			return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); //cambiar por ft namespace
+			return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 		}
 
 	template< typename T, typename Alloc >

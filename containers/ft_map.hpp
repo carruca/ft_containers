@@ -3,6 +3,7 @@
 
 # include <functional>
 # include "ft_pair.hpp"
+# include "ft_tree.hpp"
 
 namespace	ft
 {
@@ -11,22 +12,29 @@ namespace	ft
 		class	map
 		{
 		public:
-			typedef Key										key_value;
-			typedef T										mapped_value;
-			typedef ft::pair<const key_value, mapped_value>	value_type;
-			typedef Compare									key_compare;
-			typedef Alloc									allocator_type;
-			typedef allocator_type::reference				reference;
-			typedef allocator_type::const_reference			const_reference;
-			typedef allocator_type::pointer					pointer;
-			typedef allocator_type::const_pointer			const_pointer;
-		/*	typedef											iterator;
-			typedef											const_iterator;
-			typedef	ft::reverse_iterator<iterator>			reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-		*/
-			typedef std::ptrdiff_t							diferrence_type;
-			typedef std::size_t								size_type;
+			typedef Key															key_value;
+			typedef T															mapped_value;
+			typedef ft::pair<const key_value, mapped_value>						value_type;
+			typedef Compare														key_compare;
+			typedef Alloc														allocator_type;
+
+		private:
+			typedef typename allocator_type::rebind<value_type>::other			pair_allocator_type;
+			typedef tree<key_type,mapped_value,key_compare,pair_allocator_type>	tree_type;
+
+			tree_type	_tree;
+
+		public:
+			typedef pair_allocator_type::reference								reference;
+			typedef pair_allocator_type::const_reference						const_reference;
+			typedef pair_allocator_type::pointer								pointer;
+			typedef pair_allocator_type::const_pointer							const_pointer;
+			typedef	tree_type::iterator											iterator;
+			typedef	tree_type::const_iterator									const_iterator;
+			typedef	tree_type::reverse_iterator									reverse_iterator;
+			typedef tree_type::const_reverse_iterator							const_reverse_iterator;
+			typedef tree_type::size_type										size_type;
+			typedef tree_type::difference_type									diferrence_type;
 
 			/*	default_constructor	*/
 			map()

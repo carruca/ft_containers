@@ -5,6 +5,8 @@
 # include <memory>
 # include "ft_tree_iterator.hpp"
 # include "ft_reverse_iterator.hpp"
+# include "ft_equal.hpp"
+# include "ft_lexicographical_compare.hpp"
 
 namespace	ft
 {
@@ -117,8 +119,7 @@ namespace	ft
 
 			/*	default constructor	*/
 			tree( void )
-			{
-			}
+			{}
 
 			tree( const Compare& comp)
 			: _comp(comp),
@@ -133,7 +134,7 @@ namespace	ft
 			{}
 
 			tree( const tree<Key, Value, Compare, Alloc>& x )
-			{	
+			{
 			}
 
 			~tree( void )
@@ -164,39 +165,30 @@ namespace	ft
 				return this->_header.parent;
 			}
 */
+			node_ptr
+			_minimum( node_ptr x )
+			{
+				return ft::tree_node::minimum(x);
+			}
+
+			const_node_ptr
+			_minimum( node_ptr x )
+			{
+				return ft::tree_node::minimum(x);
+			}
+
+			node_ptr
+			_maximum( node_ptr x )
+			{
+				return ft::tree_node::maximum(x);
+			}
+
+			const_node_ptr
+			_maximum( node_ptr x )
+			{
+				return ft::tree_node::maximum(x);
+			}
 /*
-			node_ptr
-			_minimum( node_ptr x )
-			{
-				while (x->left != 0)
-					x = x->left;
-				return x;
-			}
-
-			const_node_ptr
-			_minimum( node_ptr x )
-			{
-				while (x->left != 0)
-					x = x->left;
-				return x;
-			}
-
-			node_ptr
-			_maximum( node_ptr x )
-			{
-				while (x->right != 0)
-					x = x->right;
-				return x;
-			}
-
-			const_node_ptr
-			_maximum( node_ptr x )
-			{
-				while (x->right != 0)
-					x = x->right;
-				return x;
-			}
-
 			static node_ptr
 			_increment( node_ptr x )
 			{
@@ -266,7 +258,87 @@ namespace	ft
 				y->right = x;
 				x->parent = y;
 			}
+
+			bool
+			empty( void ) const
+			{
+				return this->_node_count == 0;
+			}
+
+			size_type
+			size( void )
+			{
+				return this->_node_count;
+			}
+
+			size_type
+			max_size( void )
+			{
+				return size_type(-1);
+			}
+
+			void
+			swap( tree<Key, Value, Compare, Alloc>& x )
+			{
+			}
 		};
+
+	template< typename Key, typename Value, typename Compare, typename Alloc >
+		inline bool
+		operator==( const tree<Key,Value,Compare,Alloc>& lhs,
+					const tree<Key,Value,Compare,Alloc>& rhs )
+		{
+			return lhs.size() == rhs.size()
+				&& ft::equal(lhs.begin(), lhs.end(), rhs.begin();
+		}
+
+	template< typename Key, typename Value, typename Compare, typename Alloc >
+		inline bool
+		operator!=( const tree<Key,Value,Compare,Alloc>& lhs,
+					const tree<Key,Value,Compare,Alloc>& rhs )
+		{
+			return !(lhs == rhs);
+		}
+
+	template< typename Key, typename Value, typename Compare, typename Alloc >
+		inline bool
+		operator<( const tree<Key,Value,Compare,Alloc>& lhs,
+					const tree<Key,Value,Compare,Alloc>& rhs )
+		{
+			return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		}
+
+	template< typename Key, typename Value, typename Compare, typename Alloc >
+		inline bool
+		operator>( const tree<Key,Value,Compare,Alloc>& lhs,
+					const tree<Key,Value,Compare,Alloc>& rhs )
+		{
+			return rhs < lhs;
+		}
+
+	template< typename Key, typename Value, typename Compare, typename Alloc >
+		inline bool
+		operator<=( const tree<Key,Value,Compare,Alloc>& lhs,
+					const tree<Key,Value,Compare,Alloc>& rhs )
+		{
+			return !(rhs < lhs);
+		}
+
+	template< typename Key, typename Value, typename Compare, typename Alloc >
+		inline bool
+		operator>=( const tree<Key,Value,Compare,Alloc>& lhs,
+					const tree<Key,Value,Compare,Alloc>& rhs )
+		{
+			return !(lhs < rhs);
+		}
+
+	template< typename Key, typename Value, typename Compare, typename Alloc >
+		inline void
+		swap( tree<Key,Value,Compare,Alloc>& lhs,
+				tree<Key,Value,Compare,Alloc>& rhs )
+		{
+			return lhs.swap(rhs);
+		}
 }
 
 #endif
