@@ -3,6 +3,8 @@
 
 # include <cstddef>
 # include <memory>
+# include "ft_tree_iterator.hpp"
+# include "ft_reverse_iterator.hpp"
 
 namespace	ft
 {
@@ -22,17 +24,96 @@ namespace	ft
 			node_ptr	left;
 			node_ptr	right;
 			Value		content;
+
+			static node_ptr
+			minimum( node_ptr x )
+			{
+				while (x->left != 0)
+					x = x->left;
+				return x;
+			}
+
+			static const_node_ptr
+			minimum( node_ptr x )
+			{
+				while (x->left != 0)
+					x = x->left;
+				return x;
+			}
+
+			static node_ptr
+			maximum( node_ptr x )
+			{
+				while (x->right != 0)
+					x = x->right;
+				return x;
+			}
+
+			static const_node_ptr
+			maximum( node_ptr x )
+			{
+				while (x->right != 0)
+					x = x->right;
+				return x;
+			}
+
+			static node_ptr
+			increment( node_ptr x )
+			{
+				node_ptr	y;
+
+				if (x->right != 0)
+					return tree_node::mininum(x->right);
+				y = x->parent;
+				while ( y != 0 && x == y->right)
+				{
+					x = y;
+					y = x->parent;
+				}
+				return y;
+			}
+
+			static node_ptr
+			decrement( node_ptr x )
+			{
+				node_ptr	y;
+
+				if (x->left != 0)
+					return tree_node::maximum(x->left);
+				y = x->parent;
+				while ( y != 0 && x == y->left)
+				{
+					x = y;
+					y = x->parent;
+				}
+				return y;
+			}
 		};
 
 	template< typename Key, typename Value, typename Compare,
 			  typename Alloc = std::allocator<Value> >
 		class	tree
 		{
+		private:
+			typedef typename Alloc::rebind<tree_node_type>::other	node_allocator;
+
 		public:
-			typedef Key						key_type;
-			typedef Value					value_type;
-			typedef std::size_t				size_type;
-			typedef	Alloc					allocator_type;
+			typedef Key												key_type;
+			typedef Value											value_type;
+			typedef value_type*										pointer;
+			typedef const value_type*								const_pointer;
+			typedef value_type&										reference;
+			typedef const value_type&								const_reference;
+			typedef tree_node<value_type>							tree_node_type;
+			typedef tree_node_type*									node_ptr;
+			typedef const tree_node_type*							const_node_ptr;
+			typedef std::size_t										size_type;
+			typedef std::ptrdiff_t									difference_type;
+			typedef	Alloc											allocator_type;
+			typedef ft::tree_iterator<value_type>					iterator;
+			typedef ft::tree_const_iterator<value_type>				const_iterator;
+			typedef ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 			/*	default constructor	*/
 			tree( void )
@@ -57,7 +138,7 @@ namespace	ft
 
 			~tree( void )
 			{
-				//erase
+				//call erase
 			}
 
 			const tree<Key, Value, Compare, Alloc>&
@@ -66,14 +147,10 @@ namespace	ft
 			}
 
 		protected:
-			typedef tree_node<value_type>	tree_node_type;
-			typedef tree_node_type*			node_ptr;
-			typedef const tree_node_type*	const_node_ptr;
-
-			Compare		_comp;
-			tree_node	_header;
-			size_type	_node_count;
-			Alloc		_allocator;
+			Compare			_comp;
+			tree_node		_header;
+			size_type		_node_count;
+			node_allocator	_allocator;
 /*
 			node_ptr
 			_root( void )
@@ -87,6 +164,7 @@ namespace	ft
 				return this->_header.parent;
 			}
 */
+/*
 			node_ptr
 			_minimum( node_ptr x )
 			{
@@ -150,7 +228,7 @@ namespace	ft
 				}
 				return y;
 			}
-
+*/
 			static void
 			_rotate_left( node_ptr x, node_ptr root )
 			{
