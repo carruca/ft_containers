@@ -131,7 +131,8 @@ namespace	ft
 			: _comp(comp)
 			, _node_count(0)
 			, allocator(a)
-			{}
+			{
+			}
 
 			tree( const tree<Key, Value, Compare, Alloc>& x )
 			{
@@ -149,9 +150,50 @@ namespace	ft
 
 		protected:
 			Compare			_comp;
-			tree_node		_header;
+			tree_node_type	_header;
 			size_type		_node_count;
 			node_allocator	_allocator;
+
+			node_ptr
+			_get_node( void )
+			{
+				return this->_allocator.allocate(1);
+			}
+
+			void
+			_destroy_node( node_ptr x )
+			{
+				this->allocator.deallocate(x, 1);
+			}
+
+			node_ptr
+			_create_node( const value_type& value )
+			{
+				node_ptr	tmp = this->_get_node();
+
+				tmp->content = value;
+				return tmp;
+			}
+
+			node_ptr
+			_clone_node( node_ptr x )
+			{
+				node_ptr	tmp = this->_create_node(x->content);
+
+				tmp->color = x->color;
+				tmp->left = 0;
+				tmp->right = 0;
+				return tmp;
+			}
+
+			void
+			_empty_init( void )
+			{
+				this->_header.color = red;
+				this->_header.parent = 0;
+				this->_header.left = &this->_header;
+				this->_header.right = &this->_header;
+			}
 /*
 			node_ptr
 			_root( void )
@@ -259,6 +301,7 @@ namespace	ft
 				x->parent = y;
 			}
 
+		public:
 			bool
 			empty( void ) const
 			{

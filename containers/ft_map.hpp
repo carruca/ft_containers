@@ -229,7 +229,7 @@ namespace	ft
 		operator==( const map<Key,T,Compare,Alloc>& lhs,
 					const map<Key,T,Comapre,Alloc>& rhs )
 		{
-			return ; //TODO
+			return lhs._tree == rhs._tree;
 		}
 	
 	template< typename Key, typename T, typename Compare, typename Alloc >
@@ -245,7 +245,7 @@ namespace	ft
 		operator<( const map<Key,T,Compare,Alloc>& lhs,
 					const map<Key,T,Compare,Alloc>& rhs )
 		{
-			return; //TODO
+			return lhs._tree < rhs._tree;
 		}
 
 	template< typename Key, typename T, typename Compare, typename Alloc >
