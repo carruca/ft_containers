@@ -57,69 +57,88 @@ namespace	ft
 			{
 			}
 
+			/*	default destructor	*/
+			~map( void )
+			{}
+
 			map&
 			operator=( const map& x )
 			{
+				if (this != &x)
+					this->_tree = x._tree;
+				return *this;
 			}
 
 			allocator_type
 			get_allocator( void ) const
 			{
+				return this->_tree.get_allocator();
 			}
 
 			iterator
 			begin( void )
 			{
+				return this->_tree.begin();
 			}
 
 			const_iterator
 			begin( void ) const
 			{
+				return this->_tree.begin();
 			}
 
 			iterator
 			end( void )
 			{
+				return this->_tree.end();
 			}
 
 			const_iterator
 			end( void ) const
 			{
+				return this->_tree.end();
 			}
 
 			reverse_iterator
 			rbegin( void )
 			{
+				return this->_tree.rbegin();
 			}
 
 			const_reverse_iterator
 			rbegin( void ) const
 			{
+				return this->_tree.rbegin();
 			}
 
 			reverse_iterator
 			rend( void )
 			{
+				return this->_tree.rend();
 			}
 
 			const_reverse_iterator
 			rend( void ) const
 			{
+				return this->_tree.rend();
 			}
 
 			bool
 			empty( void ) const
 			{
+				return this->_tree.empty();
 			}
 
 			size_type
 			size( void ) const
 			{
+				return this->_tree.size();
 			}
 
 			size_type
 			max_size( void ) const
 			{
+				return this->_tree.max_size();
 			}
 
 			mapped_type&
@@ -133,12 +152,12 @@ namespace	ft
 			}
 
 			ft::pair<iterator, bool>
-			insert( const value_type& v )
+			insert( const value_type& value )
 			{
 			}
 
 			iterator
-			insert( iterator position, const value_type& v )
+			insert( iterator position, const value_type& value )
 			{
 			}
 
@@ -154,7 +173,7 @@ namespace	ft
 			}
 
 			size_type
-			erase( const key_type& k )
+			erase( const key_type& key )
 			{
 			}
 
@@ -216,6 +235,7 @@ namespace	ft
 			key_compare
 			key_comp( void ) const
 			{
+				return this->_tree.key_comp();
 			}
 
 			value_compare

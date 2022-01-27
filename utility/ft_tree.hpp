@@ -117,39 +117,8 @@ namespace	ft
 			typedef ft::reverse_iterator<iterator>					reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
-			/*	default constructor	*/
-			tree( void )
-			{}
-
-			tree( const Compare& comp)
-			: _comp(comp),
-			, _node_count(0)
-			{
-			}
-
-			tree( const Compare& comp, const allocator_type& a )
-			: _comp(comp)
-			, _node_count(0)
-			, allocator(a)
-			{
-			}
-
-			tree( const tree<Key, Value, Compare, Alloc>& x )
-			{
-			}
-
-			~tree( void )
-			{
-				//call erase
-			}
-
-			const tree<Key, Value, Compare, Alloc>&
-			operator=( const tree<Key, value, Compare, Alloc>& rhs)
-			{
-			}
-
 		protected:
-			Compare			_comp;
+			Compare			_key_compare;
 			tree_node_type	_header;
 			size_type		_node_count;
 			node_allocator	_allocator;
@@ -302,6 +271,88 @@ namespace	ft
 			}
 
 		public:
+
+			/*	default constructor	*/
+			tree( void )
+			{}
+
+			tree( const Compare& comp)
+			: _key_compare(comp),
+			, _node_count(0)
+			{
+			}
+
+			tree( const Compare& comp, const allocator_type& a )
+			: _key_compare(comp)
+			, _node_count(0)
+			, allocator(a)
+			{
+			}
+
+			tree( const tree<Key, Value, Compare, Alloc>& x )
+			{
+			}
+
+			~tree( void )
+			{
+				//call erase
+			}
+
+			const tree<Key, Value, Compare, Alloc>&
+			operator=( const tree<Key, value, Compare, Alloc>& rhs)
+			{
+			}
+
+			allocator_type
+			get_allocator( void ) const
+			{
+				return this->_allocator;
+			}
+
+			iterator
+			begin( void )
+			{
+			}
+
+			const_iterator
+			begin( void ) const
+			{
+			}
+
+			iterator
+			end( void )
+			{
+			}
+
+			const_iterator
+			end( void ) const
+			{
+			}
+
+			reverse_iterator
+			rbegin( void )
+			{
+				return reverse_iterator(this->end());
+			}
+
+			const_reverse_iterator
+			rbegin( void ) const
+			{
+				return const_reverse_iterator(this->end());
+			}
+
+			reverse_iterator
+			rend( void )
+			{
+				return reverse_iterator(this->begin());
+			}
+
+			const_reverse_iterator
+			rend( void ) const
+			{
+				return const_reverse_iterator(this->begin());
+			}
+
 			bool
 			empty( void ) const
 			{
@@ -321,8 +372,170 @@ namespace	ft
 			}
 
 			void
+			clear( void )
+			{
+				this->erase(this->begin());
+				//incomplete
+			}
+
+			ft::pair<iterator, bool>
+			insert( const value_type& value )
+			{
+			}
+
+			iterator
+			insert( iterator position, const value_type& value )
+			{
+			}
+
+			template< typename InputIterator >
+				void
+				insert( InputIterator first, InputIterator last)
+				{
+				}
+
+			void
+			erase( iterator position )
+			{
+			}
+
+			size_type
+			erase( const key_type& key )
+			{
+			}
+
+			void
+			erase( iterator first, iterator last )
+			{
+			}
+
+			void
 			swap( tree<Key, Value, Compare, Alloc>& x )
 			{
+			}
+
+			size_type
+			count( const key_type& key ) const
+			{
+			}
+
+			iterator
+			find( const key_type& key )
+			{
+			}
+
+			const_iterator
+			find( const key_type& key ) const
+			{
+			}
+
+			ft::pair<iterator, iterator>
+			equal_range( const key_type& key )
+			{
+				node_ptr	x = this->begin();
+				node_ptr	y = this->end();
+
+				while (x != 0)
+				{
+					//TODO
+				}
+				return ft::pair<iterator, iterator>(iterator(x), iterator(y));
+			}
+
+			ft::pair<const_iterator, const_iterator>
+			equal_range( const key_type& key ) const
+			{
+				const_node_ptr	x = this->begin();
+				const_node_ptr	y = this->end();
+
+				while (x != 0)
+				{
+					//TODO
+				}
+				return ft::pair<const_iterator,
+					   const_iterator>(const_iterator(x), const_iterator(y));
+			}
+
+			iterator
+			lower_bound( const key_type& key )
+			{
+				node_ptr	x = this->begin();
+				node_ptr	y = this->end();
+
+				while (x != 0)
+				{
+					if (!this->_key_compare(x->content.first, key))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return iterator(y);
+			}
+
+			const_iterator
+			lower_bound( const key_type& key ) const
+			{
+				const_node_ptr	x = this->begin();
+				const_node_ptr	y = this->end();
+
+				while (x != 0)
+				{
+					if (!this->_key_compare(x->content.first, key))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return const_iterator(y);
+			}
+
+			iterator
+			upper_bound( const key_type& key )
+			{
+				node_ptr	x = this->begin();
+				node_ptr	y = this->end();
+
+				while (x != 0)
+				{
+					if (this->_key_compare(key, x->content.first))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return iterator(y);
+			}
+
+			const_iterator
+			upper_bound( const key_type& key ) const
+			{
+				const_node_ptr	x = this->begin();
+				const_node_ptr	y = this->end();
+
+				while (x != 0)
+				{
+					if (this->_key_compare(key, x->content.first))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return const_iterator(y);
+			}
+
+			key_compare
+			key_comp( void ) const
+			{
+				return this->key_compare;
 			}
 		};
 
