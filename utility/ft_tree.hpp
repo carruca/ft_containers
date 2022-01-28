@@ -119,7 +119,7 @@ namespace	ft
 
 		protected:
 			Compare			_key_compare;
-			tree_node_type	_header;
+			node_ptr		_header;
 			size_type		_node_count;
 			node_allocator	_allocator;
 
@@ -154,7 +154,7 @@ namespace	ft
 				tmp->right = 0;
 				return tmp;
 			}
-
+/*
 			void
 			_empty_init( void )
 			{
@@ -163,19 +163,19 @@ namespace	ft
 				this->_header.left = &this->_header;
 				this->_header.right = &this->_header;
 			}
-/*
+*/
 			node_ptr
 			_root( void )
 			{
-				return this->_header.parent;
+				return this->_header;
 			}
 
 			const_node_ptr
 			_root( void ) const
 			{
-				return this->_header.parent;
+				return this->_header;
 			}
-*/
+
 			node_ptr
 			_minimum( node_ptr x )
 			{
@@ -312,21 +312,25 @@ namespace	ft
 			iterator
 			begin( void )
 			{
+				return iterator(this->_minimum(this->_root()));
 			}
 
 			const_iterator
 			begin( void ) const
 			{
+				return const_iterator(this->_minimum(this->_root()));
 			}
 
 			iterator
 			end( void )
 			{
+				return iterator(this->_maximum(this->_root()));
 			}
 
 			const_iterator
 			end( void ) const
 			{
+				return const_iterator(this->_maximum(this->_root()));
 			}
 
 			reverse_iterator
@@ -456,10 +460,11 @@ namespace	ft
 					   const_iterator>(const_iterator(x), const_iterator(y));
 			}
 
+		public:
 			iterator
 			lower_bound( const key_type& key )
 			{
-				node_ptr	x = this->begin();
+				node_ptr	x = this->_root();
 				node_ptr	y = this->end();
 
 				while (x != 0)
@@ -478,8 +483,8 @@ namespace	ft
 			const_iterator
 			lower_bound( const key_type& key ) const
 			{
-				const_node_ptr	x = this->begin();
-				const_node_ptr	y = this->end();
+				node_ptr	x = this->_root();
+				node_ptr	y = this->end();
 
 				while (x != 0)
 				{
@@ -497,7 +502,7 @@ namespace	ft
 			iterator
 			upper_bound( const key_type& key )
 			{
-				node_ptr	x = this->begin();
+				node_ptr	x = this->_root();
 				node_ptr	y = this->end();
 
 				while (x != 0)
@@ -516,8 +521,8 @@ namespace	ft
 			const_iterator
 			upper_bound( const key_type& key ) const
 			{
-				const_node_ptr	x = this->begin();
-				const_node_ptr	y = this->end();
+				node_ptr	x = this->_root();
+				node_ptr	y = this->end();
 
 				while (x != 0)
 				{
