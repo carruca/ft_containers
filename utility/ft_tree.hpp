@@ -65,7 +65,7 @@ namespace	ft
 				node_ptr	y;
 
 				if (x->right != 0)
-					return tree_node::mininum(x->right);
+					return mininum(x->right);
 				y = x->parent;
 				while ( y != 0 && x == y->right)
 				{
@@ -81,7 +81,7 @@ namespace	ft
 				node_ptr	y;
 
 				if (x->left != 0)
-					return tree_node::maximum(x->left);
+					return maximum(x->left);
 				y = x->parent;
 				while ( y != 0 && x == y->left)
 				{
@@ -177,6 +177,30 @@ namespace	ft
 			}
 
 			node_ptr
+			_leftmost( void )
+			{
+				return this->_header.left;
+			}
+
+			const_node_ptr
+			_leftmost( void ) const
+			{
+				return this->_header.left;
+			}
+
+			node_ptr
+			_rightmost( void )
+			{
+				return this->_header.right;
+			}
+
+			const_node_ptr
+			_rightmost( void ) const
+			{
+				return this->_header.right;
+			}
+
+			node_ptr
 			_minimum( node_ptr x )
 			{
 				return tree_node::minimum(x);
@@ -199,39 +223,19 @@ namespace	ft
 			{
 				return tree_node::maximum(x);
 			}
-/*
+
 			static node_ptr
 			_increment( node_ptr x )
 			{
-				node_ptr	y;
-
-				if (x->right != 0)
-					return this->_mininum(x->right);
-				y = x->parent;
-				while ( y != 0 && x == y->right)
-				{
-					x = y;
-					y = x->parent;
-				}
-				return y;
+				return tree_node::increment(x);
 			}
 
 			static node_ptr
 			_decrement( node_ptr x )
 			{
-				node_ptr	y;
-
-				if (x->left != 0)
-					return this->_maximum(x->left);
-				y = x->parent;
-				while ( y != 0 && x == y->left)
-				{
-					x = y;
-					y = x->parent;
-				}
-				return y;
+				return tree_node::decrement(x);
 			}
-*/
+
 			static void
 			_rotate_left( node_ptr x, node_ptr root )
 			{
@@ -271,7 +275,6 @@ namespace	ft
 			}
 
 		public:
-
 			/*	default constructor	*/
 			tree( void )
 			{}
@@ -421,127 +424,182 @@ namespace	ft
 			size_type
 			count( const key_type& key ) const
 			{
+				node_ptr	x = this->_root();
+
+				while (x != 0)
+				{
+					if (this->_key_compare(key, x->content.first))
+						x = x->left;
+					else if (this->_key_compare(x->content.first, key)
+						x = x->right;
+					else
+						return 1;
+				}
+				return 0;
 			}
 
 			iterator
 			find( const key_type& key )
 			{
+				iterator	it = this->_lower_bound(key, this->_root(), this->end());
+
+				if (it != this->end() && !this->_key_compare(key, it->first))
+					return it;
+				return this->end();
 			}
 
 			const_iterator
 			find( const key_type& key ) const
 			{
+				const_iterator	it = this->_lower_bound(key, this->_root(), this->end());
+
+				if (it != this->end() && !this->_key_compare(key, it->first))
+					return it;
+				return this->end();
 			}
 
 			ft::pair<iterator, iterator>
 			equal_range( const key_type& key )
 			{
-				node_ptr	x = this->begin();
-				node_ptr	y = this->end();
+				typedef ft::pair<iterator, iterator>	pair_type;
 
-				while (x != 0)
+				node_ptr	root = this->_root();
+				node_ptr	result = this->end();
+
+				while (root != 0)
 				{
-					//TODO
+					if (this->_key_compare(key, root->content.first))
+					{
+						result = root;
+						root = root->left;
+					}
+					else if (this->_key_compare(root->content.first, key)
+						root = root->right;
+					else
+						return pair_type(iterator(root),
+								iterator(root->right != 0 ? root->right : result))
 				}
-				return ft::pair<iterator,
-					iterator>(iterator(x), iterator(y));
+				return pair_type(iterator(result), iterator(result));
 			}
 
 			ft::pair<const_iterator, const_iterator>
 			equal_range( const key_type& key ) const
 			{
-				const_node_ptr	x = this->begin();
-				const_node_ptr	y = this->end();
+				typedef ft::pair<const_iterator, const_iterator>	pair_type;
 
-				while (x != 0)
+				node_ptr	root = this->_root();
+				node_ptr	result = this->end();
+
+				while (root != 0)
 				{
-					//TODO
+					if (this->_key_compare(key, root->content.first))
+					{
+						result = root;
+						root = root->left;
+					}
+					else if (this->_key_compare(root->content.first, key)
+						root = root->right;
+					else
+						return pair_type(const_iterator(root),
+								const_iterator(root->right != 0 ? root->right : result))
 				}
-				return ft::pair<const_iterator,
-					const_iterator>(const_iterator(x), const_iterator(y));
+				return pair_type(const_iterator(result), const_iterator(result));
+			}
+
+		protected:
+			iterator
+			_lower_bound( const key_type& key, node_ptr root, node_ptr result )
+			{
+				while (root != 0)
+				{
+					if (!this->_key_compare(root->content.first, key))
+					{
+						result = root;
+						root = root->left;
+					}
+					else
+						root = root->right;
+				}
+				return iterator(result);
+			}
+
+			const_iterator
+			_lower_bound( const key_type& key, node_ptr root, node_ptr result ) const
+			{
+				while (root != 0)
+				{
+					if (!this->_key_compare(root->content.first, key))
+					{
+						result = root;
+						root = root->left;
+					}
+					else
+						root = root->right;
+				}
+				return const_iterator(result);
+			}
+
+			iterator
+			_upper_bound( const key_type& key, node_ptr root, node_ptr result )
+			{
+				while (root != 0)
+				{
+					if (this->_key_compare(key, root->content.first))
+					{
+						result = root;
+						root = root->left;
+					}
+					else
+						root = root->right;
+				}
+				return iterator(result);
+			}
+
+			const_iterator
+			_upper_bound( const key_type& key, node_ptr root, node_ptr result ) const
+			{
+				while (root != 0)
+				{
+					if (this->_key_compare(key, root->content.first))
+					{
+						result = root;
+						root = root->left;
+					}
+					else
+						root = root->right;
+				}
+				return const_iterator(result);
 			}
 
 		public:
 			iterator
 			lower_bound( const key_type& key )
 			{
-				node_ptr	x = this->_root();
-				node_ptr	y = this->end();
-
-				while (x != 0)
-				{
-					if (!this->_key_compare(x->content.first, key))
-					{
-						y = x;
-						x = x->left;
-					}
-					else
-						x = x->right;
-				}
-				return iterator(y);
+				return this->_lower_bound(key, this->_root(), this->end();
 			}
 
 			const_iterator
 			lower_bound( const key_type& key ) const
 			{
-				node_ptr	x = this->_root();
-				node_ptr	y = this->end();
-
-				while (x != 0)
-				{
-					if (!this->_key_compare(x->content.first, key))
-					{
-						y = x;
-						x = x->left;
-					}
-					else
-						x = x->right;
-				}
-				return const_iterator(y);
+				return this->_lower_bound(key, this->_root(), this->end();
 			}
 
 			iterator
 			upper_bound( const key_type& key )
 			{
-				node_ptr	x = this->_root();
-				node_ptr	y = this->end();
-
-				while (x != 0)
-				{
-					if (this->_key_compare(key, x->content.first))
-					{
-						y = x;
-						x = x->left;
-					}
-					else
-						x = x->right;
-				}
-				return iterator(y);
+				return this->_upper_bound(key, this->_root(), this->end();
 			}
 
 			const_iterator
 			upper_bound( const key_type& key ) const
 			{
-				node_ptr	x = this->_root();
-				node_ptr	y = this->end();
-
-				while (x != 0)
-				{
-					if (this->_key_compare(key, x->content.first))
-					{
-						y = x;
-						x = x->left;
-					}
-					else
-						x = x->right;
-				}
-				return const_iterator(y);
+				return this->_upper_bound(key, this->_root(), this->end();
 			}
 
 			key_compare
 			key_comp( void ) const
 			{
-				return this->key_compare;
+				return this->_key_compare;
 			}
 		};
 
