@@ -119,7 +119,7 @@ namespace	ft
 
 		protected:
 			Compare			_key_compare;
-			node_ptr		_header;
+			tree_node_type	_header;
 			size_type		_node_count;
 			node_allocator	_allocator;
 
@@ -167,37 +167,37 @@ namespace	ft
 			node_ptr
 			_root( void )
 			{
-				return this->_header;
+				return this->_header.parent;
 			}
 
 			const_node_ptr
 			_root( void ) const
 			{
-				return this->_header;
+				return this->_header.parent;
 			}
 
 			node_ptr
 			_minimum( node_ptr x )
 			{
-				return ft::tree_node::minimum(x);
+				return tree_node::minimum(x);
 			}
 
 			const_node_ptr
 			_minimum( node_ptr x )
 			{
-				return ft::tree_node::minimum(x);
+				return tree_node::minimum(x);
 			}
 
 			node_ptr
 			_maximum( node_ptr x )
 			{
-				return ft::tree_node::maximum(x);
+				return tree_node::maximum(x);
 			}
 
 			const_node_ptr
 			_maximum( node_ptr x )
 			{
-				return ft::tree_node::maximum(x);
+				return tree_node::maximum(x);
 			}
 /*
 			static node_ptr
@@ -443,7 +443,8 @@ namespace	ft
 				{
 					//TODO
 				}
-				return ft::pair<iterator, iterator>(iterator(x), iterator(y));
+				return ft::pair<iterator,
+					iterator>(iterator(x), iterator(y));
 			}
 
 			ft::pair<const_iterator, const_iterator>
@@ -457,7 +458,7 @@ namespace	ft
 					//TODO
 				}
 				return ft::pair<const_iterator,
-					   const_iterator>(const_iterator(x), const_iterator(y));
+					const_iterator>(const_iterator(x), const_iterator(y));
 			}
 
 		public:

@@ -7,6 +7,8 @@ void	testEqual( void );
 void	testLexicographical_compare( void );
 void	testReverseIterator( void );
 void	testVector( void );
+void	map_lower_bound( void );
+void	map_upper_bound( void );
 
 void	check_leaks( void )
 {
@@ -23,5 +25,9 @@ int	main( void )
 	testLexicographical_compare();
 //	testReverseIterator();
 	testVector();
+
+
+	map_lower_bound();
+	map_upper_bound();
 	return 0;
 }

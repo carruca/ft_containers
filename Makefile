@@ -3,10 +3,15 @@ NAME			= ft_containers
 
 TEST_DIR		= test/
 
+MAP_DIR			= map/
+MAP_TEST		= lower_bound.cpp					\
+				  upper_bound.cpp
+
 VECTOR_DIR		= vector/
 TEST_VECTOR		= test.cpp							\
 				  constructor.cpp					\
 				  erase.cpp
+
 TEST_UTILS		= is_integralTest.cpp				\
 				  enable_ifTest.cpp					\
 				  pairTest.cpp						\
@@ -36,7 +41,8 @@ UTIL_INC		= ft_pair.hpp
 SRC				= $(addprefix $(TEST_DIR),	\
 				  main.cpp					\
 				  $(TEST_UTILS)				\
-				  $(addprefix $(VECTOR_DIR), $(TEST_VECTOR)))
+				  $(addprefix $(VECTOR_DIR), $(TEST_VECTOR)) \
+				  $(addprefix $(MAP_DIR), $(MAP_TEST)))
 
 INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR)
 
