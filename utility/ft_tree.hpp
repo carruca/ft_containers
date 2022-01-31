@@ -96,9 +96,6 @@ namespace	ft
 			  typename Alloc = std::allocator<Value> >
 		class	tree
 		{
-		private:
-			typedef typename Alloc::rebind<tree_node_type>::other	node_allocator;
-
 		public:
 			typedef Key												key_type;
 			typedef Value											value_type;
@@ -116,6 +113,9 @@ namespace	ft
 			typedef ft::tree_const_iterator<value_type>				const_iterator;
 			typedef ft::reverse_iterator<iterator>					reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+
+		private:
+			typedef allocator_type::rebind<tree_node_type>::other	node_allocator;
 
 		protected:
 			Compare			_key_compare;
@@ -224,13 +224,13 @@ namespace	ft
 				return tree_node::maximum(x);
 			}
 
-			static node_ptr
+			node_ptr
 			_increment( node_ptr x )
 			{
 				return tree_node::increment(x);
 			}
 
-			static node_ptr
+			node_ptr
 			_decrement( node_ptr x )
 			{
 				return tree_node::decrement(x);
@@ -280,7 +280,7 @@ namespace	ft
 			{}
 
 			tree( const Compare& comp)
-			: _key_compare(comp),
+			: _key_compare(comp)
 			, _node_count(0)
 			{
 			}
@@ -327,13 +327,13 @@ namespace	ft
 			iterator
 			end( void )
 			{
-				return iterator(this->_maximum(this->_root()));
+				return iterator(this->_maximum(this->_root())->right); //no good
 			}
 
 			const_iterator
 			end( void ) const
 			{
-				return const_iterator(this->_maximum(this->_root()));
+				return const_iterator(this->_maximum(this->_root())->right); //no good
 			}
 
 			reverse_iterator

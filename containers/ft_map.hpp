@@ -36,6 +36,29 @@ namespace	ft
 			typedef tree_type::size_type										size_type;
 			typedef tree_type::difference_type									diferrence_type;
 
+			class	value_compare
+				: public std::binary_function<value_type, value_type, bool>
+			{
+				friend class map;
+
+			protected:
+				key_compare	comp;
+
+				value_compare( key_compare c )
+				: comp(c)
+				{}
+
+			public:
+				typedef bool		result_type;
+				typedef value_type	first_argument_type;
+				typedef value_type	second_argument_type;
+
+				bool
+				operator()( const first_argument_type& x, const second_argument_type& y ) const
+				{
+					return comp(x.first, y.first);
+				}
+			}
 			/*	default_constructor	*/
 			map()
 			{}
@@ -241,6 +264,7 @@ namespace	ft
 			value_compare
 			value_comp( void ) const
 			{
+				return value_compare(this->_tree.key_comp());
 			}
 		};
 
