@@ -105,6 +105,7 @@ namespace	ft
 			typedef const value_type&								const_reference;
 			typedef tree_node<value_type>							tree_node_type;
 			typedef tree_node_type*									node_ptr;
+			typedef tree_node_type&									node_ref;
 			typedef const tree_node_type*							const_node_ptr;
 			typedef std::size_t										size_type;
 			typedef std::ptrdiff_t									difference_type;
@@ -273,6 +274,9 @@ namespace	ft
 				y->right = x;
 				x->parent = y;
 			}
+
+			static void
+			_insert_and_rebalance( const bool insert_left, node_ptr x, node_ref
 
 		public:
 			/*	default constructor	*/
