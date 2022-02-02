@@ -275,8 +275,45 @@ namespace	ft
 				x->parent = y;
 			}
 
-			static void
-			_insert_and_rebalance( const bool insert_left, node_ptr x, node_ref
+			void
+			_insert_and_rebalance( const bool insert_left,
+								node_ptr x, node_ptr p)
+			{
+				node_ptr&	root = this->header->parent;
+
+				x->parent = p;
+				x->left = 0;
+				x->right = 0;
+				x->color = tree_color::red;
+
+				if (insert_left)
+				{
+					p->left = x;
+					if (p == &header)
+					{
+						this->header.parent = x;
+						this->header.right = x;
+					}
+					else if (p == header.left)
+						this->header.left = x;
+				}
+				else
+				{
+					p->right = x;
+					if (p == header.right)
+						this->header.right= x;
+				}
+				//rebalance
+				while (x != root && x->parent->color == red)
+				{
+					const node_ptr	xpp = x->parent->parent;
+
+					if (x->parent == xpp->left)
+					{
+						const node_ptr//TODO	
+					}
+				}
+			}
 
 		public:
 			/*	default constructor	*/
