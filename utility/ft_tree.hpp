@@ -238,7 +238,7 @@ namespace	ft
 			}
 
 			static void
-			_rotate_left( node_ptr x, node_ptr root )
+			_rotate_left( node_ptr x, node_ptr& root )
 			{
 				node_ptr	y = x->right;
 
@@ -257,7 +257,7 @@ namespace	ft
 			}
 
 			static void
-			_rotate_right( node_ptr x, node_ptr root )
+			_rotate_right( node_ptr x, node_ptr& root )
 			{
 				node_ptr	y = x->left;
 
@@ -310,9 +310,50 @@ namespace	ft
 
 					if (x->parent == xpp->left)
 					{
-						const node_ptr//TODO	
+						const node_ptr	y = xpp->right;
+						if (y && y->color == red)
+						{
+							x->parent->color = black;
+							y->color = black;
+							xpp->color = red;
+							x = xpp;
+						}
+						else
+						{
+							if (x == x->parent->right)
+							{
+								x = x->parent;
+								tree::_rotate_left(x, root);
+							}
+							x->parent->color = black;
+							xpp->color = red;
+							tree::_rotate_right(xpp, root);
+						}
+					}
+					else
+					{
+						const node_ptr	y = xpp->left;
+						if (y && y->color == red)
+						{
+							x->parent->color = black;
+							y->color = black;
+							xpp->color = red;
+							x = xpp;
+						}
+						else
+						{
+							if (x == x->parent->left)
+							{
+								x = x->parent;
+								tree::_rotate_right(x, root);
+							}
+							x->parent->color = black;
+							xpp->color = red;
+							tree::_rotate_left(xpp, root);
+						}
 					}
 				}
+				root->color = black;
 			}
 
 		public:
