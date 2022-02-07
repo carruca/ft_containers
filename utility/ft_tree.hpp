@@ -3,6 +3,7 @@
 
 # include <cstddef>
 # include <memory>
+# include <algorithm>
 # include "ft_tree_iterator.hpp"
 # include "ft_reverse_iterator.hpp"
 # include "ft_pair.hpp"
@@ -156,16 +157,16 @@ namespace	ft
 				tmp->right = 0;
 				return tmp;
 			}
-/*
+
 			void
-			_empty_init( void )
+			_empty_tree_init( void )
 			{
 				this->_header.color = red;
 				this->_header.parent = 0;
 				this->_header.left = &this->_header;
 				this->_header.right = &this->_header;
 			}
-*/
+
 			node_ptr
 			_root( void )
 			{
@@ -310,11 +311,10 @@ namespace	ft
 				//rebalance
 				while (x != root && x->parent->color == red)
 				{
-					const node_ptr	xpp = x->parent->parent;
+					node_ptr const	xpp = x->parent->parent;
 
 					if (x->parent == xpp->left)
 					{
-			//			_rebalance_insert_right(xpp->right, );
 						node_ptr const	y = xpp->right;
 						if (y && y->color == red)
 						{
@@ -370,6 +370,7 @@ namespace	ft
 			: _key_compare(comp)
 			, _node_count(0)
 			{
+				this->_empty_tree_init();
 			}
 
 			tree( const Compare& comp, const allocator_type& a )
@@ -377,6 +378,7 @@ namespace	ft
 			, _node_count(0)
 			, allocator(a)
 			{
+				this->_empty_tree_init();
 			}
 
 			tree( const tree<Key, Value, Compare, Alloc>& x )
@@ -391,7 +393,6 @@ namespace	ft
 			const tree<Key, Value, Compare, Alloc>&
 			operator=( const tree<Key, value, Compare, Alloc>& rhs)
 			{
-				
 			}
 
 			allocator_type
@@ -403,7 +404,7 @@ namespace	ft
 			iterator
 			begin( void )
 			{
-				return iterator(this->_minimum(this->_root()));
+				return iterator(this->_minimum(this->_root())); //change to _rightmost member
 			}
 
 			const_iterator
@@ -415,13 +416,13 @@ namespace	ft
 			iterator
 			end( void )
 			{
-				return iterator(this->_maximum(this->_root())->right); //no good
+				return iterator(0); //no good
 			}
 
 			const_iterator
 			end( void ) const
 			{
-				return const_iterator(this->_maximum(this->_root())->right); //no good
+				return const_iterator(0); //no good
 			}
 
 			reverse_iterator
@@ -476,12 +477,11 @@ namespace	ft
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-				
 			}
 
 			iterator
 			insert( iterator position, const value_type& value )
-			{	
+			{
 			}
 
 			template< typename InputIterator >
@@ -508,6 +508,12 @@ namespace	ft
 			void
 			swap( tree<Key, Value, Compare, Alloc>& x )
 			{
+				std::swap(this->_key_compare, x._key_compare);
+				std::swap(this->_header.parent, x._header.parent);
+				std::swap(this->_header.left, x._header.left);
+				std::swap(this->_header.right, x._header.right);
+				std::swap(this->_node_count, x._node_count);
+				std::swap(this->_allocator, x._allocator);
 			}
 
 			size_type
