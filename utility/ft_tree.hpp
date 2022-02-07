@@ -5,6 +5,7 @@
 # include <memory>
 # include "ft_tree_iterator.hpp"
 # include "ft_reverse_iterator.hpp"
+# include "ft_pair.hpp"
 # include "ft_equal.hpp"
 # include "ft_lexicographical_compare.hpp"
 
@@ -201,37 +202,37 @@ namespace	ft
 				return this->_header.right;
 			}
 
-			node_ptr
+			static node_ptr
 			_minimum( node_ptr x )
 			{
 				return tree_node::minimum(x);
 			}
 
-			const_node_ptr
+			static const_node_ptr
 			_minimum( node_ptr x )
 			{
 				return tree_node::minimum(x);
 			}
 
-			node_ptr
+			static node_ptr
 			_maximum( node_ptr x )
 			{
 				return tree_node::maximum(x);
 			}
 
-			const_node_ptr
+			static const_node_ptr
 			_maximum( node_ptr x )
 			{
 				return tree_node::maximum(x);
 			}
 
-			node_ptr
+			static node_ptr
 			_increment( node_ptr x )
 			{
 				return tree_node::increment(x);
 			}
 
-			node_ptr
+			static node_ptr
 			_decrement( node_ptr x )
 			{
 				return tree_node::decrement(x);
@@ -275,6 +276,9 @@ namespace	ft
 				x->parent = y;
 			}
 
+		//	void
+		//	_rebalance_insert_left( node_ptr& u, 
+
 			void
 			_insert_and_rebalance( const bool insert_left,
 								node_ptr x, node_ptr p)
@@ -310,7 +314,8 @@ namespace	ft
 
 					if (x->parent == xpp->left)
 					{
-						const node_ptr	y = xpp->right;
+			//			_rebalance_insert_right(xpp->right, );
+						node_ptr const	y = xpp->right;
 						if (y && y->color == red)
 						{
 							x->parent->color = black;
@@ -332,7 +337,7 @@ namespace	ft
 					}
 					else
 					{
-						const node_ptr	y = xpp->left;
+						node_ptr const	y = xpp->left;
 						if (y && y->color == red)
 						{
 							x->parent->color = black;
@@ -386,6 +391,7 @@ namespace	ft
 			const tree<Key, Value, Compare, Alloc>&
 			operator=( const tree<Key, value, Compare, Alloc>& rhs)
 			{
+				
 			}
 
 			allocator_type
@@ -470,11 +476,12 @@ namespace	ft
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
+				
 			}
 
 			iterator
 			insert( iterator position, const value_type& value )
-			{
+			{	
 			}
 
 			template< typename InputIterator >
@@ -506,7 +513,7 @@ namespace	ft
 			size_type
 			count( const key_type& key ) const
 			{
-				node_ptr	x = this->_root();
+				const_node_ptr	x = this->_root();
 
 				while (x != 0)
 				{
@@ -545,21 +552,21 @@ namespace	ft
 			{
 				typedef ft::pair<iterator, iterator>	pair_type;
 
-				node_ptr	root = this->_root();
-				node_ptr	result = this->end();
+				const_node_ptr	x = this->_root();
+				const_node_ptr	result = this->end();
 
-				while (root != 0)
+				while (x != 0)
 				{
-					if (this->_key_compare(key, root->content.first))
+					if (this->_key_compare(key, x->content.first))
 					{
-						result = root;
-						root = root->left;
+						result = x;
+						x = root->left;
 					}
-					else if (this->_key_compare(root->content.first, key)
-						root = root->right;
+					else if (this->_key_compare(x->content.first, key)
+						x = x->right;
 					else
-						return pair_type(iterator(root),
-								iterator(root->right != 0 ? root->right : result))
+						return pair_type(iterator(x),
+								iterator(x->right != 0 ? x->right : result))
 				}
 				return pair_type(iterator(result), iterator(result));
 			}
@@ -569,86 +576,86 @@ namespace	ft
 			{
 				typedef ft::pair<const_iterator, const_iterator>	pair_type;
 
-				node_ptr	root = this->_root();
-				node_ptr	result = this->end();
+				const_node_ptr	x = this->_root();
+				const_node_ptr	result = this->end();
 
-				while (root != 0)
+				while (x != 0)
 				{
-					if (this->_key_compare(key, root->content.first))
+					if (this->_key_compare(key, x->content.first))
 					{
-						result = root;
-						root = root->left;
+						result = x;
+						x = root->left;
 					}
-					else if (this->_key_compare(root->content.first, key)
-						root = root->right;
+					else if (this->_key_compare(x->content.first, key)
+						x = x->right;
 					else
-						return pair_type(const_iterator(root),
-								const_iterator(root->right != 0 ? root->right : result))
+						return pair_type(const_iterator(x),
+								const_iterator(x->right != 0 ? x->right : result))
 				}
 				return pair_type(const_iterator(result), const_iterator(result));
 			}
 
 		protected:
 			iterator
-			_lower_bound( const key_type& key, node_ptr root, node_ptr result )
+			_lower_bound( const key_type& key, const_node_ptr x, const_node_ptr result )
 			{
-				while (root != 0)
+				while (x != 0)
 				{
-					if (!this->_key_compare(root->content.first, key))
+					if (!this->_key_compare(x->content.first, key))
 					{
-						result = root;
-						root = root->left;
+						result = x;
+						x = x->left;
 					}
 					else
-						root = root->right;
+						x = x->right;
 				}
 				return iterator(result);
 			}
 
 			const_iterator
-			_lower_bound( const key_type& key, node_ptr root, node_ptr result ) const
+			_lower_bound( const key_type& key, const_node_ptr x, const_node_ptr result ) const
 			{
-				while (root != 0)
+				while (x != 0)
 				{
-					if (!this->_key_compare(root->content.first, key))
+					if (!this->_key_compare(x->content.first, key))
 					{
-						result = root;
-						root = root->left;
+						result = x;
+						x = x->left;
 					}
 					else
-						root = root->right;
+						x = x->right;
 				}
 				return const_iterator(result);
 			}
 
 			iterator
-			_upper_bound( const key_type& key, node_ptr root, node_ptr result )
+			_upper_bound( const key_type& key, const_node_ptr x, const_node_ptr result )
 			{
-				while (root != 0)
+				while (x != 0)
 				{
-					if (this->_key_compare(key, root->content.first))
+					if (this->_key_compare(key, x->content.first))
 					{
-						result = root;
-						root = root->left;
+						result = x;
+						x = x->left;
 					}
 					else
-						root = root->right;
+						x = x->right;
 				}
 				return iterator(result);
 			}
 
 			const_iterator
-			_upper_bound( const key_type& key, node_ptr root, node_ptr result ) const
+			_upper_bound( const key_type& key, const_node_ptr x, const_node_ptr result ) const
 			{
-				while (root != 0)
+				while (x != 0)
 				{
-					if (this->_key_compare(key, root->content.first))
+					if (this->_key_compare(key, x->content.first))
 					{
-						result = root;
-						root = root->left;
+						result = x;
+						x = x->left;
 					}
 					else
-						root = root->right;
+						x = x->right;
 				}
 				return const_iterator(result);
 			}
