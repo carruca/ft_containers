@@ -9,6 +9,7 @@ void	testReverseIterator( void );
 void	testVector( void );
 void	map_lower_bound( void );
 void	map_upper_bound( void );
+void	map_create_empty(void);
 
 void	check_leaks( void )
 {
@@ -17,6 +18,7 @@ void	check_leaks( void )
 
 int	main( void )
 {
+//vector
 //	atexit(check_leaks);
 	testIs_integral();
 	testEnable_if();
@@ -26,8 +28,9 @@ int	main( void )
 //	testReverseIterator();
 	testVector();
 
-
+//map
 	map_lower_bound();
 	map_upper_bound();
+	map_create_empty();
 	return 0;
 }

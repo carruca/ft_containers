@@ -1,11 +1,11 @@
 NAME			= ft_containers
 
-
 TEST_DIR		= test/
 
 MAP_DIR			= map/
 MAP_TEST		= lower_bound.cpp					\
-				  upper_bound.cpp
+				  upper_bound.cpp					\
+				  create_empty.cpp
 
 VECTOR_DIR		= vector/
 TEST_VECTOR		= test.cpp							\
@@ -20,12 +20,14 @@ TEST_UTILS		= is_integralTest.cpp				\
 				  reverse_iteratorTest.cpp
 
 CONTAINER_DIR	= containers/
-VECTOR_INC		= ft_vector.hpp
+VECTOR_INC		= ft_vector.hpp						\
+				  ft_map.cpp
 
 ITER_DIR		= iterator/
 ITER_INC		= ft_iterators_traits.hpp			\
 				  ft_reverse_iterator.hpp			\
-				  ft_normal_iterator.hpp
+				  ft_normal_iterator.hpp			\
+				  ft_tree_iterator.hpp
 
 TYPES_DIR		= types/
 TYPES_INC		= ft_is_integral.hpp				\
@@ -36,7 +38,8 @@ ALG_INC			= ft_equal.hpp						\
 				  ft_lexicographical_compare.hpp
 
 UTIL_DIR		= utility/
-UTIL_INC		= ft_pair.hpp
+UTIL_INC		= ft_pair.hpp						\
+				  ft_tree.hpp
 
 SRC				= $(addprefix $(TEST_DIR),	\
 				  main.cpp					\

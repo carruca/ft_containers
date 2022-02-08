@@ -9,6 +9,9 @@
 namespace	ft
 {
 	template< typename T >
+		struct	tree_node;
+
+	template< typename T >
 		struct	tree_iterator
 		{
 			typedef T								value_type;
@@ -44,14 +47,14 @@ namespace	ft
 			self&
 			operator++( void )
 			{
-				this->node = ft::tree_node::increment(node);
+				this->node = tree_node_type::increment(node);
 				return *this;
 			}
 
 			self&
 			operator--( void )
 			{
-				this->node = ft::tree_node::decrement(node);
+				this->node = tree_node_type::decrement(node);
 				return *this;
 			}
 
@@ -60,7 +63,7 @@ namespace	ft
 			{
 				self	tmp = *this;
 
-				this->node = ft::tree_node::increment(node);
+				this->node = tree_node_type::increment(node);
 				return tmp;
 			}
 
@@ -69,7 +72,7 @@ namespace	ft
 			{
 				self	tmp = *this;
 
-				this->node = ft::tree_node::decrement(node);
+				this->node = tree_node_type::decrement(node);
 				return tmp;
 			}
 
@@ -129,14 +132,14 @@ namespace	ft
 			self&
 			operator++( void )
 			{
-				this->node = ft::tree_node::increment(node);
+				this->node = tree_node_type::increment(node);
 				return *this;
 			}
 
 			self&
 			operator--( void )
 			{
-				this->node = ft::tree_node::decrement(node);
+				this->node = tree_node_type::decrement(node);
 				return *this;
 			}
 
@@ -145,7 +148,7 @@ namespace	ft
 			{
 				self	tmp = *this;
 
-				this->node = ft::tree_node::increment(node);
+				this->node = tree_node_type::increment(node);
 				return tmp;
 			}
 
@@ -154,7 +157,7 @@ namespace	ft
 			{
 				self	tmp = *this;
 
-				this->node = ft::tree_node::decrement(node);
+				this->node = tree_node_type::decrement(node);
 				return tmp;
 			}
 

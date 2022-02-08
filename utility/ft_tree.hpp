@@ -18,16 +18,20 @@ namespace	ft
 		black = true
 	};
 
-	template< typename Value >
+	template< typename T >
 		struct	tree_node
 		{
-			typedef struct tree_node*	node_ptr;
+		public:
+			typedef T					value_type;
+			typedef struct tree_node	node_type;
+			typedef node_type*			node_ptr;
+			typedef const node_type*	const_node_ptr;
 
 			tree_color	color;
 			node_ptr	parent;
 			node_ptr	left;
 			node_ptr	right;
-			Value		content;
+			value_type	content;
 
 			static node_ptr
 			minimum( node_ptr x )
@@ -38,7 +42,7 @@ namespace	ft
 			}
 
 			static const_node_ptr
-			minimum( node_ptr x )
+			minimum( const_node_ptr x )
 			{
 				while (x->left != 0)
 					x = x->left;
@@ -54,11 +58,17 @@ namespace	ft
 			}
 
 			static const_node_ptr
-			maximum( node_ptr x )
+			maximum( const_node_ptr x )
 			{
 				while (x->right != 0)
 					x = x->right;
 				return x;
+			}
+
+			static bool
+			is_left_sibling( node_ptr x )
+			{
+				return x != 0 && x == x->parent->left;
 			}
 
 			static node_ptr
@@ -69,7 +79,7 @@ namespace	ft
 				if (x->right != 0)
 					return mininum(x->right);
 				y = x->parent;
-				while ( y != 0 && x == y->right)
+				while (y != 0 && x == y->right)
 				{
 					x = y;
 					y = x->parent;
@@ -94,13 +104,14 @@ namespace	ft
 			}
 		};
 
-	template< typename Key, typename Value, typename Compare,
-			  typename Alloc = std::allocator<Value> >
+	template< typename Key, typename T, typename Compare,
+			  typename Alloc = std::allocator<T> >
 		class	tree
 		{
 		public:
 			typedef Key												key_type;
-			typedef Value											value_type;
+			typedef T												mapped_type;
+			typedef ft::pair<const key_type, mapped_type>			value_type;
 			typedef value_type*										pointer;
 			typedef const value_type*								const_pointer;
 			typedef value_type&										reference;
@@ -111,6 +122,7 @@ namespace	ft
 			typedef const tree_node_type*							const_node_ptr;
 			typedef std::size_t										size_type;
 			typedef std::ptrdiff_t									difference_type;
+			typedef Compare											key_compare;
 			typedef	Alloc											allocator_type;
 			typedef ft::tree_iterator<value_type>					iterator;
 			typedef ft::tree_const_iterator<value_type>				const_iterator;
@@ -118,10 +130,10 @@ namespace	ft
 			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 		private:
-			typedef allocator_type::rebind<tree_node_type>::other	node_allocator;
+			typedef typename allocator_type::template rebind<tree_node_type>::other	node_allocator;
 
 		protected:
-			Compare			_key_compare;
+			key_compare		_key_compare;
 			tree_node_type	_header;
 			size_type		_node_count;
 			node_allocator	_allocator;
@@ -206,37 +218,37 @@ namespace	ft
 			static node_ptr
 			_minimum( node_ptr x )
 			{
-				return tree_node::minimum(x);
+				return tree_node_type::minimum(x);
 			}
 
 			static const_node_ptr
-			_minimum( node_ptr x )
+			_minimum( const_node_ptr x )
 			{
-				return tree_node::minimum(x);
+				return tree_node_type::minimum(x);
 			}
 
 			static node_ptr
 			_maximum( node_ptr x )
 			{
-				return tree_node::maximum(x);
+				return tree_node_type::maximum(x);
 			}
 
 			static const_node_ptr
-			_maximum( node_ptr x )
+			_maximum( const_node_ptr x )
 			{
-				return tree_node::maximum(x);
+				return tree_node_type::maximum(x);
 			}
 
 			static node_ptr
 			_increment( node_ptr x )
 			{
-				return tree_node::increment(x);
+				return tree_node_type::increment(x);
 			}
 
 			static node_ptr
 			_decrement( node_ptr x )
 			{
-				return tree_node::decrement(x);
+				return tree_node_type::decrement(x);
 			}
 
 			static void
@@ -281,32 +293,32 @@ namespace	ft
 		//	_rebalance_insert_left( node_ptr& u, 
 
 			void
-			_insert_and_rebalance( const bool insert_left,
+			_insert_and_rebalance(const bool insert_left,
 								node_ptr x, node_ptr p)
 			{
-				node_ptr&	root = this->header->parent;
+				node_ptr&	root = this->_header->parent;
 
 				x->parent = p;
 				x->left = 0;
 				x->right = 0;
-				x->color = tree_color::red;
+				x->color = red;
 
 				if (insert_left)
 				{
 					p->left = x;
-					if (p == &header)
+					if (p == &this->_header)
 					{
-						this->header.parent = x;
-						this->header.right = x;
+						this->_header.parent = x;
+						this->_header.right = x;
 					}
-					else if (p == header.left)
-						this->header.left = x;
+					else if (p == this->_header.left)
+						this->_header.left = x;
 				}
 				else
 				{
 					p->right = x;
-					if (p == header.right)
-						this->header.right= x;
+					if (p == this->_header.right)
+						this->_header.right= x;
 				}
 				//rebalance
 				while (x != root && x->parent->color == red)
@@ -376,13 +388,14 @@ namespace	ft
 			tree( const Compare& comp, const allocator_type& a )
 			: _key_compare(comp)
 			, _node_count(0)
-			, allocator(a)
+			, _allocator(a)
 			{
 				this->_empty_tree_init();
 			}
 
-			tree( const tree<Key, Value, Compare, Alloc>& x )
+			tree( const tree<key_type, mapped_type, key_compare, allocator_type>& x )
 			{
+				*this = x;
 			}
 
 			~tree( void )
@@ -390,9 +403,10 @@ namespace	ft
 				//call erase
 			}
 
-			const tree<Key, Value, Compare, Alloc>&
-			operator=( const tree<Key, value, Compare, Alloc>& rhs)
+			const tree<key_type, mapped_type, key_compare, allocator_type>&
+			operator=( const tree<key_type, mapped_type, key_compare, allocator_type>& rhs)
 			{
+				(void)rhs;
 			}
 
 			allocator_type
@@ -473,7 +487,7 @@ namespace	ft
 				this->erase(this->begin());
 				//incomplete
 			}
-
+/*
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
@@ -482,6 +496,7 @@ namespace	ft
 			iterator
 			insert( iterator position, const value_type& value )
 			{
+
 			}
 
 			template< typename InputIterator >
@@ -504,9 +519,9 @@ namespace	ft
 			erase( iterator first, iterator last )
 			{
 			}
-
+*/
 			void
-			swap( tree<Key, Value, Compare, Alloc>& x )
+			swap( tree<key_type, mapped_type, key_compare, allocator_type>& x )
 			{
 				std::swap(this->_key_compare, x._key_compare);
 				std::swap(this->_header.parent, x._header.parent);
@@ -525,7 +540,7 @@ namespace	ft
 				{
 					if (this->_key_compare(key, x->content.first))
 						x = x->left;
-					else if (this->_key_compare(x->content.first, key)
+					else if (this->_key_compare(x->content.first, key))
 						x = x->right;
 					else
 						return 1;
@@ -566,13 +581,13 @@ namespace	ft
 					if (this->_key_compare(key, x->content.first))
 					{
 						result = x;
-						x = root->left;
+						x = x->left;
 					}
-					else if (this->_key_compare(x->content.first, key)
+					else if (this->_key_compare(x->content.first, key))
 						x = x->right;
 					else
 						return pair_type(iterator(x),
-								iterator(x->right != 0 ? x->right : result))
+								iterator(x->right != 0 ? x->right : result));
 				}
 				return pair_type(iterator(result), iterator(result));
 			}
@@ -590,13 +605,13 @@ namespace	ft
 					if (this->_key_compare(key, x->content.first))
 					{
 						result = x;
-						x = root->left;
+						x = x->left;
 					}
-					else if (this->_key_compare(x->content.first, key)
+					else if (this->_key_compare(x->content.first, key))
 						x = x->right;
 					else
 						return pair_type(const_iterator(x),
-								const_iterator(x->right != 0 ? x->right : result))
+								const_iterator(x->right != 0 ? x->right : result));
 				}
 				return pair_type(const_iterator(result), const_iterator(result));
 			}
@@ -670,25 +685,25 @@ namespace	ft
 			iterator
 			lower_bound( const key_type& key )
 			{
-				return this->_lower_bound(key, this->_root(), this->end();
+				return this->_lower_bound(key, this->_root(), this->end());
 			}
 
 			const_iterator
 			lower_bound( const key_type& key ) const
 			{
-				return this->_lower_bound(key, this->_root(), this->end();
+				return this->_lower_bound(key, this->_root(), this->end());
 			}
 
 			iterator
 			upper_bound( const key_type& key )
 			{
-				return this->_upper_bound(key, this->_root(), this->end();
+				return this->_upper_bound(key, this->_root(), this->end());
 			}
 
 			const_iterator
 			upper_bound( const key_type& key ) const
 			{
-				return this->_upper_bound(key, this->_root(), this->end();
+				return this->_upper_bound(key, this->_root(), this->end());
 			}
 
 			key_compare
@@ -704,7 +719,7 @@ namespace	ft
 					const tree<Key,Value,Compare,Alloc>& rhs )
 		{
 			return lhs.size() == rhs.size()
-				&& ft::equal(lhs.begin(), lhs.end(), rhs.begin();
+				&& ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 		}
 
 	template< typename Key, typename Value, typename Compare, typename Alloc >
