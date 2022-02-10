@@ -487,7 +487,8 @@ namespace	ft
 			iterator
 			_insert( node_ptr x, node_ptr p, const value_type& v )
 			{
-				bool	insert_left = (x != 0 || p == this->end() || !_);
+				bool	insert_left = (x != 0 || p == this->end()
+									|| this->_key_compare(x->content.first, p->content.first));
 			}
 
 		public:
@@ -495,7 +496,7 @@ namespace	ft
 			insert( const value_type& value )
 			{
 				node_ptr	x = this->_root();
-				ndoe_ptr	y = this->end();
+				node_ptr	y = this->end();
 				bool		comp = true;
 
 				while (x != 0)
