@@ -36,7 +36,7 @@ namespace	ft
 			typedef typename tree_type::size_type								size_type;
 			typedef typename tree_type::difference_type							diferrence_type;
 
-/*			class	value_compare
+			class	value_compare
 				: public std::binary_function<value_type, value_type, bool>
 			{
 				friend class map;
@@ -58,8 +58,8 @@ namespace	ft
 				{
 					return comp(x.first, y.first);
 				}
-			}
-*/
+			};
+
 			/*	default_constructor	*/
 			map( void )
 			: _tree()

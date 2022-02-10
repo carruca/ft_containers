@@ -77,7 +77,7 @@ namespace	ft
 				node_ptr	y;
 
 				if (x->right != 0)
-					return mininum(x->right);
+					return minimum(x->right);
 				y = x->parent;
 				while (y != 0 && x == y->right)
 				{
@@ -289,9 +289,6 @@ namespace	ft
 				x->parent = y;
 			}
 
-		//	void
-		//	_rebalance_insert_left( node_ptr& u, 
-
 			void
 			_insert_and_rebalance(const bool insert_left,
 								node_ptr x, node_ptr p)
@@ -418,25 +415,25 @@ namespace	ft
 			iterator
 			begin( void )
 			{
-				return iterator(this->_minimum(this->_root())); //change to _rightmost member
+				return iterator(this->_leftmost());
 			}
 
 			const_iterator
 			begin( void ) const
 			{
-				return const_iterator(this->_minimum(this->_root()));
+				return const_iterator(this->_leftmost());
 			}
 
 			iterator
 			end( void )
 			{
-				return iterator(0); //no good
+				return iterator(&this->_header);
 			}
 
 			const_iterator
 			end( void ) const
 			{
-				return const_iterator(0); //no good
+				return const_iterator(&this->_header);
 			}
 
 			reverse_iterator
@@ -480,19 +477,45 @@ namespace	ft
 			{
 				return size_type(-1);
 			}
-
+/*
 			void
 			clear( void )
 			{
-				this->erase(this->begin());
-				//incomplete
 			}
-/*
+*/
+		protected:
+			iterator
+			_insert( node_ptr x, node_ptr p, const value_type& v )
+			{
+				bool	insert_left = (x != 0 || p == this->end() || !_);
+			}
+
+		public:
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-			}
+				node_ptr	x = this->_root();
+				ndoe_ptr	y = this->end();
+				bool		comp = true;
 
+				while (x != 0)
+				{
+					y = x;
+					comp = this->_key_compare(value.first, x->content.first);
+					x = comp ? x->left : x->right;
+				}
+				
+				iterator	it = iterator(y);
+
+				if (comp)
+				{
+					if (it == this->begin())
+						return pair<iterator, bool>(this->_insert(x, y, value));
+					else
+						--it;
+				}
+			}
+/*
 			iterator
 			insert( iterator position, const value_type& value )
 			{
@@ -523,10 +546,38 @@ namespace	ft
 			void
 			swap( tree<key_type, mapped_type, key_compare, allocator_type>& x )
 			{
+				if (this->root() == 0)
+				{
+					if (x.root() != 0)
+					{
+						this->_root() = x._root();
+						this->_leftmost() = x._leftmost();
+						this->_rightmost() = x._rightmost();
+						this->_root()->parent = this->end();
+						x._root() = 0;
+						x._leftmost() = x.end();
+						x._rightmost() = x.end();
+					}
+					else
+					{
+						x._root() = this->_root();
+						x._leftmost() = this->_leftmost();
+						x._rightmost() = this->_rightmost();
+						x._root()->parent = x.end();
+						this->_root() = 0;
+						this->_leftmost() = this->end();
+						this->_rightmost() = this->end();
+					}
+				}
+				else
+				{
+					std::swap(this->_root(), x._root());
+					std::swap(this->_leftmost(), x._leftmost());
+					std::swap(this->_rightmost(), x._rightmost());
+					this->_root()->parent = this->end();
+					x._root()->parent = x.end();
+				}
 				std::swap(this->_key_compare, x._key_compare);
-				std::swap(this->_header.parent, x._header.parent);
-				std::swap(this->_header.left, x._header.left);
-				std::swap(this->_header.right, x._header.right);
 				std::swap(this->_node_count, x._node_count);
 				std::swap(this->_allocator, x._allocator);
 			}
