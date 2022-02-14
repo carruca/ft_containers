@@ -24,10 +24,11 @@ namespace	ft
 
 		pair&	operator=( const pair& other )
 		{
-			if ( this == &other )
-				return *this;
-			this->first = other.first;
-			this->second = other.second;
+			if ( this != &other )
+			{
+				this->first = other.first;
+				this->second = other.second;
+			}
 			return *this;
 		}
 	};
