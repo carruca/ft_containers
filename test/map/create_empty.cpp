@@ -5,7 +5,7 @@
 #include "ft_map.hpp"
 #include "ft_tree.hpp"
 
-# define NAMESPACE	ft
+# define NAMESPACE	std
 
 template< typename Key, typename T >
 	void	print_map(NAMESPACE::map<Key, T>& x)

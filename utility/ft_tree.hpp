@@ -145,9 +145,16 @@ namespace	ft
 			}
 
 			void
-			_destroy_node( node_ptr x )
+			_put_node( node_ptr x )
 			{
 				this->allocator.deallocate(x, 1);
+			}
+
+			void
+			_destroy_node( node_ptr x )
+			{
+				this->allocator.destroy(&x->content);
+				this->_put_node(x);
 			}
 
 			node_ptr
@@ -155,7 +162,15 @@ namespace	ft
 			{
 				node_ptr	tmp = this->_get_node();
 
-				tmp->content = value;
+				try
+				{
+					this->allocator.construct(&tmp->content, value);
+				}
+				catch (std::exception& e )
+				{
+					this->_put_node();
+					throw e;
+				}
 				return tmp;
 			}
 
@@ -484,37 +499,42 @@ namespace	ft
 			}
 */
 		protected:
+			static const key_type&
+			_key(const_node_ptr x)
+			{
+				return x->content.first;
+			}
+
 			iterator
 			_insert( node_ptr x, node_ptr p, const value_type& v )
 			{
-				bool	insert_left = (x != 0 || p == this->end()
-									|| this->_key_compare(x->content.first, p->content.first));
+				bool		insert_left = (x != 0 || p == this->end()
+										|| this->_key_compare(v.first, tree::_key(p)));
+
+				node_ptr	z = this->_create_node(v);
+
+				this->_insert_and_rebalance(insert_left, z, p);
+				++this->_node_count;
 			}
 
 		public:
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-				node_ptr	x = this->_root();
-				node_ptr	y = this->end();
-				bool		comp = true;
+				typedef ft::pair<iterator, bool>	pair_type;
+
+				const_node_ptr	x = this->_root();
+				const_node_ptr	y = this->end();
 
 				while (x != 0)
 				{
 					y = x;
-					comp = this->_key_compare(value.first, x->content.first);
-					x = comp ? x->left : x->right;
+					x = this->_key_compare(value.first, tree::_key(x))
+						? x->left : x->right;
 				}
-				
-				iterator	it = iterator(y);
-
-				if (comp)
-				{
-					if (it == this->begin())
-						return pair<iterator, bool>(this->_insert(x, y, value));
-					else
-						--it;
-				}
+				if (y)
+					return pair_type(this->_insert(x, y, value), true);
+				return pair_type(iterator(x), false);
 			}
 /*
 			iterator
@@ -611,11 +631,11 @@ namespace	ft
 			}
 
 			const_iterator
-			find( const key_type& key ) const
+			find( const key_type& x ) const
 			{
-				const_iterator	it = this->_lower_bound(key, this->_root(), this->end());
+				const_iterator	it = this->_lower_bound(x, this->_root(), this->end());
 
-				if (it != this->end() && !this->_key_compare(key, it->first))
+				if (it != this->end() && !this->_key_compare(x, it->content.first))
 					return it;
 				return this->end();
 			}
