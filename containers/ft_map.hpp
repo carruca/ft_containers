@@ -165,12 +165,13 @@ namespace	ft
 			{
 				return this->_tree.max_size();
 			}
-/*
+
 			mapped_type&
 			operator[]( const key_type& k )
 			{
+				return (*((this->insert(ft::make_pair(k,mapped_type()))).first)).second;
 			}
-*/
+
 			void
 			clear( void )
 			{
@@ -180,7 +181,7 @@ namespace	ft
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-				this->_tree.insert(value);
+				return this->_tree.insert(value);
 			}
 
 			iterator

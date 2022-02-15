@@ -137,6 +137,7 @@ namespace	ft
 			tree_node_type	_header;
 			size_type		_node_count;
 			node_allocator	_allocator;
+			allocator_type	_pair_allocator;
 
 			node_ptr
 			_get_node( void )
@@ -153,7 +154,7 @@ namespace	ft
 			void
 			_destroy_node( node_ptr x )
 			{
-				this->_allocator.destroy(&x->content);
+				this->_pair_allocator.destroy(&x->content);
 				this->_put_node(x);
 			}
 
@@ -164,11 +165,12 @@ namespace	ft
 
 				try
 				{
-					this->_allocator.construct(&tmp->content, value);
+	//				tmp->content = value;
+					this->_pair_allocator.construct(&tmp->content, value);
 				}
 				catch (...)
 				{
-					this->_put_node();
+					this->_put_node(tmp);
 					throw ;
 				}
 				return tmp;
@@ -308,7 +310,7 @@ namespace	ft
 			_insert_and_rebalance(const bool insert_left,
 								node_ptr x, node_ptr p)
 			{
-				node_ptr&	root = this->_header->parent;
+				node_ptr&	root = this->_header.parent;
 
 				x->parent = p;
 				x->left = 0;
@@ -337,7 +339,8 @@ namespace	ft
 				{
 					node_ptr const	xpp = x->parent->parent;
 
-					if (x->parent == xpp->left)
+				std::cout << xpp << std::endl;
+					if (xpp && x->parent == xpp->left)
 					{
 						node_ptr const	y = xpp->right;
 						if (y && y->color == red)
@@ -388,7 +391,9 @@ namespace	ft
 		public:
 			/*	default constructor	*/
 			tree( void )
-			{}
+			{
+				this->_empty_tree_init();
+			}
 
 			tree( const Compare& comp)
 			: _key_compare(comp)
@@ -508,13 +513,14 @@ namespace	ft
 			iterator
 			_insert( node_ptr x, node_ptr p, const value_type& v )
 			{
-				bool		insert_left = (x != 0 || p == this->end()
+				bool		insert_left = (x != 0 //|| p == this->end()
 										|| this->_key_compare(v.first, tree::_key(p)));
 
 				node_ptr	z = this->_create_node(v);
 
 				this->_insert_and_rebalance(insert_left, z, p);
 				++this->_node_count;
+				return iterator(p); //TODO
 			}
 
 		public:
@@ -523,8 +529,8 @@ namespace	ft
 			{
 				typedef ft::pair<iterator, bool>	pair_type;
 
-				const_node_ptr	x = this->_root();
-				const_node_ptr	y = this->end();
+				node_ptr	x = this->_root();
+				node_ptr	y = &this->_header;
 
 				while (x != 0)
 				{
