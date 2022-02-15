@@ -147,13 +147,13 @@ namespace	ft
 			void
 			_put_node( node_ptr x )
 			{
-				this->allocator.deallocate(x, 1);
+				this->_allocator.deallocate(x, 1);
 			}
 
 			void
 			_destroy_node( node_ptr x )
 			{
-				this->allocator.destroy(&x->content);
+				this->_allocator.destroy(&x->content);
 				this->_put_node(x);
 			}
 
@@ -164,12 +164,12 @@ namespace	ft
 
 				try
 				{
-					this->allocator.construct(&tmp->content, value);
+					this->_allocator.construct(&tmp->content, value);
 				}
-				catch (std::exception& e )
+				catch (...)
 				{
 					this->_put_node();
-					throw e;
+					throw ;
 				}
 				return tmp;
 			}
