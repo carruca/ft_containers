@@ -23,8 +23,8 @@ void	map_create_empty(void)
 	map_type	player_map;
 
 	player_map.insert(NAMESPACE::pair<int, std::string>(12, "Manolo"));
-	//player_map[12] = "Hola";
-//	player_map.
+	player_map.insert(NAMESPACE::pair<int, std::string>(3, "Figo"));
+//	player_map[3] = "Figo";
 
 //	print_map<int, std::string>(player_map);
 }

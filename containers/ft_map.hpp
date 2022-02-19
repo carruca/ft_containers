@@ -169,7 +169,11 @@ namespace	ft
 			mapped_type&
 			operator[]( const key_type& k )
 			{
-				return (*((this->insert(ft::make_pair(k,mapped_type()))).first)).second;
+				iterator	it = this->find(k);
+
+				if (it == this->end())
+					return it->second;
+				return insert(value_type(k,mapped_type())).first->second;
 			}
 
 			void
@@ -181,13 +185,17 @@ namespace	ft
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-				return this->_tree.insert(value);
+				ft::pair<iterator, bool>	ret = this->_tree.insert(value);
+
+				this->_tree.debug();
+				return ret;
 			}
 
 			iterator
 			insert( iterator position, const value_type& value )
 			{
 				this->_tree.insert(position, value);
+				//TODO
 			}
 
 			template< typename InputIterator >
@@ -230,13 +238,13 @@ namespace	ft
 			iterator
 			find( const key_type& key )
 			{
-				this->_tree.find(key);
+				return this->_tree.find(key);
 			}
 
 			const_iterator
 			find( const key_type& key ) const
 			{
-				this->_tree.find(key);
+				return this->_tree.find(key);
 			}
 
 			ft::pair<iterator,iterator>

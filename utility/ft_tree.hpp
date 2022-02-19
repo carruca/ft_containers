@@ -1,6 +1,7 @@
 #ifndef FT_TREE_HPP
 # define FT_TREE_HPP
 
+# include <iostream>
 # include <cstddef>
 # include <memory>
 # include <algorithm>
@@ -21,7 +22,6 @@ namespace	ft
 	template< typename T >
 		struct	tree_node
 		{
-		public:
 			typedef T					value_type;
 			typedef struct tree_node	node_type;
 			typedef node_type*			node_ptr;
@@ -32,6 +32,16 @@ namespace	ft
 			node_ptr	left;
 			node_ptr	right;
 			value_type	content;
+
+			tree_node( void )
+			{}
+
+			tree_node( const value_type& v )
+			: content(v)
+			{}
+
+			~tree_node( void )
+			{}
 
 			static node_ptr
 			minimum( node_ptr x )
@@ -137,7 +147,6 @@ namespace	ft
 			tree_node_type	_header;
 			size_type		_node_count;
 			node_allocator	_allocator;
-			allocator_type	_pair_allocator;
 
 			node_ptr
 			_get_node( void )
@@ -154,19 +163,19 @@ namespace	ft
 			void
 			_destroy_node( node_ptr x )
 			{
-				this->_pair_allocator.destroy(&x->content);
+				this->_allocator.destroy(x);
 				this->_put_node(x);
 			}
 
 			node_ptr
 			_create_node( const value_type& value )
 			{
-				node_ptr	tmp = this->_get_node();
+				node_ptr	tmp;
 
 				try
 				{
-	//				tmp->content = value;
-					this->_pair_allocator.construct(&tmp->content, value);
+					tmp = this->_get_node();
+					this->_allocator.construct(tmp, value);
 				}
 				catch (...)
 				{
@@ -339,7 +348,6 @@ namespace	ft
 				{
 					node_ptr const	xpp = x->parent->parent;
 
-				std::cout << xpp << std::endl;
 					if (xpp && x->parent == xpp->left)
 					{
 						node_ptr const	y = xpp->right;
@@ -391,6 +399,7 @@ namespace	ft
 		public:
 			/*	default constructor	*/
 			tree( void )
+			: _node_count(0)
 			{
 				this->_empty_tree_init();
 			}
@@ -447,13 +456,13 @@ namespace	ft
 			iterator
 			end( void )
 			{
-				return iterator(&this->_header);
+				return iterator(this->_header.parent);
 			}
 
 			const_iterator
 			end( void ) const
 			{
-				return const_iterator(&this->_header);
+				return const_iterator(this->_header.parent);
 			}
 
 			reverse_iterator
@@ -513,14 +522,14 @@ namespace	ft
 			iterator
 			_insert( node_ptr x, node_ptr p, const value_type& v )
 			{
-				bool		insert_left = (x != 0 //|| p == this->end()
+				bool		insert_left = (x != 0 || p == &this->_header
 										|| this->_key_compare(v.first, tree::_key(p)));
 
 				node_ptr	z = this->_create_node(v);
 
 				this->_insert_and_rebalance(insert_left, z, p);
 				++this->_node_count;
-				return iterator(p); //TODO
+				return iterator(z);
 			}
 
 		public:
@@ -626,77 +635,9 @@ namespace	ft
 				return 0;
 			}
 
-			iterator
-			find( const key_type& key )
-			{
-				iterator	it = this->_lower_bound(key, this->_root(), this->end());
-
-				if (it != this->end() && !this->_key_compare(key, it->first))
-					return it;
-				return this->end();
-			}
-
-			const_iterator
-			find( const key_type& x ) const
-			{
-				const_iterator	it = this->_lower_bound(x, this->_root(), this->end());
-
-				if (it != this->end() && !this->_key_compare(x, it->content.first))
-					return it;
-				return this->end();
-			}
-
-			ft::pair<iterator, iterator>
-			equal_range( const key_type& key )
-			{
-				typedef ft::pair<iterator, iterator>	pair_type;
-
-				const_node_ptr	x = this->_root();
-				const_node_ptr	result = this->end();
-
-				while (x != 0)
-				{
-					if (this->_key_compare(key, x->content.first))
-					{
-						result = x;
-						x = x->left;
-					}
-					else if (this->_key_compare(x->content.first, key))
-						x = x->right;
-					else
-						return pair_type(iterator(x),
-								iterator(x->right != 0 ? x->right : result));
-				}
-				return pair_type(iterator(result), iterator(result));
-			}
-
-			ft::pair<const_iterator, const_iterator>
-			equal_range( const key_type& key ) const
-			{
-				typedef ft::pair<const_iterator, const_iterator>	pair_type;
-
-				const_node_ptr	x = this->_root();
-				const_node_ptr	result = this->end();
-
-				while (x != 0)
-				{
-					if (this->_key_compare(key, x->content.first))
-					{
-						result = x;
-						x = x->left;
-					}
-					else if (this->_key_compare(x->content.first, key))
-						x = x->right;
-					else
-						return pair_type(const_iterator(x),
-								const_iterator(x->right != 0 ? x->right : result));
-				}
-				return pair_type(const_iterator(result), const_iterator(result));
-			}
-
 		protected:
 			iterator
-			_lower_bound( const key_type& key, const_node_ptr x, const_node_ptr result )
+			_lower_bound( const key_type& key, node_ptr x, node_ptr result )
 			{
 				while (x != 0)
 				{
@@ -761,6 +702,74 @@ namespace	ft
 
 		public:
 			iterator
+			find( const key_type& key )
+			{
+				iterator	it = this->_lower_bound(key, this->_root(), &this->_header);
+
+				if (it != this->end() && !this->_key_compare(key, it->first))
+					return it;
+				return this->end();
+			}
+
+			const_iterator
+			find( const key_type& x ) const
+			{
+				const_iterator	it = this->_lower_bound(x, this->_root(), this->end());
+
+				if (it != this->end() && !this->_key_compare(x, it->content.first))
+					return it;
+				return this->end();
+			}
+
+			ft::pair<iterator, iterator>
+			equal_range( const key_type& key )
+			{
+				typedef ft::pair<iterator, iterator>	pair_type;
+
+				const_node_ptr	x = this->_root();
+				const_node_ptr	result = this->end();
+
+				while (x != 0)
+				{
+					if (this->_key_compare(key, x->content.first))
+					{
+						result = x;
+						x = x->left;
+					}
+					else if (this->_key_compare(x->content.first, key))
+						x = x->right;
+					else
+						return pair_type(iterator(x),
+								iterator(x->right != 0 ? x->right : result));
+				}
+				return pair_type(iterator(result), iterator(result));
+			}
+
+			ft::pair<const_iterator, const_iterator>
+			equal_range( const key_type& key ) const
+			{
+				typedef ft::pair<const_iterator, const_iterator>	pair_type;
+
+				const_node_ptr	x = this->_root();
+				const_node_ptr	result = this->end();
+
+				while (x != 0)
+				{
+					if (this->_key_compare(key, x->content.first))
+					{
+						result = x;
+						x = x->left;
+					}
+					else if (this->_key_compare(x->content.first, key))
+						x = x->right;
+					else
+						return pair_type(const_iterator(x),
+								const_iterator(x->right != 0 ? x->right : result));
+				}
+				return pair_type(const_iterator(result), const_iterator(result));
+			}
+
+			iterator
 			lower_bound( const key_type& key )
 			{
 				return this->_lower_bound(key, this->_root(), this->end());
@@ -788,6 +797,34 @@ namespace	ft
 			key_comp( void ) const
 			{
 				return this->_key_compare;
+			}
+
+		public:
+			void
+			debug( void )
+			{
+				node_ptr x = this->_leftmost();
+				size_type	elems = this->_node_count;
+
+				std::cout << "-----------------------" << std::endl;
+				std::cout << "##tree##" << std::endl;
+				std::cout << "header_node=" << &this->_header << std::endl;
+				std::cout << "root_node=" << this->_root() << std::endl;
+				std::cout << "leftmost_node=" << this->_leftmost() << std::endl;
+				std::cout << "rightmost_node=" << this->_rightmost() << std::endl;
+				std::cout << "-----------------------" << std::endl;
+				while (elems != 0)
+				{
+					std::cout << "total nodes=" << this->_node_count << std::endl;
+					std::cout << "node=" << x << std::endl;
+					std::cout << "element: first=" << x->content.first << " second=" << x->content.second << std::endl;
+					std::cout << "parent=" << x->parent << std::endl;
+					std::cout << "right=" << x->right << std::endl;
+					std::cout << "left=" << x->left << std::endl;
+					std::cout << "-----------------------" << std::endl;
+					x = _increment(x);
+					--elems;
+				}
 			}
 		};
 
