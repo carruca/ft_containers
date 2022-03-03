@@ -81,6 +81,12 @@ namespace	ft
 				return x != 0 && x == x->parent->left;
 			}
 
+			static bool
+			is_right_sibling( node_ptr x )
+			{
+				return x != 0 && x == x->parent->right;
+			}
+
 			static node_ptr
 			increment( node_ptr x )
 			{
