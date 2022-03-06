@@ -5,7 +5,7 @@
 # define NAMESPACE	std
 
 template< typename Key, typename T >
-	void	print_map(NAMESPACE::map<Key, T>& x)
+	static void	print_map(NAMESPACE::map<Key, T>& x)
 	{
 		typedef typename NAMESPACE::map<Key, T>	map_type;
 

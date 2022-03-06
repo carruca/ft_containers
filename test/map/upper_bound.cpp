@@ -5,7 +5,7 @@
 # define NAMESPACE	std
 
 template< typename Key, typename T >
-	void	print_map(NAMESPACE::map<Key, T>& x)
+	static void	print_map(NAMESPACE::map<Key, T>& x)
 	{
 		typedef typename NAMESPACE::map<Key, T>	map_type;
 
@@ -31,6 +31,6 @@ void	map_upper_bound(void)
 	iterator	it = player_map.upper_bound(7);
 	std::cout << it->first << ":" << it->second << " is the upper_bound of 7" << std::endl;
 
-	it = std::upper_bound(player_map.begin(), player_map.end(), std::pair<const int, std::string>(7, "depay"));
+//	it = std::upper_bound(player_map.begin(), player_map.end(), std::pair<const int, std::string>(7, "depay"));
 	std::cout << "std::upper_bound of 7 = " << it->first << std::endl;
 }

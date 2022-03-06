@@ -47,7 +47,12 @@ void	swap_test( void )
 
 void	testVector(void)
 {
-	default_constructor_test();
+	typedef std::vector<std::string>	stdVector_type;
+	typedef ft::vector<std::string>		ftVector_type;
+
+	std::cout << "std vector size = " << sizeof(stdVector_type) << std::endl;
+	std::cout << "std vector size = " << sizeof(ftVector_type) << std::endl;
+/*	default_constructor_test();
 	erase_test();
 	iterator_test();
 	iterator_test2();
@@ -67,7 +72,7 @@ void	testVector(void)
 	ft_vec_int1.assign(2, 4);
 	ft_vec_int1.assign(3, 4);
 	for_each(ft_vec_int1.begin(), ft_vec_int1.end(), display_int);
-/*
+
 	std::allocator<int>	alloc1;
 
 	std::cout << "Size of empty std::vector = " << sizeof(std_vec_int1) << std::endl;

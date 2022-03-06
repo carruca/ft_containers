@@ -5,21 +5,17 @@
 #include "ft_map.hpp"
 #include "ft_tree.hpp"
 
-# define NAMESPACE	std
+# define NAMESPACE	ft
 
 template< typename Key, typename T >
-	void	print_map(NAMESPACE::map<Key, T>& x)
+	static void	print_map(NAMESPACE::map<Key, T>& x)
 	{
 		typedef typename NAMESPACE::map<Key, T>	map_type;
-
-//		int	count = 2;
 
 		for (typename map_type::iterator it = x.begin(); it != x.end(); ++it)
 		{
 			std::cout << "node address = " << &(*it) << std::endl;
 			std::cout << "map elem = " << it->first << " : " << it->second << std::endl;
-//			if (!count)
-//				break ;
 		}
 		std::cout << "end node map address = " << &(*x.end()) << std::endl;
 		std::cout << "         map address = " << &x << std::endl;
@@ -29,6 +25,7 @@ template< typename Key, typename T >
 void	map_create_empty(void)
 {
 	typedef NAMESPACE::map<int, std::string>	map_type;
+	typedef NAMESPACE::map<int, int>		intMap_type;
 
 	map_type		player_map;
 	map_type		player_map2;
@@ -40,10 +37,12 @@ void	map_create_empty(void)
 
 	std::cout << "PRINT_MAP function" << std::endl;
 	std::cout << "begin=" << player_map.begin()->first << std::endl;
-	std::cout << "end=" << &player_map2.end()->first << std::endl;
+	std::cout << "end=" << player_map2.end()->first << std::endl;
 //	player_map2.end()->second.insert(0, "hola");
 	print_map<int, std::string>(player_map);
-	print_map<int, std::string>(player_map2);
+//	print_map<int, std::string>(player_map2);
+	std::cout << "size of std::string " << sizeof(std::string) << std::endl;
 	std::cout << "size of map " << sizeof(map_type) << std::endl;
+	std::cout << "size of int map " << sizeof(intMap_type) << std::endl;
 	std::cout << "diff between maps = " << (unsigned long)&player_map - (unsigned long)&player_map2 << std::endl;
 }

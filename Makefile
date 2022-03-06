@@ -12,12 +12,13 @@ TEST_VECTOR		= test.cpp							\
 				  constructor.cpp					\
 				  erase.cpp
 
-TEST_UTILS		= is_integralTest.cpp				\
-				  enable_ifTest.cpp					\
-				  pairTest.cpp						\
+TEST_UTILS		= 				  pairTest.cpp						\
 				  equalTest.cpp						\
 				  lexicographical_compareTest.cpp 	\
 				  reverse_iteratorTest.cpp
+				  #enable_ifTest.cpp					\
+				  is_integralTest.cpp
+
 
 CONTAINER_DIR	= containers/
 VECTOR_INC		= ft_vector.hpp						\
@@ -54,7 +55,7 @@ OBJ				= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
 DEPS			= $(OBJ:.o=.d)
 
 CXXFLAGS		= -Wall -Wextra -Werror -pedantic -O0 -MD $(INC) $(COMMONFLAGS) -std=c++98
-CXX				= clang++
+CXX				= g++
 COMMONFLAGS		=
 LDFLAGS			= $(COMMONFLAGS)
 
