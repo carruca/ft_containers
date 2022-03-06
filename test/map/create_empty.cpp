@@ -38,7 +38,6 @@ void	map_create_empty(void)
 	std::cout << "PRINT_MAP function" << std::endl;
 	std::cout << "begin=" << player_map.begin()->first << std::endl;
 	std::cout << "end=" << player_map2.end()->first << std::endl;
-//	player_map2.end()->second.insert(0, "hola");
 	print_map<int, std::string>(player_map);
 //	print_map<int, std::string>(player_map2);
 	std::cout << "size of std::string " << sizeof(std::string) << std::endl;

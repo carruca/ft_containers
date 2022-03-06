@@ -88,38 +88,40 @@ namespace	ft
 			}
 
 			static node_ptr
-			increment( node_ptr x )
+			increment( node_ptr current )
 			{
-				node_ptr	y;
+				node_ptr	parent;
 
-				if (x->right != 0)
-					return minimum(x->right);
-				y = x->parent;
-				while (y != 0 && x == y->right)
+				if (current->right != 0)
+					return minimum(current->right);
+				parent = current->parent;
+				while (current == parent->right)
 				{
-					x = y;
-					y = x->parent;
+					current = parent;
+					parent = current->parent;
 				}
-				return y;
+				if (current->right != parent)
+					current = parent;
+				return current;
 			}
 
 			static node_ptr
-			decrement( node_ptr x )
+			decrement( node_ptr current )
 			{
-				node_ptr	y;
+				node_ptr	parent;
 
-				if (x->color == red
-						&& x == x->parent->parent)
-					return x->right;
-				if (x->left != 0)
-					return maximum(x->left);
-				y = x->parent;
-				while ( y != 0 && x == y->left)
+				if (current->color == red
+						&& current == current->parent->parent)
+					return current->right;
+				if (current->left != 0)
+					return maximum(current->left);
+				parent = current->parent;
+				while (current == parent->left)
 				{
-					x = y;
-					y = x->parent;
+					current = parent;
+					parent = current->parent;
 				}
-				return y;
+				return parent;
 			}
 		};
 
@@ -817,12 +819,12 @@ namespace	ft
 
 				std::cout << "-----------------------" << std::endl;
 				std::cout << "##tree##" << std::endl;
-				std::cout << "header_node=" << &this->_header << std::endl;
+				std::cout << "sentinel_node=" << &this->_header << std::endl;
 				std::cout << "root_node=" << this->_root() << std::endl;
 				std::cout << "leftmost_node=" << this->_leftmost() << std::endl;
 				std::cout << "rightmost_node=" << this->_rightmost() << std::endl;
-				std::cout << "begin=" << this->begin()->first << std::endl;
-				std::cout << "end=" << this->end()->first << std::endl;
+				std::cout << "begin=" << &(*this->begin()) << std::endl;
+				std::cout << "end=" << &(*this->end()) << std::endl;
 				std::cout << "-----------------------" << std::endl;
 				while (elems != 0)
 				{
