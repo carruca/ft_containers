@@ -819,21 +819,26 @@ namespace	ft
 
 				std::cout << "-----------------------" << std::endl;
 				std::cout << "##tree##" << std::endl;
-				std::cout << "sentinel_node=" << &this->_header << std::endl;
-				std::cout << "root_node=" << this->_root() << std::endl;
-				std::cout << "leftmost_node=" << this->_leftmost() << std::endl;
-				std::cout << "rightmost_node=" << this->_rightmost() << std::endl;
-				std::cout << "begin=" << &(*this->begin()) << std::endl;
-				std::cout << "end=" << &(*this->end()) << std::endl;
+				std::cout << "sentinel_node = " << &this->_header << std::endl;
+				std::cout << "root_node = " << this->_root() << std::endl;
+				std::cout << "leftmost_node = " << this->_leftmost() << std::endl;
+				std::cout << "rightmost_node = " << this->_rightmost() << std::endl;
+				std::cout << "begin = " << &(*this->begin()) << std::endl;
+				std::cout << "end = " << &(*this->end()) << std::endl;
 				std::cout << "-----------------------" << std::endl;
 				while (elems != 0)
 				{
-					std::cout << "total nodes=" << this->_node_count << std::endl;
-					std::cout << "node=" << x << std::endl;
-					std::cout << "element: first=" << x->content.first << " second=" << x->content.second << std::endl;
-					std::cout << "parent=" << x->parent << std::endl;
-					std::cout << "right=" << x->right << std::endl;
-					std::cout << "left=" << x->left << std::endl;
+					std::cout << "total nodes = " << this->_node_count << std::endl;
+					std::cout << "node = " << x << std::endl;
+					std::cout << "content: first = " << x->content.first << " second = " << x->content.second << std::endl;
+					std::cout << "color = ";
+					if (x->color == red)
+						std::cout << "red" << std::endl;
+					else
+						std::cout << "black" << std::endl;
+					std::cout << "parent = " << x->parent << std::endl;
+					std::cout << "right = " << x->right << std::endl;
+					std::cout << "left = " << x->left << std::endl;
 					std::cout << "-----------------------" << std::endl;
 					x = _increment(x);
 					--elems;

@@ -33,6 +33,8 @@ void	map_create_empty(void)
 	player_map.insert(NAMESPACE::pair<int, std::string>(12, "Manolo"));
 	player_map.insert(NAMESPACE::pair<int, std::string>(3, "Figo"));
 	player_map.insert(NAMESPACE::pair<int, std::string>(7, "Raul"));
+	player_map.insert(NAMESPACE::pair<int, std::string>(14, "Xabi"));
+	player_map.insert(NAMESPACE::pair<int, std::string>(1, "Casillas"));
 //	player_map[3] = "Figo";
 
 	std::cout << "PRINT_MAP function" << std::endl;
