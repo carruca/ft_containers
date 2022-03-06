@@ -199,6 +199,6 @@ namespace	ft
 		{
 			return reverse_iterator<Iterator>( x.base() - n );
 		}
-};
+}
 
 #endif

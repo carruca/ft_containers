@@ -43,11 +43,6 @@ void	testIs_integral( void )
 	else
 		std::cout << "is_integral<long int>:			WRONG!" << std::endl;
 
-	if ( ft::is_integral<long long int>::value == std::is_integral<long long int>::value )
-		std::cout << "is_integral<long long int>:		CHECK!" << std::endl;
-	else
-		std::cout << "is_integral<long long int>:		WRONG!" << std::endl;
-
 	if ( ft::is_integral<unsigned char>::value == std::is_integral<unsigned char>::value )
 		std::cout << "is_integral<unsigned char>:		CHECK!" << std::endl;
 	else
@@ -67,11 +62,6 @@ void	testIs_integral( void )
 		std::cout << "is_integral<unsigned long int>:		CHECK!" << std::endl;
 	else
 		std::cout << "is_integral<unsigned long int>:		WRONG!" << std::endl;
-
-	if ( ft::is_integral<unsigned long long int>::value == std::is_integral<unsigned long long int>::value )
-		std::cout << "is_integral<unsigned long long int>:	CHECK!" << std::endl;
-	else
-		std::cout << "is_integral<unsigned long long int>:	WRONG!" << std::endl;
 
 	if ( ft::is_integral<float>::value == std::is_integral<float>::value )
 		std::cout << "is_integral<float>:			CHECK!" << std::endl;

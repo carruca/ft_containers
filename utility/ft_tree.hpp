@@ -108,6 +108,9 @@ namespace	ft
 			{
 				node_ptr	y;
 
+				if (x->color == red
+						&& x == x->parent->parent)
+					return x->right;
 				if (x->left != 0)
 					return maximum(x->left);
 				y = x->parent;
@@ -462,13 +465,13 @@ namespace	ft
 			iterator
 			end( void )
 			{
-				return iterator(this->_header.parent);
+				return iterator(&this->_header);
 			}
 
 			const_iterator
 			end( void ) const
 			{
-				return const_iterator(this->_header.parent);
+				return const_iterator(&this->_header);
 			}
 
 			reverse_iterator
@@ -818,6 +821,8 @@ namespace	ft
 				std::cout << "root_node=" << this->_root() << std::endl;
 				std::cout << "leftmost_node=" << this->_leftmost() << std::endl;
 				std::cout << "rightmost_node=" << this->_rightmost() << std::endl;
+				std::cout << "begin=" << this->begin()->first << std::endl;
+				std::cout << "end=" << this->end()->first << std::endl;
 				std::cout << "-----------------------" << std::endl;
 				while (elems != 0)
 				{

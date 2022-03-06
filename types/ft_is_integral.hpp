@@ -52,12 +52,6 @@ namespace	ft
 	};
 
 	template<>
-	struct	is_integral<long long int>
-	{
-		static bool const	value = true;
-	};
-
-	template<>
 	struct	is_integral<unsigned char>
 	{
 		static bool const	value = true;
@@ -80,12 +74,6 @@ namespace	ft
 	{
 		static bool const	value = true;
 	};
-
-	template<>
-	struct	is_integral<unsigned long long int>
-	{
-		static bool const	value = true;
-	};
-};
+}
 
 #endif

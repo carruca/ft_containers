@@ -75,6 +75,6 @@ namespace	ft
 	{
 		return pair<T1,T2>( t, u );
 	}
-};
+}
 
 #endif
