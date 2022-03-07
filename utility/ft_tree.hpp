@@ -525,22 +525,22 @@ namespace	ft
 */
 		protected:
 			static const key_type&
-			_key(const_node_ptr x)
+			_key( const_node_ptr x )
 			{
 				return x->content.first;
 			}
 
 			iterator
-			_insert( node_ptr x, node_ptr p, const value_type& v )
+			_insert( node_ptr x, node_ptr parent, const value_type& v )
 			{
-				bool		insert_left = (x != 0 || p == &this->_header
-										|| this->_key_compare(v.first, tree::_key(p)));
+				bool		insert_left = (x != 0 || parent == &this->_header
+										|| this->_key_compare(v.first, tree::_key(parent)));
 
-				node_ptr	ptr = this->_create_node(v);
+				node_ptr	node = this->_create_node(v);
 
-				this->_insert_and_rebalance(insert_left, z, p);
+				this->_insert_and_rebalance(insert_left, node, parent);
 				++this->_node_count;
-				return iterator(z);
+				return iterator(node);
 			}
 
 		public:
@@ -566,7 +566,48 @@ namespace	ft
 			iterator
 			insert( iterator position, const value_type& value )
 			{
-				return position; // Equivalent value keys
+				if (position == this->end()) // End position
+				{
+					if (this->size() > 0
+							&& this->_key_compare(tree::_key(this->_rightmost()), value.first))
+						return this->_insert(0, this->rightmost(), value);
+					else
+						return (this->insert(value)).first;
+				}
+				else if (this->_key_compare(value.first, tree::_key(position.node))) // Before position
+				{
+					iterator	before = position;
+
+					if (position.node == this->_leftmost()) // Begin position
+						return this->_insert(this->_leftmost(), this->_letfmost(), value);
+					else if (this->_key_compare(tree::_key((--before).node), value.first))
+					{
+						if (before.node->right == 0)
+							return this->_insert(0, before.node, value);
+						else
+							return this->_insert(position.node, position.node, value);
+					}
+					else
+						return (this->insert(value).first);
+				}
+				else if (this->_key_compare(tree::_key(position.node), value.first))
+				{
+					iterator	after = position;
+
+					if (position.node == this->_rightmost()) // Last position
+						return this->_insert(0, this->rightmost(), value);
+					else if (this->_key_compare(value.first, tree::_key((++after).node)))
+					{
+						if (after.node->right == 0)
+							return this->_insert(0, position.node, value);
+						else
+							return this->_insert(after.node, after.node, value);
+					}
+					else
+						return (this->insert(value)).first;
+				}
+				else // Equivalent value keys
+					return position;
 			}
 /*
 			template< typename InputIterator >
