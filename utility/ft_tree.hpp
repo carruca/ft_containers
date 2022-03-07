@@ -166,9 +166,9 @@ namespace	ft
 			}
 
 			void
-			_put_node( node_ptr x )
+			_put_node( node_ptr current )
 			{
-				this->_allocator.deallocate(x, 1);
+				this->_allocator.deallocate(current, 1);
 			}
 
 			void
@@ -536,7 +536,7 @@ namespace	ft
 				bool		insert_left = (x != 0 || p == &this->_header
 										|| this->_key_compare(v.first, tree::_key(p)));
 
-				node_ptr	z = this->_create_node(v);
+				node_ptr	ptr = this->_create_node(v);
 
 				this->_insert_and_rebalance(insert_left, z, p);
 				++this->_node_count;
@@ -562,13 +562,13 @@ namespace	ft
 					return pair_type(this->_insert(x, y, value), true);
 				return pair_type(iterator(x), false);
 			}
-/*
+
 			iterator
 			insert( iterator position, const value_type& value )
 			{
-
+				return position; // Equivalent value keys
 			}
-
+/*
 			template< typename InputIterator >
 				void
 				insert( InputIterator first, InputIterator last)
@@ -591,26 +591,26 @@ namespace	ft
 			}
 */
 			void
-			swap( tree<key_type, mapped_type, key_compare, allocator_type>& x )
+			swap( tree<key_type, mapped_type, key_compare, allocator_type>& other )
 			{
 				if (this->root() == 0)
 				{
-					if (x.root() != 0)
+					if (other.root() != 0)
 					{
-						this->_root() = x._root();
-						this->_leftmost() = x._leftmost();
-						this->_rightmost() = x._rightmost();
+						this->_root() = other._root();
+						this->_leftmost() = other._leftmost();
+						this->_rightmost() = other._rightmost();
 						this->_root()->parent = this->end();
-						x._root() = 0;
-						x._leftmost() = x.end();
-						x._rightmost() = x.end();
+						other._root() = 0;
+						other.the_leftmost() = other.end();
+						other._rightmost() = other.end();
 					}
 					else
 					{
-						x._root() = this->_root();
-						x._leftmost() = this->_leftmost();
-						x._rightmost() = this->_rightmost();
-						x._root()->parent = x.end();
+						other._root() = this->_root();
+						other._leftmost() = this->_leftmost();
+						other._rightmost() = this->_rightmost();
+						other._root()->parent = other.end();
 						this->_root() = 0;
 						this->_leftmost() = this->end();
 						this->_rightmost() = this->end();
@@ -618,15 +618,15 @@ namespace	ft
 				}
 				else
 				{
-					std::swap(this->_root(), x._root());
-					std::swap(this->_leftmost(), x._leftmost());
-					std::swap(this->_rightmost(), x._rightmost());
+					std::swap(this->_root(), other._root());
+					std::swap(this->_leftmost(), other._leftmost());
+					std::swap(this->_rightmost(), other._rightmost());
 					this->_root()->parent = this->end();
-					x._root()->parent = x.end();
+					other._root()->parent = other.end();
 				}
-				std::swap(this->_key_compare, x._key_compare);
-				std::swap(this->_node_count, x._node_count);
-				std::swap(this->_allocator, x._allocator);
+				std::swap(this->_key_compare, other._key_compare);
+				std::swap(this->_node_count, other._node_count);
+				std::swap(this->_allocator, other._allocator);
 			}
 
 			size_type
@@ -814,35 +814,39 @@ namespace	ft
 			void
 			debug( void )
 			{
-				node_ptr x = this->_leftmost();
+				node_ptr	current = this->_leftmost();
 				size_type	elems = this->_node_count;
 
 				std::cout << "-----------------------" << std::endl;
-				std::cout << "##tree##" << std::endl;
+				std::cout << "##tree elems##" << std::endl;
+				std::cout << "-----------------------" << std::endl;
 				std::cout << "sentinel_node = " << &this->_header << std::endl;
 				std::cout << "root_node = " << this->_root() << std::endl;
 				std::cout << "leftmost_node = " << this->_leftmost() << std::endl;
 				std::cout << "rightmost_node = " << this->_rightmost() << std::endl;
+				std::cout << "-----------------------" << std::endl;
 				std::cout << "begin = " << &(*this->begin()) << std::endl;
 				std::cout << "end = " << &(*this->end()) << std::endl;
 				std::cout << "-----------------------" << std::endl;
+				std::cout << "total nodes = " << this->_node_count << std::endl;
+				std::cout << "-----------------------" << std::endl;
 				while (elems != 0)
 				{
-					std::cout << "total nodes = " << this->_node_count << std::endl;
-					std::cout << "node = " << x << std::endl;
-					std::cout << "content: first = " << x->content.first << " second = " << x->content.second << std::endl;
+					if (current->parent == &this->_header)
+						std::cout << "ROOT NODE" << std::endl;
+					std::cout << "node = " << current << std::endl;
+					std::cout << "content: first = " << current->content.first << std::endl;
+					std::cout << "	second = " << current->content.second << std::endl;
 					std::cout << "color = ";
-					if (x->color == red)
-						std::cout << "red" << std::endl;
-					else
-						std::cout << "black" << std::endl;
-					std::cout << "parent = " << x->parent << std::endl;
-					std::cout << "right = " << x->right << std::endl;
-					std::cout << "left = " << x->left << std::endl;
+					std::cout << ((current->color == red) ? "red" : "black") << std::endl;
+					std::cout << "parent = " << current->parent << std::endl;
+					std::cout << "right = " << current->right << std::endl;
+					std::cout << "left = " << current->left << std::endl;
 					std::cout << "-----------------------" << std::endl;
-					x = _increment(x);
+					current = _increment(current);
 					--elems;
 				}
+				std::cout << std::endl;
 			}
 		};
 
