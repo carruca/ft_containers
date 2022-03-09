@@ -185,7 +185,7 @@ namespace	ft
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-				ft::pair<iterator, bool>	ret = this->_tree.insert(value);
+				ft::pair<iterator, bool>	ret(this->_tree.insert(value));
 
 				this->_tree.debug();
 				return ret;
@@ -194,8 +194,10 @@ namespace	ft
 			iterator
 			insert( iterator position, const value_type& value )
 			{
-				this->_tree.insert(position, value);
-				//TODO
+				iterator	ret(this->_tree.insert(position, value));
+
+				this->_tree.debug();
+				return ret;
 			}
 
 			template< typename InputIterator >
