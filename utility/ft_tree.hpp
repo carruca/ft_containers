@@ -208,7 +208,7 @@ namespace	ft
 			}
 
 			void
-			_empty_tree_init( void )
+			_init_empty_tree( void )
 			{
 				this->_sentinel.color = red;
 				this->_sentinel.parent = 0;
@@ -423,14 +423,14 @@ namespace	ft
 			tree( void )
 			: _node_count(0)
 			{
-				this->_empty_tree_init();
+				this->_init_empty_tree();
 			}
 
 			tree( const Compare& comp)
 			: _key_compare(comp)
 			, _node_count(0)
 			{
-				this->_empty_tree_init();
+				this->_init_empty_tree();
 			}
 
 			tree( const Compare& comp, const allocator_type& a )
@@ -438,12 +438,13 @@ namespace	ft
 			, _node_count(0)
 			, _allocator(a)
 			{
-				this->_empty_tree_init();
+				this->_init_empty_tree();
 			}
 
 			tree( const tree<key_type, mapped_type, key_compare, allocator_type>& x )
 			{
 				*this = x;
+				//TODO
 			}
 
 			~tree( void )
@@ -554,27 +555,6 @@ namespace	ft
 				return iterator(node);
 			}
 
-		public:
-			ft::pair<iterator, bool>
-			insert( const value_type& value )
-			{
-				typedef ft::pair<iterator, bool>	pair_type;
-
-				node_ptr	pos = this->_root();
-				node_ptr	parent = &this->_sentinel;
-
-				while (pos != 0)
-				{
-					parent = pos;
-					pos = this->_key_compare(value.first, tree::_key(pos))
-						? pos->left : pos->right;
-				}
-				if (parent)
-					return pair_type(this->_insert(pos, parent, value), true);
-				return pair_type(iterator(pos), false);
-			}
-
-		protected:
 			iterator
 			_insert_before_position( iterator position, const value_type& value )
 			{
@@ -619,6 +599,27 @@ namespace	ft
 			}
 
 		public:
+			ft::pair<iterator, bool>
+			insert( const value_type& value )
+			{
+				typedef ft::pair<iterator, bool>	pair_type;
+
+				node_ptr	pos = this->_root();
+				node_ptr	parent = &this->_sentinel;
+
+				while (pos != 0)
+				{
+					parent = pos;
+					if (this->_key_compare(value.first, tree::_key(pos)))
+						pos = pos->left;
+					else if (this->_key_compare(tree::_key(pos), value.first))
+						pos = pos->right;
+					else
+						return pair_type(iterator(pos), false);
+				}
+				return pair_type(this->_insert(pos, parent, value), true);
+			}
+
 			iterator
 			insert( iterator position, const value_type& value )
 			{

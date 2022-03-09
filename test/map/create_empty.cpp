@@ -35,11 +35,12 @@ void	map_create_empty(void)
 	player_map.insert(map_type::value_type(7, "Raul"));
 	player_map.insert(map_type::value_type(14, "Xabi"));
 	player_map.insert(map_type::value_type(1, "Casillas"));
-//	if ((player_map.insert(map_type::value_type(1, "Casillas"))).second == false)
+//	if ((player_map.insert(map_type::value_type(1, "Courtois"))).second == false)
 //		std::cout << "cannot insert a unique value key again" << std::endl;
-//	player_map[3] = "Figo";
 	player_map.insert(player_map.begin(), map_type::value_type(3, "Roberto"));
 	player_map.insert(player_map.end(), map_type::value_type(19, "Rodrigo"));
+
+//	player_map[3] = "Figo";
 
 	std::cout << "PRINT_MAP function" << std::endl;
 	std::cout << "begin=" << player_map.begin()->first << std::endl;
