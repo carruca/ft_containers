@@ -1,15 +1,18 @@
 #ifndef FT_TREE_HPP
 # define FT_TREE_HPP
 
-# include <iostream>
-# include <cstddef>
-# include <memory>
-# include <algorithm>
 # include "ft_tree_iterator.hpp"
 # include "ft_reverse_iterator.hpp"
 # include "ft_pair.hpp"
 # include "ft_equal.hpp"
 # include "ft_lexicographical_compare.hpp"
+# include "ft_enable_if.hpp"
+# include "ft_is_integral.hpp"
+
+# include <iostream>
+# include <cstddef>
+# include <memory>
+# include <algorithm>
 
 namespace	ft
 {
@@ -560,7 +563,7 @@ namespace	ft
 			{
 				iterator	before = position;
 
-				if (position == this->begin())
+				if (position.node == this->_leftmost())
 					return this->_insert(this->_leftmost(), this->_leftmost(), value);
 				else if (this->_key_compare(tree::_key((--before).node), value.first))
 				{
@@ -624,20 +627,25 @@ namespace	ft
 			insert( iterator position, const value_type& value )
 			{
 				if (position == this->end())
-					this->_insert_last_position(value);
+					return this->_insert_last_position(value);
 				else if (this->_key_compare(value.first, tree::_key(position.node)))
-					this->_insert_before_position(position, value);
+					return this->_insert_before_position(position, value);
 				else if (this->_key_compare(tree::_key(position.node), value.first))
-					this->_insert_after_position(position, value);
+					return this->_insert_after_position(position, value);
 				return position;
 			}
-/*
+
 			template< typename InputIterator >
 				void
-				insert( InputIterator first, InputIterator last)
+				insert( typename ft::enable_if<
+						!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+						InputIterator last)
 				{
+					for (; first != last; ++first)
+						this->insert(this->end(), *first);
+					this->debug();
 				}
-
+/*
 			void
 			erase( iterator position )
 			{
