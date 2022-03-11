@@ -572,7 +572,6 @@ namespace	ft
 			}
 
 		public:
-
 			void
 			clear( void )
 			{
