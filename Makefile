@@ -12,11 +12,11 @@ TEST_VECTOR		= test.cpp							\
 				  constructor.cpp					\
 				  erase.cpp
 
-TEST_UTILS		= 				  pairTest.cpp						\
+TEST_UTILS		= pairTest.cpp						\
 				  equalTest.cpp						\
 				  lexicographical_compareTest.cpp 	\
 				  reverse_iteratorTest.cpp
-				  #enable_ifTest.cpp					\
+				  #enable_ifTest.cpp				\
 				  is_integralTest.cpp
 
 

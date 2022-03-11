@@ -173,7 +173,6 @@ namespace	ft
 
 				if (it != this->end())
 					return it->second;
-				std::cout << "operator[] called" << std::endl;
 				return insert(value_type(k,mapped_type())).first->second;
 			}
 

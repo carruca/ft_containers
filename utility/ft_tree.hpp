@@ -217,6 +217,7 @@ namespace	ft
 				this->_sentinel.parent = 0;
 				this->_sentinel.left = &this->_sentinel;
 				this->_sentinel.right = &this->_sentinel;
+				this->_node_count = 0;
 			}
 
 			node_ptr
@@ -421,17 +422,39 @@ namespace	ft
 				root->color = black;
 			}
 
+		node_ptr
+		_rebalance_after_erase(node_ptr node)
+		{
+			node_ptr	copy = node;
+			node_ptr	current = 0;
+			node_ptr	parent = 0;
+
+			if (copy->left == 0) // is left child null
+				current = copy->right;
+			else
+			{
+				if (copy->right == 0) // is right child null
+					current = copy->left;
+				else // no null child
+				{
+					copy = copy->right;
+					while (copy->left != 0)
+						copy = copy->left;
+					copy = copy->right;
+				}
+			}
+			return node;
+		}
+
 		public:
 			/*	default constructor	*/
 			tree( void )
-			: _node_count(0)
 			{
 				this->_init_empty_tree();
 			}
 
 			tree( const Compare& comp)
 			: _key_compare(comp)
-			, _node_count(0)
 			{
 				this->_init_empty_tree();
 			}
@@ -452,7 +475,7 @@ namespace	ft
 
 			~tree( void )
 			{
-				//call erase
+				this->_destroy_all(this->_root());
 			}
 
 			const tree<key_type, mapped_type, key_compare, allocator_type>&
@@ -532,12 +555,31 @@ namespace	ft
 			{
 				return size_type(-1);
 			}
-/*
+
+		protected:
+			void
+			_destroy_all( node_ptr current )
+			{
+				node_ptr	left;
+
+				while (current != 0)
+				{
+					this->_destroy_all(current->right);
+					left = current->left;
+					this->_destroy_node(current);
+					current = left;
+				}
+			}
+
+		public:
+
 			void
 			clear( void )
 			{
+				this->_destroy_all(this->_root());
+				this->_init_empty_tree();
 			}
-*/
+
 		protected:
 			static const key_type&
 			_key( const_node_ptr x )

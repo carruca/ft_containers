@@ -2,8 +2,8 @@
 #include <string>
 #include <iostream>
 #include <functional>
+
 #include "ft_map.hpp"
-#include "ft_tree.hpp"
 
 # define NAMESPACE	ft
 
@@ -25,8 +25,10 @@ template< typename Key, typename T >
 
 void	map_create_empty(void)
 {
-	typedef NAMESPACE::map<int, std::string>	map_type;
 	typedef NAMESPACE::map<int, int>			intMap_type;
+
+	typedef NAMESPACE::map<int, std::string>	map_type;
+	typedef map_type::iterator					map_iterator;
 
 	map_type		play_map;
 
@@ -59,12 +61,28 @@ void	map_create_empty(void)
 
 	std::cout  << "Best player is = " << play_map[20] << std::endl;
 
+	map_type		play_map3;
+	map_iterator	map3_it = play_map3.end();
+
+	play_map3.insert(play_map3.begin(), map_type::value_type(1, "Courtois"));
+	play_map3.insert(++play_map3.begin(), map_type::value_type(5, "Puyol"));
+
+	play_map3.insert(map3_it, map_type::value_type(7, "Raul"));
+	play_map3.insert(map3_it, map_type::value_type(12, "Manolo"));
+	play_map3.insert(map3_it, map_type::value_type(3, "Manolo"));
+
+	--map3_it;
+	play_map3.insert(map3_it, map_type::value_type(10, "Robinho"));
+
 	std::cout << "diff between maps = " << (unsigned long)&play_map - (unsigned long)&play_map2 << std::endl;
+
 	std::cout << "PRINT_MAP function" << std::endl;
 	std::cout << "play_map 1:" << std::endl;
 	print_map<int, std::string>(play_map);
 	std::cout << "play_map 2:" << std::endl;
 	print_map<int, std::string>(play_map2);
+	std::cout << "play_map 3:" << std::endl;
+	print_map<int, std::string>(play_map3);
 	std::cout << "-----------------------" << std::endl;
 
 	std::cout << "SIZEOF MAP_TYPE" << std::endl;

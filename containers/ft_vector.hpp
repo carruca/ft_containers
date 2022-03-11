@@ -116,13 +116,13 @@ namespace	ft
 					InputIterator last, const Alloc& a = Alloc() )
 				: base(std::distance(first, last), a)
 				{
-					this->finish = this->_range_copy_init(first, last, this->start);
+					this->finish = this->_range_construct(first, last, this->start);
 				}
 
 			vector( const vector& other )
 			: base(other.size(), other.get_allocator())
 			{
-				this->finish = this->_range_copy_init(other.begin(), other.end(), this->start);
+				this->finish = this->_range_construct(other.begin(), other.end(), this->start);
 			}
 
 			/*	default destructor	*/
@@ -141,7 +141,7 @@ namespace	ft
 						pointer	tmp = this->allocate(other_len);
 
 						std::copy(other.begin(), other.end(), tmp);
-					//	this->_range_copy_init(other.begin(), other.end(), tmp);
+					//	this->_range_construct(other.begin(), other.end(), tmp);
 					//	this->_range_destroy(this->start, this->finish);
 						this->deallocate(this->start, this->capacity());
 						this->start = tmp;
@@ -151,7 +151,7 @@ namespace	ft
 					{
 						if ( other_len <= this->size() )
 							this->_range_destroy(this->start, this->finish);
-				//		this->_range_copy_init(other.begin(), other.end(), this->start);
+				//		this->_range_construct(other.begin(), other.end(), this->start);
 						std::copy(other.begin(), other.end(), this->start);
 					}
 					this->finish = this->start + other_len;
@@ -224,7 +224,7 @@ namespace	ft
 
 			template< typename InputIterator >
 				pointer
-				_range_copy_init( InputIterator first, InputIterator last, pointer result )
+				_range_construct( InputIterator first, InputIterator last, pointer result )
 				{
 					pointer	current = result;
 
