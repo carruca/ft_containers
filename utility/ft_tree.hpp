@@ -372,17 +372,18 @@ namespace	ft
 				//rebalance
 				while (node != root && node->parent->color == red)
 				{
-					node_ptr const	xpp = node->parent->parent;
+					node_ptr const	gparent = node->parent->parent;
 
-					if (xpp && node->parent == xpp->left)
+					if (gparent && node->parent == gparent->left)
 					{
-						node_ptr const	y = xpp->right;
+						node_ptr const	y = gparent->right;
+
 						if (y && y->color == red)
 						{
 							node->parent->color = black;
 							y->color = black;
-							xpp->color = red;
-							node = xpp;
+							gparent->color = red;
+							node = gparent;
 						}
 						else
 						{
@@ -392,19 +393,20 @@ namespace	ft
 								tree::_rotate_left(node, root);
 							}
 							node->parent->color = black;
-							xpp->color = red;
-							tree::_rotate_right(xpp, root);
+							gparent->color = red;
+							tree::_rotate_right(gparent, root);
 						}
 					}
 					else
 					{
-						node_ptr const	y = xpp->left;
+						node_ptr const	y = gparent->left;
+
 						if (y && y->color == red)
 						{
 							node->parent->color = black;
 							y->color = black;
-							xpp->color = red;
-							node = xpp;
+							gparent->color = red;
+							node = gparent;
 						}
 						else
 						{
@@ -414,8 +416,8 @@ namespace	ft
 								tree::_rotate_right(node, root);
 							}
 							node->parent->color = black;
-							xpp->color = red;
-							tree::_rotate_left(xpp, root);
+							gparent->color = red;
+							tree::_rotate_left(gparent, root);
 						}
 					}
 				}
@@ -423,27 +425,37 @@ namespace	ft
 			}
 
 		node_ptr
-		_rebalance_after_erase(node_ptr node)
+		_rebalance_after_erase( node_ptr node )
 		{
-			node_ptr	copy = node;
-			node_ptr	current = 0;
+			node_ptr&	root = this->_sentinel.parent;
+			node_ptr	current = node;
+			node_ptr	child = 0;
 			node_ptr	parent = 0;
 
-			if (copy->left == 0) // is left child null
-				current = copy->right;
-			else
+			if (current->left == 0) // is left child null
+				child = current->right;
+			else if (current->right == 0) // is right child null
+				child = current->left;
+			else // no null child
 			{
-				if (copy->right == 0) // is right child null
-					current = copy->left;
-				else // no null child
+				current = current->right;
+				while (current->left != 0)
+					current = current->left;
+				child = current->right;
+			}
+
+			if (current != node)
+			{
+				// relink left child of node with new parent current
+				node->left->parent = current;
+				current->left = node->left;
+
+				if (current != node->right)
 				{
-					copy = copy->right;
-					while (copy->left != 0)
-						copy = copy->left;
-					copy = copy->right;
+					parent = current->parent;
 				}
 			}
-			return node;
+			return current;
 		}
 
 		public:
@@ -475,7 +487,7 @@ namespace	ft
 
 			~tree( void )
 			{
-				this->_destroy_all(this->_root());
+				this->_erase_tree(this->_root());
 			}
 
 			const tree<key_type, mapped_type, key_compare, allocator_type>&
@@ -558,13 +570,13 @@ namespace	ft
 
 		protected:
 			void
-			_destroy_all( node_ptr current )
+			_erase_tree( node_ptr current )
 			{
 				node_ptr	left;
 
 				while (current != 0)
 				{
-					this->_destroy_all(current->right);
+					this->_erase_tree(current->right);
 					left = current->left;
 					this->_destroy_node(current);
 					current = left;
@@ -575,7 +587,7 @@ namespace	ft
 			void
 			clear( void )
 			{
-				this->_destroy_all(this->_root());
+				this->_erase_tree(this->_root());
 				this->_init_empty_tree();
 			}
 
@@ -602,34 +614,34 @@ namespace	ft
 			iterator
 			_insert_before_position( iterator position, const value_type& value )
 			{
-				iterator	before = position;
+	//			iterator	before = position;
 
 				if (position.node == this->_leftmost())
 					return this->_insert(this->_leftmost(), this->_leftmost(), value);
-				else if (this->_key_compare(tree::_key((--before).node), value.first))
+/*				else if (this->_key_compare(tree::_key((--before).node), value.first))
 				{
 					if (before.node->right == 0)
 						return this->_insert(0, before.node, value);
 				else
 					return this->_insert(position.node, position.node, value);
-				}
+				}*/
 				return (this->insert(value).first);
 			}
 
 			iterator
 			_insert_after_position( iterator position, const value_type& value )
 			{
-				iterator	after = position;
+	//			iterator	after = position;
 
 				if (position.node == this->_rightmost())
 					return this->_insert(0, this->_rightmost(), value);
-				else if (this->_key_compare(value.first, tree::_key((++after).node)))
+/*				else if (this->_key_compare(value.first, tree::_key((++after).node)))
 				{
 					if (after.node->right == 0)
 						return this->_insert(0, position.node, value);
 					else
 						return this->_insert(after.node, after.node, value);
-				}
+				}*/
 				return (this->insert(value)).first;
 			}
 
