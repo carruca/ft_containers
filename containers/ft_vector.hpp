@@ -595,7 +595,6 @@ namespace	ft
 			{
 				this->_erase_at_end(this->start);
 			}
-
 		};
 
 	template< typename T, typename Alloc >

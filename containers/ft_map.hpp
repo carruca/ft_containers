@@ -7,13 +7,13 @@
 
 namespace	ft
 {
-	template< typename Key, typename T, typename Compare = std::less<Key>,
-			  typename Alloc = std::allocator<ft::pair<const Key, T> > >
+	template< typename Key, typename Type, typename Compare = std::less<Key>,
+			  typename Alloc = std::allocator<ft::pair<const Key, Type> > >
 		class	map
 		{
 		public:
 			typedef Key															key_type;
-			typedef T															mapped_type;
+			typedef Type														mapped_type;
 			typedef ft::pair<const key_type, mapped_type>						value_type;
 			typedef Compare														key_compare;
 			typedef Alloc														allocator_type;
@@ -39,22 +39,16 @@ namespace	ft
 			class	value_compare
 				: public std::binary_function<value_type, value_type, bool>
 			{
-				friend class map;
-
 			protected:
 				key_compare	comp;
 
+			public:
 				value_compare( key_compare c )
 				: comp(c)
 				{}
 
-			public:
-				typedef bool		result_type;
-				typedef value_type	first_argument_type;
-				typedef value_type	second_argument_type;
-
 				bool
-				operator()( const first_argument_type& x, const second_argument_type& y ) const
+				operator()( const value_type& x, const value_type& y ) const
 				{
 					return comp(x.first, y.first);
 				}
@@ -216,7 +210,7 @@ namespace	ft
 			size_type
 			erase( const key_type& key )
 			{
-				this->_tree.erase(key);
+				return this->_tree.erase(key);
 			}
 
 			void
@@ -234,7 +228,7 @@ namespace	ft
 			size_type
 			count( const key_type& key ) const
 			{
-				this->_tree.count(key);
+				return this->_tree.count(key);
 			}
 
 			iterator
@@ -252,37 +246,37 @@ namespace	ft
 			ft::pair<iterator,iterator>
 			equal_range( const key_type& key )
 			{
-				this->_tree.equal_range(key);
+				return this->_tree.equal_range(key);
 			}
 
 			ft::pair<const_iterator,const_iterator>
 			equal_range( const key_type& key ) const
 			{
-				this->_tree.equal_range(key);
+				return this->_tree.equal_range(key);
 			}
 
 			iterator
 			lower_bound( const key_type& key )
 			{
-				this->_tree.lower_bound(key);
+				return this->_tree.lower_bound(key);
 			}
 
 			const_iterator
 			lower_bound( const key_type& key ) const
 			{
-				this->_tree.lower_bound(key);
+				return this->_tree.lower_bound(key);
 			}
 
 			iterator
 			upper_bound( const key_type& key )
 			{
-				this->_tree.upper_bound(key);
+				return this->_tree.upper_bound(key);
 			}
 
 			const_iterator
 			upper_bound( const key_type& key ) const
 			{
-				this->_tree.upper_bound(key);
+				return this->_tree.upper_bound(key);
 			}
 
 			key_compare
@@ -290,66 +284,75 @@ namespace	ft
 			{
 				return this->_tree.key_comp();
 			}
-/*
+
 			value_compare
 			value_comp( void ) const
 			{
 				return value_compare(this->_tree.key_comp());
 			}
-*/
+
+			template< typename K, typename T, typename C, typename A >
+				friend bool
+				operator==( const map<K,T,C,A>& lhs,
+							const map<K,T,C,A>& rhs );
+
+			template< typename K, typename T, typename C, typename A >
+				friend bool
+				operator<( const map<K,T,C,A>& lhs,
+							const map<K,T,C,A>& rhs );
 		};
 
-	template< typename Key, typename T, typename Compare, typename Alloc >
+	template< typename Key, typename Type, typename Compare, typename Alloc >
 		inline bool
-		operator==( const map<Key,T,Compare,Alloc>& lhs,
-					const map<Key,T,Compare,Alloc>& rhs )
+		operator==( const map<Key,Type,Compare,Alloc>& lhs,
+					const map<Key,Type,Compare,Alloc>& rhs )
 		{
 			return lhs._tree == rhs._tree;
 		}
 	
-	template< typename Key, typename T, typename Compare, typename Alloc >
+	template< typename Key, typename Type, typename Compare, typename Alloc >
 		inline bool
-		operator!=( const map<Key,T,Compare,Alloc>& lhs,
-					const map<Key,T,Compare,Alloc>& rhs )
+		operator!=( const map<Key,Type,Compare,Alloc>& lhs,
+					const map<Key,Type,Compare,Alloc>& rhs )
 		{
 			return !(lhs == rhs);
 		}
 
-	template< typename Key, typename T, typename Compare, typename Alloc >
+	template< typename Key, typename Type, typename Compare, typename Alloc >
 		inline bool
-		operator<( const map<Key,T,Compare,Alloc>& lhs,
-					const map<Key,T,Compare,Alloc>& rhs )
+		operator<( const map<Key,Type,Compare,Alloc>& lhs,
+					const map<Key,Type,Compare,Alloc>& rhs )
 		{
 			return lhs._tree < rhs._tree;
 		}
 
-	template< typename Key, typename T, typename Compare, typename Alloc >
+	template< typename Key, typename Type, typename Compare, typename Alloc >
 		inline bool
-		operator>( const map<Key,T,Compare,Alloc>& lhs,
-					const map<Key,T,Compare,Alloc>& rhs )
+		operator>( const map<Key,Type,Compare,Alloc>& lhs,
+					const map<Key,Type,Compare,Alloc>& rhs )
 		{
 			return rhs < lhs;
 		}
 
-	template< typename Key, typename T, typename Compare, typename Alloc >
+	template< typename Key, typename Type, typename Compare, typename Alloc >
 		inline bool
-		operator<=( const map<Key,T,Compare,Alloc>& lhs,
-					const map<Key,T,Compare,Alloc>& rhs )
+		operator<=( const map<Key,Type,Compare,Alloc>& lhs,
+					const map<Key,Type,Compare,Alloc>& rhs )
 		{
 			return !(rhs < lhs);
 		}
 
-	template< typename Key, typename T, typename Compare, typename Alloc >
+	template< typename Key, typename Type, typename Compare, typename Alloc >
 		inline bool
-		operator>=( const map<Key,T,Compare,Alloc>& lhs,
-					const map<Key,T,Compare,Alloc>& rhs )
+		operator>=( const map<Key,Type,Compare,Alloc>& lhs,
+					const map<Key,Type,Compare,Alloc>& rhs )
 		{
 			return !(lhs < rhs);
 		}
 
-	template< typename Key, typename T, typename Compare, typename Alloc >
+	template< typename Key, typename Type, typename Compare, typename Alloc >
 		inline void
-		swap( map<Key,T,Compare,Alloc>& lhs, map<Key,T,Compare,Alloc>& rhs )
+		swap( map<Key,Type,Compare,Alloc>& lhs, map<Key,Type,Compare,Alloc>& rhs )
 		{
 			lhs.swap(rhs);
 		}

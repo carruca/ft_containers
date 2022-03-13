@@ -425,9 +425,11 @@ namespace	ft
 			}
 
 		node_ptr
-		_rebalance_after_erase( node_ptr node )
+		_rebalance_before_erase( node_ptr node )
 		{
 			node_ptr&	root = this->_sentinel.parent;
+			node_ptr&	leftmost = this->_sentinel.left;
+			node_ptr&	rightmost = this->_sentinel.right;
 			node_ptr	current = node;
 			node_ptr	child = 0;
 			node_ptr	parent = 0;
@@ -443,7 +445,6 @@ namespace	ft
 					current = current->left;
 				child = current->right;
 			}
-
 			if (current != node)
 			{
 				// relink left child of node with new parent current
@@ -453,7 +454,54 @@ namespace	ft
 				if (current != node->right)
 				{
 					parent = current->parent;
+					if (child)
+						child->parent = current->parent;
+					current->parent->left = child;
+					current->right = node->right;
+					node->right->parent = current;
 				}
+				else
+					parent = current;
+				// change parent pointers
+				if (root == node)
+					root = current;
+				else if (node->parent->left == node)
+					node->parent->left = current;
+				else
+					node->parent->right = current;
+				current->parent = node->parent;
+				std::swap(current->color, node->color);
+				//current points to the node to be deleted
+				current = node;
+			}
+			else
+			{
+				parent = current->parent;
+				if (child)
+					child->parent = current->parent;
+				if (root == node)
+					root = child;
+				else if (node->parent->left == node)
+					node->parent->left = child;
+				else
+					node->parent->right = child;
+				if (leftmost == node)
+				{
+					if (node->right == 0)
+						leftmost = node->parent;
+					else
+						leftmost = tree::_minimum(child);
+				}
+				if (rightmost == node)
+				{
+					if (node->left == 0)
+						rightmost = node->parent;
+					else
+						rightmost = tree::_minimum(child);
+				}
+			}
+			if (current->color != red)
+			{
 			}
 			return current;
 		}
@@ -698,22 +746,43 @@ namespace	ft
 						this->insert(this->end(), *first);
 					this->debug();
 				}
-/*
+
 			void
 			erase( iterator position )
 			{
+				node_ptr	node;
+
+				node = this->_rebalance_before_erase(position.node);
+				this->_destroy_node(node);
+				--this->_node_count;
 			}
 
 			size_type
 			erase( const key_type& key )
 			{
+				iterator	position;
+
+				position = this->find(key);
+				if (position != this->end())
+				{
+					this->erase(position);
+					return 1;
+				}
+				return 0;
 			}
 
 			void
 			erase( iterator first, iterator last )
 			{
+				if (first == this->begin() && last == this->end())
+					this->clear();
+				else
+				{
+					while (first != last)
+						this->erase(first++);
+				}
 			}
-*/
+
 			void
 			swap( tree<key_type, mapped_type, key_compare, allocator_type>& other )
 			{
@@ -839,20 +908,20 @@ namespace	ft
 			iterator
 			find( const key_type& key )
 			{
-				iterator	it = this->_lower_bound(key, this->_root(), &this->_sentinel);
+				iterator	position = this->_lower_bound(key, this->_root(), &this->_sentinel);
 
-				if (it != this->end() && !this->_key_compare(key, it->first))
-					return it;
+				if (position != this->end() && !this->_key_compare(key, position->first))
+					return position;
 				return this->end();
 			}
 
 			const_iterator
 			find( const key_type& x ) const
 			{
-				const_iterator	it = this->_lower_bound(x, this->_root(), &this->_sentinel);
+				const_iterator	position = this->_lower_bound(x, this->_root(), &this->_sentinel);
 
-				if (it != this->end() && !this->_key_compare(x, it->content.first))
-					return it;
+				if (position != this->end() && !this->_key_compare(x, position->content.first))
+					return position;
 				return this->end();
 			}
 
