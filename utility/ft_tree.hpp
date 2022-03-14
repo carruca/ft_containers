@@ -128,13 +128,13 @@ namespace	ft
 			}
 		};
 
-	template< typename Key, typename T, typename Compare,
-			  typename Alloc = std::allocator<T> >
+	template< typename Key, typename Type, typename Compare,
+			  typename Alloc = std::allocator<Type> >
 		class	tree
 		{
 		public:
 			typedef Key												key_type;
-			typedef T												mapped_type;
+			typedef Type											mapped_type;
 			typedef ft::pair<const key_type, mapped_type>			value_type;
 			typedef value_type*										pointer;
 			typedef const value_type*								const_pointer;
@@ -200,7 +200,7 @@ namespace	ft
 			}
 
 			node_ptr
-			_clone_node( node_ptr x )
+			_clone_node( const_node_ptr x )
 			{
 				node_ptr	tmp = this->_create_node(x->content);
 
@@ -221,10 +221,40 @@ namespace	ft
 			}
 
 			node_ptr
+			_assign_node( const_node_ptr root, node_ptr parent )
+			{
+				node_ptr	node;
+
+				node = this->_clone_node(root);
+				node->parent = parent;
+				if (root->right)
+					node->right = this->_copy_tree(root->right, node);
+				return node;
+			}
+
+			node_ptr
+			_copy_tree( const_node_ptr root, node_ptr parent )
+			{
+				node_ptr	top;
+				node_ptr	leftmost;
+
+				top = this->_assign_node(root, parent);
+				parent = top;
+				for (root = root->left; root != 0; root = root->left)
+				{
+					leftmost = this->_assign_node(root, parent);
+					parent->left = leftmost;
+					parent = leftmost;
+				}
+				return top;
+			}
+
+/*			node_ptr
 			_end( void )
 			{
 				return &this->_sentinel;
-			}
+			}*/
+
 			node_ptr
 			_root( void )
 			{
@@ -424,87 +454,98 @@ namespace	ft
 				root->color = black;
 			}
 
-		node_ptr
-		_rebalance_before_erase( node_ptr node )
-		{
-			node_ptr&	root = this->_sentinel.parent;
-			node_ptr&	leftmost = this->_sentinel.left;
-			node_ptr&	rightmost = this->_sentinel.right;
-			node_ptr	current = node;
-			node_ptr	child = 0;
-			node_ptr	parent = 0;
-
-			if (current->left == 0) // is left child null
-				child = current->right;
-			else if (current->right == 0) // is right child null
-				child = current->left;
-			else // no null child
+			node_ptr
+			_rebalance_before_erase( node_ptr node )
 			{
-				current = current->right;
-				while (current->left != 0)
-					current = current->left;
-				child = current->right;
-			}
-			if (current != node)
-			{
-				// relink left child of node with new parent current
-				node->left->parent = current;
-				current->left = node->left;
+				node_ptr&	root = this->_sentinel.parent;
+				node_ptr&	leftmost = this->_sentinel.left;
+				node_ptr&	rightmost = this->_sentinel.right;
+				node_ptr	current = node;
+				node_ptr	child = 0;
+				node_ptr	parent = 0;
 
-				if (current != node->right)
+				if (current->left == 0) // is left child null
+					child = current->right;
+				else if (current->right == 0) // is right child null
+					child = current->left;
+				else // no null child
+				{
+					current = current->right;
+					while (current->left != 0)
+						current = current->left;
+					child = current->right;
+				}
+				if (current != node)
+				{
+					// relink left child of node with new parent current
+					node->left->parent = current;
+					current->left = node->left;
+
+					if (current != node->right)
+					{
+						parent = current->parent;
+						if (child)
+							child->parent = current->parent;
+						current->parent->left = child;
+						current->right = node->right;
+						node->right->parent = current;
+					}
+					else
+						parent = current;
+					// change parent pointers
+					if (root == node)
+						root = current;
+					else if (node->parent->left == node)
+						node->parent->left = current;
+					else
+						node->parent->right = current;
+					current->parent = node->parent;
+					std::swap(current->color, node->color);
+					//current points to the node to be deleted
+					current = node;
+				}
+				else
 				{
 					parent = current->parent;
 					if (child)
 						child->parent = current->parent;
-					current->parent->left = child;
-					current->right = node->right;
-					node->right->parent = current;
-				}
-				else
-					parent = current;
-				// change parent pointers
-				if (root == node)
-					root = current;
-				else if (node->parent->left == node)
-					node->parent->left = current;
-				else
-					node->parent->right = current;
-				current->parent = node->parent;
-				std::swap(current->color, node->color);
-				//current points to the node to be deleted
-				current = node;
-			}
-			else
-			{
-				parent = current->parent;
-				if (child)
-					child->parent = current->parent;
-				if (root == node)
-					root = child;
-				else if (node->parent->left == node)
-					node->parent->left = child;
-				else
-					node->parent->right = child;
-				if (leftmost == node)
-				{
-					if (node->right == 0)
-						leftmost = node->parent;
+					if (root == node)
+						root = child;
+					else if (node->parent->left == node)
+						node->parent->left = child;
 					else
-						leftmost = tree::_minimum(child);
+						node->parent->right = child;
+					if (leftmost == node)
+					{
+						if (node->right == 0)
+							leftmost = node->parent;
+						else
+							leftmost = tree::_minimum(child);
+					}
+					if (rightmost == node)
+					{
+						if (node->left == 0)
+							rightmost = node->parent;
+						else
+							rightmost = tree::_minimum(child);
+					}
 				}
-				if (rightmost == node)
+				if (current->color != red)
 				{
-					if (node->left == 0)
-						rightmost = node->parent;
-					else
-						rightmost = tree::_minimum(child);
+					//TODO
 				}
+				return current;
 			}
-			if (current->color != red)
+
+			void
+			_init_fill_sentinel_and_count( const tree<key_type, mapped_type,
+									key_compare, allocator_type>& other )
 			{
+				this->_sentinel.parent = this->_copy_tree(other._root(), &this->_sentinel);
+				this->_sentinel.left = tree::_minimum(this->_root());
+				this->_sentinel.right = tree::_maximum(this->_root());
+				this->_node_count = other._node_count;
 			}
-			return current;
-		}
 
 		public:
 			/*	default constructor	*/
@@ -521,16 +562,18 @@ namespace	ft
 
 			tree( const Compare& comp, const allocator_type& a )
 			: _key_compare(comp)
-			, _node_count(0)
 			, _allocator(a)
 			{
 				this->_init_empty_tree();
 			}
 
-			tree( const tree<key_type, mapped_type, key_compare, allocator_type>& x )
+			tree( const tree<key_type, mapped_type, key_compare, allocator_type>& other )
+			: _key_compare(other._key_compare)
+			, _allocator(other._allocator)
 			{
-				*this = x;
-				//TODO
+				this->_init_empty_tree();
+				if (!other.empty())
+					this->_init_fill_sentinel_and_count(other);
 			}
 
 			~tree( void )
@@ -541,7 +584,15 @@ namespace	ft
 			const tree<key_type, mapped_type, key_compare, allocator_type>&
 			operator=( const tree<key_type, mapped_type, key_compare, allocator_type>& rhs)
 			{
-				(void)rhs;
+				if (this != &rhs)
+				{
+					this->clear();
+					this->_key_compare = rhs._key_compare;
+					this->_allocator = rhs._allocator;
+					if (!rhs.empty())
+						this->_init_fill_sentinel_and_count(rhs);
+				}
+				return *this;
 			}
 
 			allocator_type
@@ -786,7 +837,7 @@ namespace	ft
 			void
 			swap( tree<key_type, mapped_type, key_compare, allocator_type>& other )
 			{
-				if (this->root() == 0)
+			/*	if (this->root() == 0)
 				{
 					if (other.root() != 0)
 					{
@@ -810,13 +861,13 @@ namespace	ft
 					}
 				}
 				else
-				{
+				{*/
 					std::swap(this->_root(), other._root());
 					std::swap(this->_leftmost(), other._leftmost());
 					std::swap(this->_rightmost(), other._rightmost());
 					this->_root()->parent = this->end();
 					other._root()->parent = other.end();
-				}
+			//	}
 				std::swap(this->_key_compare, other._key_compare);
 				std::swap(this->_node_count, other._node_count);
 				std::swap(this->_allocator, other._allocator);
@@ -873,7 +924,7 @@ namespace	ft
 			}
 
 			iterator
-			_upper_bound( const key_type& key, const_node_ptr x, const_node_ptr result )
+			_upper_bound( const key_type& key, node_ptr x, node_ptr result )
 			{
 				while (x != 0)
 				{
@@ -976,25 +1027,25 @@ namespace	ft
 			iterator
 			lower_bound( const key_type& key )
 			{
-				return this->_lower_bound(key, this->_root(), this->end());
+				return this->_lower_bound(key, this->_root(), &this->_sentinel);
 			}
 
 			const_iterator
 			lower_bound( const key_type& key ) const
 			{
-				return this->_lower_bound(key, this->_root(), this->end());
+				return this->_lower_bound(key, this->_root(), &this->_sentinel);
 			}
 
 			iterator
 			upper_bound( const key_type& key )
 			{
-				return this->_upper_bound(key, this->_root(), this->end());
+				return this->_upper_bound(key, this->_root(), &this->_sentinel);
 			}
 
 			const_iterator
 			upper_bound( const key_type& key ) const
 			{
-				return this->_upper_bound(key, this->_root(), this->end());
+				return this->_upper_bound(key, this->_root(), &this->_sentinel);
 			}
 
 			key_compare
@@ -1003,7 +1054,6 @@ namespace	ft
 				return this->_key_compare;
 			}
 
-		public:
 			void
 			debug( void )
 			{

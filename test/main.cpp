@@ -7,8 +7,8 @@ void	testEqual( void );
 void	testLexicographical_compare( void );
 void	testReverseIterator( void );*/
 void	testVector( void );
-/*void	map_lower_bound( void );
-void	map_upper_bound( void );*/
+//void	map_lower_bound( void );
+void	map_upper_bound( void );
 void	map_create_empty(void);
 
 void	check_leaks( void )
@@ -20,7 +20,7 @@ int	main( void )
 {
 //vector
 	testVector();
-//	atexit(check_leaks);
+	atexit(check_leaks);
 //	testIs_integral();
 //	testEnable_if();
 //	testPair();
@@ -30,7 +30,7 @@ int	main( void )
 
 //map
 //	map_lower_bound();
-//	map_upper_bound();
 	map_create_empty();
+	map_upper_bound();
 	return 0;
 }
