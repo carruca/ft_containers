@@ -30,7 +30,7 @@ int	main( void )
 
 //map
 //	map_lower_bound();
-	map_create_empty();
-	map_upper_bound();
+//	map_create_empty();
+//	map_upper_bound();
 	return 0;
 }

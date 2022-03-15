@@ -52,7 +52,7 @@ void	testVector(void)
 
 	std::cout << "std vector size = " << sizeof(stdVector_type) << std::endl;
 	std::cout << "std vector size = " << sizeof(ftVector_type) << std::endl;
-/*	default_constructor_test();
+	default_constructor_test();
 	erase_test();
 	iterator_test();
 	iterator_test2();
@@ -396,5 +396,5 @@ void	testVector(void)
 	std::cout << "size of ft::vector<int> = " << ft_vec_int2.size() << std::endl;
 	std::cout << "size of ft::vector<int> range = " << ft_vec_int_range.size() << std::endl;
 	std::cout << "size of ft::vector<int> copy = " << ft_vec_int_copy.size() << std::endl;
-*/
+
 }
