@@ -98,14 +98,15 @@ namespace	ft
 		protected:
 			typedef vector_base<value_type, allocator_type>			base;
 
-			void
+			pointer
 			_fill_construct( pointer first, size_type nbr, const value_type& value )
 			{
 				pointer	current = first;
 
 				for ( ; nbr > 0; --nbr, ++current )
 					this->allocator.construct(current, value);
-				this->finish = this->end_of_storage;
+				return current;
+	//			this->finish = this->end_of_storage;
 			}
 
 			template< typename InputIterator >
@@ -113,14 +114,9 @@ namespace	ft
 				_range_construct( InputIterator first, InputIterator last, pointer result )
 				{
 					pointer		current = result;
-//					size_type	len = std::distance(first, last);
 
 					for ( ; first != last; ++first, ++current )
-					{
-	//					std::cout << "element number " << len << " " << std::endl;
-	//					--len;
 						this->allocator.construct(current, *first);
-					}
 					return current;
 				}
 
@@ -150,7 +146,7 @@ namespace	ft
 					const allocator_type& a = allocator_type() )
 			: base(size, a)
 			{
-				this->_fill_construct(this->start, size, value);
+				this->finish = this->_fill_construct(this->start, size, value);
 			}
 
 			template< typename InputIterator >
@@ -170,7 +166,7 @@ namespace	ft
 			/*	default destructor	*/
 			~vector( void )
 			{
-//				this->_range_destroy(this->start, this->finish);
+				this->_range_destroy(this->start, this->finish);
 			}
 
 		protected:
@@ -199,15 +195,15 @@ namespace	ft
 				}
 
 		public:
-/*			vector&
+			vector&
 			operator=( const vector& other )
 			{
 				if ( this != &other )
 				{
-					const size_type	other_len = other.size();
+//					const size_type	other_len = other.size();
 
-					this->_range_assign(other.begin(), other.end(), other_len);
-
+					this->_range_assign(other.begin(), other.end(), other.size());
+/*
 //					if ( other_len > this->capacity() )
 //					{
 //						pointer	tmp = this->allocate(other_len);
@@ -226,10 +222,10 @@ namespace	ft
 						this->_range_construct(other.begin(), other.end(), this->start);
 				//		std::copy(other.begin(), other.end(), this->start);
 					}
-					this->finish = this->start + other_len;
+					this->finish = this->start + other_len;*/
 				}
 				return *this;
-			}*/
+			}
 
 		protected:
 			void
@@ -507,25 +503,32 @@ namespace	ft
 				const size_type	new_len(this->_check_length(len));
 				const size_type	elems_before(position - this->begin());
 				pointer			new_start(this->allocate(new_len));
+				pointer			new_finish(new_start);
 				pointer			new_mid(new_start + elems_before);
-				pointer			new_finish;
+	//			pointer			new_end_of(new_start + new_len);
 
 		//		new_finish = std::copy(this->start, position.base(), new_start);
 				new_finish = this->_range_construct(this->start,
 												position.base(), new_start);
 		//		std::fill_n(new_mid, n, value);
+		//		std::cout << "1. new_finish = " << new_finish << std::endl;
 				this->_fill_construct(new_mid, len, value);
+		//		std::cout << "2. new_finish = " << new_finish << std::endl;
 				new_finish += len;
-				new_finish = std::copy(position.base(), this->finish, new_finish);
-		//		std::cout << ""
-		//		new_finish = this->_range_construct(position.base(),
-		//										this->finish, new_finish);
+	//			new_finish = std::copy(position.base(), this->finish, new_finish);
+		//		std::cout << "len = " << len << std::endl;
+		//		std::cout << "new_len = " << new_len << " elems_before  = " << elems_before << std::endl;
+		//		std::cout << "new_start = " << new_start << " new_finish = " << new_finish << std::endl;
+		//		std::cout << "new_end_of_storage = " << new_end_of << std::endl;
+		//		std::cout << "position = " << position.base() << " this->finish = " << this->finish << std::endl;
+				new_finish = this->_range_construct(position.base(),
+												this->finish, new_finish);
 				this->_range_destroy(this->start, this->finish);
 				this->deallocate(this->start,
 						this->end_of_storage - this->start);
 				this->start = new_start;
 				this->finish = new_finish;
-				this->end_of_storage = this->start + new_len;
+				this->end_of_storage = new_start + new_len;
 			}
 
 			void
@@ -586,8 +589,8 @@ namespace	ft
 						this->_fill_construct(position.base(), len, value);
 						this->finish += len;
 					}
-	//				else
-	//					this->_resize_insert(position, len, value);
+					else
+						this->_resize_insert(position, len, value);
 				}
 			}
 

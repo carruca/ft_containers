@@ -62,8 +62,8 @@ LDFLAGS			= $(COMMONFLAGS)
 DEBUG			= -g3
 SANITIZE		= -fsanitize=address
 
-#all:		$(NAME)
-all:		sanitize
+all:		$(NAME)
+#all:		sanitize
 
 -include	$(DEPS)
 
