@@ -21,8 +21,8 @@ TEST_UTILS		= pairTest.cpp						\
 
 
 CONTAINER_DIR	= containers/
-VECTOR_INC		= ft_vector.hpp						\
-				  ft_map.cpp
+VECTOR_INC		= vector.hpp						\
+				  map.cpp
 
 ITER_DIR		= iterator/
 ITER_INC		= ft_iterators_traits.hpp			\

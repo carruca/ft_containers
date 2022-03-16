@@ -1,9 +1,9 @@
+#include "map.hpp"
+
 #include <map>
 #include <string>
 #include <iostream>
 #include <functional>
-
-#include "ft_map.hpp"
 
 # define NAMESPACE	ft
 
