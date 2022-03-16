@@ -1,13 +1,13 @@
 #include <cstdlib>
 
-/*void	testIs_integral( void );
+void	testIs_integral( void );
 void	testEnable_if( void );
 void	testPair( void );
 void	testEqual( void );
 void	testLexicographical_compare( void );
-void	testReverseIterator( void );*/
+void	testReverseIterator( void );
 void	testVector( void );
-//void	map_lower_bound( void );
+void	map_lower_bound( void );
 void	map_upper_bound( void );
 void	map_create_empty(void);
 
@@ -20,7 +20,7 @@ int	main( void )
 {
 //vector
 	testVector();
-	atexit(check_leaks);
+//	atexit(check_leaks);
 //	testIs_integral();
 //	testEnable_if();
 //	testPair();

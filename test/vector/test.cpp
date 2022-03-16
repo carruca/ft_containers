@@ -301,8 +301,8 @@ void	testVector(void)
 	std::cout << "size of ft::vector<int> = " << ft_vct.size() << std::endl;
 	std::cout << "size of ft::vector<int> = " << ft_vct_two.size() << std::endl;
 
-	ft_vct_three.assign(ft_vct.begin(), ft_vct.end());
-	ft_vct.assign(ft_vct_two.begin(), ft_vct_two.end());
+//	ft_vct_three.assign(ft_vct.begin(), ft_vct.end());
+//	ft_vct.assign(ft_vct_two.begin(), ft_vct_two.end());
 	ft_vct_two.assign(2, 42);
 	ft_vct_four.assign(4, 21);
 
@@ -319,7 +319,7 @@ void	testVector(void)
 	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
 
 	ft_vct.assign(5, 53);
-	ft_vct_two.assign(ft_vct_three.begin(), ft_vct_three.begin() + 3);
+//	ft_vct_two.assign(ft_vct_three.begin(), ft_vct_three.begin() + 3);
 
 	std::cout << "size of ft::vector<int> = " << ft_vct.size() << std::endl;
 	std::cout << "size of ft::vector<int> = " << ft_vct_two.size() << std::endl;
@@ -355,7 +355,7 @@ void	testVector(void)
 	lst_it2 = lst2.begin();
 	for (int i = 1; lst_it2 != lst2.end(); ++i)
 		*lst_it2++ = i * 5;
-	ft_vct_bi.assign(lst2.begin(), lst2.end());
+//	ft_vct_bi.assign(lst2.begin(), lst2.end());
 	std::cout << "size of ft::vector<int> = " << ft_vct_bi.size() << std::endl;
 
 	ft_vct_bi.insert(ft_vct_bi.end(), lst2.rbegin(), lst2.rend());
