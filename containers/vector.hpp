@@ -106,7 +106,6 @@ namespace	ft
 				for ( ; nbr > 0; --nbr, ++current )
 					this->allocator.construct(current, value);
 				return current;
-	//			this->finish = this->end_of_storage;
 			}
 
 			template< typename InputIterator >
@@ -299,14 +298,14 @@ namespace	ft
 				this->_fill_assign(len, value);
 			}
 
-/*			template< typename InputIterator >
+			template< typename InputIterator >
 				void
 				assign(
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
-					InputIterator last ) //TODO el error de compilacion difiere con el std
+					InputIterator last ) // el error de compilacion difiere con el std
 				{
 					this->_range_assign(first, last, std::distance(first, last));
-				}*/
+				}
 
 			allocator_type
 			get_allocator( void ) const

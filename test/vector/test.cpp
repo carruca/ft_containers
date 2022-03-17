@@ -11,8 +11,6 @@ void	erase_test(void);
 void	iterator_test(void);
 void	iterator_test2(void);
 
-
-
 void	display_int( int target ) {
 
 	std::cout << "elem = " << target << std::endl;
@@ -397,5 +395,4 @@ void	testVector(void)
 	std::cout << "size of ft::vector<int> = " << ft_vec_int2.size() << std::endl;
 	std::cout << "size of ft::vector<int> range = " << ft_vec_int_range.size() << std::endl;
 	std::cout << "size of ft::vector<int> copy = " << ft_vec_int_copy.size() << std::endl;
-
 }
