@@ -2,6 +2,9 @@ NAME			= ft_containers
 
 TEST_DIR		= test/
 
+STACK_DIR		= stack/
+STACK_TEST		= top.cpp
+
 MAP_DIR			= map/
 MAP_TEST		= lower_bound.cpp					\
 				  upper_bound.cpp					\
@@ -22,7 +25,8 @@ TEST_UTILS		= pairTest.cpp						\
 
 CONTAINER_DIR	= containers/
 VECTOR_INC		= vector.hpp						\
-				  map.cpp
+				  map.hpp							\
+				  stack.hpp
 
 ITER_DIR		= iterator/
 ITER_INC		= ft_iterators_traits.hpp			\
@@ -42,11 +46,12 @@ UTIL_DIR		= utility/
 UTIL_INC		= ft_pair.hpp						\
 				  ft_tree.hpp
 
-SRC				= $(addprefix $(TEST_DIR),	\
-				  main.cpp					\
-				  $(TEST_UTILS)				\
-				  $(addprefix $(VECTOR_DIR), $(TEST_VECTOR)) \
-				  $(addprefix $(MAP_DIR), $(MAP_TEST)))
+SRC				= $(addprefix $(TEST_DIR),						\
+				  main.cpp										\
+				  $(TEST_UTILS)									\
+				  $(addprefix $(VECTOR_DIR), $(TEST_VECTOR))	\
+				  $(addprefix $(MAP_DIR), $(MAP_TEST))			\
+				  $(addprefix $(STACK_DIR), $(STACK_TEST)))
 
 INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR)
 

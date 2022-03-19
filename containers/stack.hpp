@@ -9,11 +9,11 @@ namespace	ft
 		class	stack
 		{
 		public:
-			typedef Container						container_type;
-			typedef container_type::value_type		value_type;
-			typedef container_type::size_type		size_type;
-			typedef container_type::reference		reference;
-			typedef container_type::const_reference	const_reference;
+			typedef Container									container_type;
+			typedef typename container_type::value_type			value_type;
+			typedef typename container_type::size_type			size_type;
+			typedef typename container_type::reference			reference;
+			typedef typename container_type::const_reference	const_reference;
 
 		protected:
 			container_type	container;
@@ -72,15 +72,15 @@ namespace	ft
 				this->container.pop_back();
 			}
 
-			template< typename Type, typename Container >
+			template< typename T, typename C >
 				friend bool
-				operator==( const stack<Type, Container>& lhs,
-							const stack<Type, Container>& rhs );
+				operator==( const stack<T, C>& lhs,
+							const stack<T, C>& rhs );
 
-			template< typename Type, typename Container >
+			template< typename T, typename C >
 				friend bool
-				operator<( const stack<Type, Container>& lhs,
-							const stack<Type, Container>& rhs );
+				operator<( const stack<T, C>& lhs,
+							const stack<T, C>& rhs );
 		};
 
 	template< typename Type, typename Container >
@@ -125,7 +125,7 @@ namespace	ft
 
 	template< typename Type, typename Container >
 		inline bool
-		operator<=( const stack<Type, Container>& lhs,
+		operator>=( const stack<Type, Container>& lhs,
 					const stack<Type, Container>& rhs )
 		{
 			return !(lhs < rhs);

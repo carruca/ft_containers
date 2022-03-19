@@ -7,9 +7,12 @@ void	testEqual( void );
 void	testLexicographical_compare( void );
 void	testReverseIterator( void );
 void	testVector( void );
+
 void	map_lower_bound( void );
 void	map_upper_bound( void );
-void	map_create_empty(void);
+void	map_create_empty( void );
+
+void	pop_stack_test( void );
 
 void	check_leaks( void )
 {
@@ -32,5 +35,8 @@ int	main( void )
 //	map_lower_bound();
 //	map_create_empty();
 //	map_upper_bound();
+
+//stack
+	pop_stack_test();
 	return 0;
 }
