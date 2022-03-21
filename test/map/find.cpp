@@ -27,4 +27,9 @@ void	map_find_test( void )
 	pos = odd_map.find(89);
 	if (pos != odd_map.end())
 		std::cout << "number 5 is found in odd_map : first = " << pos->first << " : second = " << pos->second << std::endl;
+	intMap_type const	promo_map(naive_map.begin(), naive_map.end());
+	intMap_const_iterator	const_pos(promo_map.find(14));
+
+	if (const_pos != promo_map.end())
+		std::cout << "numer " << const_pos->first << " : second " << const_pos->second << " is found" << std::endl;
 }

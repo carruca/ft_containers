@@ -1011,7 +1011,7 @@ namespace	ft
 			iterator
 			find( const key_type& key )
 			{
-				iterator	position = this->_lower_bound(key, this->_root(), &this->_sentinel);
+				iterator	position(this->_lower_bound(key, this->_root(), this->_end()));
 
 				if (position != this->end() && !this->_key_compare(key, position->first))
 					return position;
@@ -1019,11 +1019,11 @@ namespace	ft
 			}
 
 			const_iterator
-			find( const key_type& x ) const
+			find( const key_type& key ) const
 			{
-				const_iterator	position = this->_lower_bound(x, this->_root(), &this->_sentinel);
+				const_iterator	position(this->_lower_bound(key, this->_root(), this->_end()));
 
-				if (position != this->end() && !this->_key_compare(x, position->content.first))
+				if (position != this->end() && !this->_key_compare(key, position->first))
 					return position;
 				return this->end();
 			}

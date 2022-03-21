@@ -37,14 +37,14 @@ int	main( void )
 //	testReverseIterator();
 
 //map
-	map_lower_bound();
-	map_create_empty();
-	map_upper_bound();
-	map_equal_range();
-	map_size_test();
+//	map_lower_bound();
+//	map_create_empty();
+//	map_upper_bound();
+//	map_equal_range();
+//	map_size_test();
 	map_find_test();
-	map_value_comp();
-	map_relational_oper();
+//	map_value_comp();
+//	map_relational_oper();
 
 //stack
 //	pop_stack_test();
