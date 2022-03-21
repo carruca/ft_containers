@@ -3,12 +3,20 @@
 
 # include "ft_tree_iterator.hpp"
 # include "ft_reverse_iterator.hpp"
+# include "../utility/ft_pair.hpp"
+# include "../algorithm/ft_equal.hpp"
+# include "../algorithm/ft_lexicographical_compare.hpp"
+# include "../types/ft_enable_if.hpp"
+# include "../types/ft_is_integral.hpp"
+/*
+# include "ft_tree_iterator.hpp"
+# include "ft_reverse_iterator.hpp"
 # include "ft_pair.hpp"
 # include "ft_equal.hpp"
 # include "ft_lexicographical_compare.hpp"
 # include "ft_enable_if.hpp"
 # include "ft_is_integral.hpp"
-
+*/
 # include <iostream>
 # include <cstddef>
 # include <memory>
@@ -108,8 +116,45 @@ namespace	ft
 				return current;
 			}
 
+			static const_node_ptr
+			increment( const_node_ptr current )
+			{
+				node_ptr	parent;
+
+				if (current->right != 0)
+					return minimum(current->right);
+				parent = current->parent;
+				while (current == parent->right)
+				{
+					current = parent;
+					parent = current->parent;
+				}
+				if (current->right != parent)
+					current = parent;
+				return current;
+			}
+
 			static node_ptr
 			decrement( node_ptr current )
+			{
+				node_ptr	parent;
+
+				if (current->color == red
+						&& current == current->parent->parent)
+					return current->right;
+				if (current->left != 0)
+					return maximum(current->left);
+				parent = current->parent;
+				while (current == parent->left)
+				{
+					current = parent;
+					parent = current->parent;
+				}
+				return parent;
+			}
+
+			static const_node_ptr
+			decrement( const_node_ptr current )
 			{
 				node_ptr	parent;
 
@@ -186,16 +231,16 @@ namespace	ft
 			{
 				node_ptr	tmp;
 
-				try
-				{
+		//		try
+		//		{
 					tmp = this->_get_node();
 					this->_allocator.construct(tmp, value);
-				}
-				catch (...)
-				{
-					this->_put_node(tmp);
-					throw ;
-				}
+		//		}
+		//		catch (...)
+		//		{
+		//			this->_put_node(tmp);
+		//			throw ;
+		//		}
 				return tmp;
 			}
 
@@ -249,13 +294,19 @@ namespace	ft
 				return top;
 			}
 
-/*			node_ptr
+			node_ptr
 			_end( void )
 			{
 				return &this->_sentinel;
-			}*/
+			}
 
-			node_ptr
+			const_node_ptr
+			_end( void ) const
+			{
+				return &this->_sentinel;
+			}
+
+			node_ptr&
 			_root( void )
 			{
 				return this->_sentinel.parent;
@@ -267,7 +318,7 @@ namespace	ft
 				return this->_sentinel.parent;
 			}
 
-			node_ptr
+			node_ptr&
 			_leftmost( void )
 			{
 				return this->_sentinel.left;
@@ -279,7 +330,7 @@ namespace	ft
 				return this->_sentinel.left;
 			}
 
-			node_ptr
+			node_ptr&
 			_rightmost( void )
 			{
 				return this->_sentinel.right;
@@ -538,7 +589,7 @@ namespace	ft
 			}
 
 			void
-			_init_fill_sentinel_and_count( const tree<key_type, mapped_type,
+			_fill_sentinel_and_count( const tree<key_type, mapped_type,
 									key_compare, allocator_type>& other )
 			{
 				this->_sentinel.parent = this->_copy_tree(other._root(), &this->_sentinel);
@@ -550,12 +601,15 @@ namespace	ft
 		public:
 			/*	default constructor	*/
 			tree( void )
+			: _key_compare()
+			, _allocator()
 			{
 				this->_init_empty_tree();
 			}
 
 			tree( const Compare& comp)
 			: _key_compare(comp)
+			, _allocator()
 			{
 				this->_init_empty_tree();
 			}
@@ -573,7 +627,7 @@ namespace	ft
 			{
 				this->_init_empty_tree();
 				if (!other.empty())
-					this->_init_fill_sentinel_and_count(other);
+					this->_fill_sentinel_and_count(other);
 			}
 
 			~tree( void )
@@ -590,7 +644,7 @@ namespace	ft
 					this->_key_compare = rhs._key_compare;
 					this->_allocator = rhs._allocator;
 					if (!rhs.empty())
-						this->_init_fill_sentinel_and_count(rhs);
+						this->_fill_sentinel_and_count(rhs);
 				}
 				return *this;
 			}
@@ -656,15 +710,15 @@ namespace	ft
 			}
 
 			size_type
-			size( void )
+			size( void ) const
 			{
 				return this->_node_count;
 			}
 
 			size_type
-			max_size( void )
+			max_size( void ) const
 			{
-				return size_type(-1);
+				return this->_allocator.max_size();
 			}
 
 		protected:
@@ -760,7 +814,7 @@ namespace	ft
 				typedef ft::pair<iterator, bool>	pair_type;
 
 				node_ptr	pos = this->_root();
-				node_ptr	parent = &this->_sentinel;
+				node_ptr	parent = this->_end();
 
 				while (pos != 0)
 				{
@@ -814,12 +868,10 @@ namespace	ft
 				iterator	position;
 
 				position = this->find(key);
-				if (position != this->end())
-				{
-					this->erase(position);
-					return 1;
-				}
-				return 0;
+				if (position == this->end())
+					return 0;
+				this->erase(position);
+				return 1;
 			}
 
 			void
@@ -865,8 +917,8 @@ namespace	ft
 					std::swap(this->_root(), other._root());
 					std::swap(this->_leftmost(), other._leftmost());
 					std::swap(this->_rightmost(), other._rightmost());
-					this->_root()->parent = this->end();
-					other._root()->parent = other.end();
+					this->_root()->parent = this->_end();
+					other._root()->parent = other._end();
 			//	}
 				std::swap(this->_key_compare, other._key_compare);
 				std::swap(this->_node_count, other._node_count);
@@ -880,9 +932,9 @@ namespace	ft
 
 				while (x != 0)
 				{
-					if (this->_key_compare(key, x->content.first))
+					if (this->_key_compare(key, tree::_key(x)))
 						x = x->left;
-					else if (this->_key_compare(x->content.first, key))
+					else if (this->_key_compare(tree::_key(x), key))
 						x = x->right;
 					else
 						return 1;
@@ -896,7 +948,7 @@ namespace	ft
 			{
 				while (x != 0)
 				{
-					if (!this->_key_compare(x->content.first, key))
+					if (!this->_key_compare(tree::_key(x), key))
 					{
 						result = x;
 						x = x->left;
@@ -912,7 +964,7 @@ namespace	ft
 			{
 				while (x != 0)
 				{
-					if (!this->_key_compare(x->content.first, key))
+					if (!this->_key_compare(tree::_key(x), key))
 					{
 						result = x;
 						x = x->left;
@@ -928,7 +980,7 @@ namespace	ft
 			{
 				while (x != 0)
 				{
-					if (this->_key_compare(key, x->content.first))
+					if (this->_key_compare(key, tree::_key(x)))
 					{
 						result = x;
 						x = x->left;
@@ -944,7 +996,7 @@ namespace	ft
 			{
 				while (x != 0)
 				{
-					if (this->_key_compare(key, x->content.first))
+					if (this->_key_compare(key, tree::_key(x)))
 					{
 						result = x;
 						x = x->left;
@@ -981,17 +1033,17 @@ namespace	ft
 			{
 				typedef ft::pair<iterator, iterator>	pair_type;
 
-				const_node_ptr	x = this->_root();
-				const_node_ptr	result = this->end();
+				node_ptr	x = this->_root();
+				node_ptr	result = this->_end();
 
 				while (x != 0)
 				{
-					if (this->_key_compare(key, x->content.first))
+					if (this->_key_compare(key, tree::_key(x)))
 					{
 						result = x;
 						x = x->left;
 					}
-					else if (this->_key_compare(x->content.first, key))
+					else if (this->_key_compare(tree::_key(x), key))
 						x = x->right;
 					else
 						return pair_type(iterator(x),
@@ -1006,16 +1058,16 @@ namespace	ft
 				typedef ft::pair<const_iterator, const_iterator>	pair_type;
 
 				const_node_ptr	x = this->_root();
-				const_node_ptr	result = this->end();
+				const_node_ptr	result = this->_end();
 
 				while (x != 0)
 				{
-					if (this->_key_compare(key, x->content.first))
+					if (this->_key_compare(key, tree::_key(x)))
 					{
 						result = x;
 						x = x->left;
 					}
-					else if (this->_key_compare(x->content.first, key))
+					else if (this->_key_compare(tree::_key(x), key))
 						x = x->right;
 					else
 						return pair_type(const_iterator(x),
@@ -1027,25 +1079,25 @@ namespace	ft
 			iterator
 			lower_bound( const key_type& key )
 			{
-				return this->_lower_bound(key, this->_root(), &this->_sentinel);
+				return this->_lower_bound(key, this->_root(), this->_end());
 			}
 
 			const_iterator
 			lower_bound( const key_type& key ) const
 			{
-				return this->_lower_bound(key, this->_root(), &this->_sentinel);
+				return this->_lower_bound(key, this->_root(), this->_end());
 			}
 
 			iterator
 			upper_bound( const key_type& key )
 			{
-				return this->_upper_bound(key, this->_root(), &this->_sentinel);
+				return this->_upper_bound(key, this->_root(), this->_end());
 			}
 
 			const_iterator
 			upper_bound( const key_type& key ) const
 			{
-				return this->_upper_bound(key, this->_root(), &this->_sentinel);
+				return this->_upper_bound(key, this->_root(), this->_end());
 			}
 
 			key_compare

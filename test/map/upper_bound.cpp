@@ -1,25 +1,13 @@
 #include "map.hpp"
+#include "struct.hpp"
+#include "utils.hpp"
 
 #include <map>
 #include <string>
 #include <iostream>
 
-# define NAMESPACE	ft
-
-template< typename Key, typename T >
-	static void	print_map(NAMESPACE::map<Key, T>& x)
-	{
-		typedef typename NAMESPACE::map<Key, T>	map_type;
-
-		for (typename map_type::iterator it = x.begin(); it != x.end(); ++it)
-			std::cout << "map elem = " << it->first << " : " << it->second << std::endl;
-	}
-
 void	map_upper_bound(void)
 {
-	typedef NAMESPACE::map<int, std::string>	map_type;
-	typedef map_type::iterator					map_iterator;
-
 	map_type	player_map;
 
 	player_map[4] = "dembele";
@@ -62,4 +50,9 @@ void	map_upper_bound(void)
 
 //	it = std::upper_bound(player_map.begin(), player_map.end(), std::pair<const int, std::string>(7, "depay"));
 //	std::cout << "std::upper_bound of 7 = " << it->first << std::endl;
+
+	map_const_iterator	const_pos;
+
+	const_pos = player_map2.upper_bound(10);
+	std::cout << pos->first << ":" << pos->second << " is the upper_bound of 10" << std::endl;
 }

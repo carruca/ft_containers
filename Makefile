@@ -8,7 +8,12 @@ STACK_TEST		= top.cpp
 MAP_DIR			= map/
 MAP_TEST		= lower_bound.cpp					\
 				  upper_bound.cpp					\
-				  create_empty.cpp
+				  create_empty.cpp					\
+				  equal_range.cpp					\
+				  size.cpp							\
+				  find.cpp							\
+				  value_comp.cpp					\
+				  relationals.cpp
 
 VECTOR_DIR		= vector/
 TEST_VECTOR		= test.cpp							\
@@ -53,16 +58,18 @@ SRC				= $(addprefix $(TEST_DIR),						\
 				  $(addprefix $(MAP_DIR), $(MAP_TEST))			\
 				  $(addprefix $(STACK_DIR), $(STACK_TEST)))
 
-INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR)
+INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR) -I$(TEST_DIR)
 
 OBJ_DIR			= obj/
 OBJ				= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
 DEPS			= $(OBJ:.o=.d)
 
-CXXFLAGS		= -Wall -Wextra -Werror -pedantic -O0 -MD $(INC) $(COMMONFLAGS) -std=c++98
+CXXFLAGS		= -Wall -Wextra -Werror -pedantic -O3 -MD $(INC) $(COMMONFLAGS) -std=c++98
 CXX				= clang++
 COMMONFLAGS		=
 LDFLAGS			= $(COMMONFLAGS)
+
+STD_FLAG		= -D USING_STD=1
 
 DEBUG			= -g3
 SANITIZE		= -fsanitize=address
@@ -92,10 +99,16 @@ sanitize:	$(NAME)
 run:		all
 	./$(NAME)
 
+#test:
+#	diff std_output ft_putput > diff
+
+std:		CXXFLAGS += $(STD_FLAG)
+std:		$(NAME)
+
 tag:
 	ctags $(SRC)
 
 re:			fclean all
 
 .SILENT: run tag fclean clean
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re std ft

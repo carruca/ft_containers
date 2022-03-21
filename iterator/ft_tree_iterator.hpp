@@ -4,7 +4,8 @@
 # include <iterator>
 # include <cstddef>
 # include "ft_iterators_traits.hpp"
-# include "ft_tree.hpp"
+//# include "ft_tree.hpp"
+# include "../utility/ft_tree.hpp"
 
 namespace	ft
 {
@@ -22,6 +23,8 @@ namespace	ft
 			typedef ft::tree_node<value_type>		tree_node_type;
 			typedef tree_node_type*					node_ptr;
 			typedef tree_iterator<value_type>		self;
+
+			node_ptr	node;
 
 			tree_iterator( void )
 			: node()
@@ -87,22 +90,22 @@ namespace	ft
 			{
 				return this->node != x.node;
 			}
-
-			node_ptr	node;
 		};
 
 	template< typename T >
 		struct	tree_const_iterator
 		{
-			typedef T								value_type;
-			typedef const value_type&				reference;
-			typedef const value_type*				pointer;
-			typedef ft::tree_iterator<value_type>	iterator;
-			typedef std::bidirectional_iterator_tag	iterator_category;
-			typedef std::ptrdiff_t					difference_type;
-			typedef ft::tree_node<value_type>		tree_node_type;
-			typedef const tree_node_type*			node_ptr;
-			typedef tree_iterator<value_type>		self;
+			typedef T									value_type;
+			typedef const value_type&					reference;
+			typedef const value_type*					pointer;
+			typedef ft::tree_iterator<value_type>		iterator;
+			typedef std::bidirectional_iterator_tag		iterator_category;
+			typedef std::ptrdiff_t						difference_type;
+			typedef ft::tree_node<value_type>			tree_node_type;
+			typedef const tree_node_type*				node_ptr;
+			typedef tree_const_iterator<value_type>		self;
+
+			node_ptr	node;
 
 			tree_const_iterator( void )
 			: node()
@@ -172,14 +175,12 @@ namespace	ft
 			{
 				return this->node != x.node;
 			}
-
-			node_ptr	node;
 		};
 
 	template< typename T >
 		inline bool
 		operator==( const tree_iterator<T>& lhs,
-					const tree_iterator<T>& rhs )
+					const tree_const_iterator<T>& rhs )
 		{
 			return lhs.node == rhs.node;
 		}
@@ -187,10 +188,26 @@ namespace	ft
 	template< typename T >
 		inline bool
 		operator!=( const tree_iterator<T>& lhs,
-					const tree_iterator<T>& rhs )
+					const tree_const_iterator<T>& rhs )
 		{
 			return lhs.node != rhs.node;
 		}
+/*
+	template< typename T >
+		inline bool
+		operator==( const tree_const_iterator<T>& lhs,
+					const tree_const_iterator<T>& rhs )
+		{
+			return lhs.node == rhs.node;
+		}
+
+	template< typename T >
+		inline bool
+		operator!=( const tree_const_iterator<T>& lhs,
+					const tree_const_iterator<T>& rhs )
+		{
+			return lhs.node != rhs.node;
+		}*/
 }
 
 #endif

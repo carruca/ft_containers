@@ -54,28 +54,25 @@ namespace	ft
 				}
 			};
 
-			/*	default_constructor	*/
-			map( void )
-			: _tree()
+			/*	explicit constructor	*/
+			explicit
+			map( const key_compare& comp = key_compare(), const allocator_type& a = allocator_type() )
+			: _tree(comp, a)
 			{}
 
-			explicit
-			map( const key_compare& comp, const allocator_type& a )
-			: _tree(comp, a)
-			{
-			}
-/*
 			template< typename InputIterator >
 				map( InputIterator first, InputIterator last,
 					const key_compare& comp = key_compare(),
-					const allocator_type& alloc = allocator_type() )
+					const allocator_type& a = allocator_type() )
+				: _tree(comp, a)
 				{
+					this->_tree.insert(first, last);
 				}
 
 			map( const map& x )
-			{
-			}
-*/
+			: _tree(x._tree)
+			{}
+
 			/*	default destructor	*/
 			~map( void )
 			{}
@@ -181,7 +178,7 @@ namespace	ft
 			{
 				ft::pair<iterator, bool>	ret(this->_tree.insert(value));
 
-				this->_tree.debug();
+			//	this->_tree.debug();
 				return ret;
 			}
 
@@ -190,7 +187,7 @@ namespace	ft
 			{
 				iterator	ret(this->_tree.insert(position, value));
 
-				this->_tree.debug();
+			//	this->_tree.debug();
 				return ret;
 			}
 

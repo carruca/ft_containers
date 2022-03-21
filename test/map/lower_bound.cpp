@@ -1,23 +1,13 @@
+#include "map.hpp"
+#include "struct.hpp"
+#include "utils.hpp"
+
 #include <map>
 #include <string>
 #include <iostream>
 
-# define NAMESPACE	std
-
-template< typename Key, typename T >
-	static void	print_map(NAMESPACE::map<Key, T>& x)
-	{
-		typedef typename NAMESPACE::map<Key, T>	map_type;
-
-		for (typename map_type::iterator it = x.begin(); it != x.end(); ++it)
-			std::cout << "map elem = " << it->first << " : " << it->second << std::endl;
-	}
-
 void	map_lower_bound(void)
 {
-	typedef NAMESPACE::map<int, std::string>	map_type;
-	typedef map_type::iterator					iterator;
-
 	map_type	player_map;
 
 	player_map[4] = "dembele";
@@ -26,11 +16,21 @@ void	map_lower_bound(void)
 	player_map[15] = "guedes";
 	player_map[20] = "vinicius";
 	
+	std::cout << "player_map 1:" << std::endl;
 	print_map<int, std::string>(player_map);
 
-	iterator	it = player_map.lower_bound(7);
+	map_iterator	it = player_map.lower_bound(7);
 	std::cout << it->first << ":" << it->second << " is the lower_bound of 7" << std::endl;
 
-	it = std::lower_bound(player_map.begin(), player_map.end(), std::pair<const int, std::string>(7, "depay"));
+	it = std::lower_bound(player_map.begin(), player_map.end(), NAMESPACE::pair<const int, std::string>(7, "depay"));
 	std::cout << "std::lower_bound of 7 = " << it->first << std::endl;
+
+	map_type	player_map2(player_map.begin(), player_map.end());
+	std::cout << "player_map 2:" << std::endl;
+	print_map<int, std::string>(player_map);
+
+	map_const_iterator	const_it;
+
+	const_it = player_map2.lower_bound(10);
+	std::cout << const_it->first << ":" << const_it->second << " is the lower_bound of 10" << std::endl;
 }

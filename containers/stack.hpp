@@ -16,12 +16,12 @@ namespace	ft
 			typedef typename container_type::const_reference	const_reference;
 
 		protected:
-			container_type	container;
+			container_type	c;
 
 		public:
 			explicit
 			stack( const container_type& ctnr = container_type() )
-			: container(ctnr)
+			: c(ctnr)
 			{}
 
 			/*	default destructor	*/
@@ -32,44 +32,44 @@ namespace	ft
 			operator=( const stack& other )
 			{
 				if (this != &other)
-					this->container = other.container;
+					this->c = other.c;
 				return *this;
 			}
 
 			reference
 			top( void )
 			{
-				return this->container.back();
+				return this->c.back();
 			}
 
 			const_reference
 			top( void ) const
 			{
-				return this->container.back();
+				return this->c.back();
 			}
 
 			bool
 			empty( void ) const
 			{
-				return this->container.empty();
+				return this->c.empty();
 			}
 
 			size_type
 			size( void ) const
 			{
-				return this->container.size();
+				return this->c.size();
 			}
 
 			void
 			push( const value_type& value )
 			{
-				this->container.push_back(value);
+				this->c.push_back(value);
 			}
 
 			void
 			pop( void )
 			{
-				this->container.pop_back();
+				this->c.pop_back();
 			}
 
 			template< typename T, typename C >
@@ -88,7 +88,7 @@ namespace	ft
 		operator==( const stack<Type, Container>& lhs,
 					const stack<Type, Container>& rhs )
 		{
-			return lhs.container == rhs.container;
+			return lhs.c == rhs.c;
 		}
 
 	template< typename Type, typename Container >
@@ -104,7 +104,7 @@ namespace	ft
 		operator<( const stack<Type, Container>& lhs,
 					const stack<Type, Container>& rhs )
 		{
-			return lhs.container < rhs.container;
+			return lhs.c < rhs.c;
 		}
 
 	template< typename Type, typename Container >

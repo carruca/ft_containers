@@ -1,35 +1,14 @@
 #include "map.hpp"
+#include "struct.hpp"
+#include "utils.hpp"
 
 #include <map>
 #include <string>
 #include <iostream>
 #include <functional>
 
-# define NAMESPACE	ft
-
-template< typename Key, typename T >
-	static void	print_map(NAMESPACE::map<Key, T>& x)
-	{
-		typedef typename NAMESPACE::map<Key, T>	map_type;
-
-		for (typename map_type::iterator it = x.begin(); it != x.end(); ++it)
-		{
-			std::cout << "node address = " << &(*it) << std::endl;
-			std::cout << "map elem = " << it->first << " : " << it->second << std::endl;
-			std::cout << "-----------------------" << std::endl;
-		}
-		std::cout << "end node map address = " << &(*x.end()) << std::endl;
-		std::cout << "         map address = " << &x << std::endl;
-		std::cout << "                diff = " << (unsigned long)&(*x.end()) - (unsigned long)&x << std::endl;
-	}
-
 void	map_create_empty(void)
 {
-	typedef NAMESPACE::map<int, int>			intMap_type;
-
-	typedef NAMESPACE::map<int, std::string>	map_type;
-	typedef map_type::iterator					map_iterator;
-
 	map_type		play_map;
 
 	play_map.insert(map_type::value_type(12, "Manolo"));
