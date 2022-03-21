@@ -849,7 +849,7 @@ namespace	ft
 				{
 					for (; first != last; ++first)
 						this->insert(this->end(), *first);
-					this->debug();
+			//		this->debug();
 				}
 
 			void

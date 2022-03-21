@@ -99,11 +99,20 @@ sanitize:	$(NAME)
 run:		all
 	./$(NAME)
 
-#test:
-#	diff std_output ft_putput > diff
+ft:			$(NAME)
+	./$(NAME) > ft_output
 
 std:		CXXFLAGS += $(STD_FLAG)
 std:		$(NAME)
+	./$(NAME) > std_output
+
+test:
+	$(MAKE) fclean std
+	$(MAKE) fclean ft
+	diff std_output ft_output > diff_output
+
+test_clean:
+	$(RM) std_output ft_output diff_output
 
 tag:
 	ctags $(SRC)
@@ -111,4 +120,4 @@ tag:
 re:			fclean all
 
 .SILENT: run tag fclean clean
-.PHONY: all clean fclean re std ft
+.PHONY: all clean fclean re std ft test test_clean

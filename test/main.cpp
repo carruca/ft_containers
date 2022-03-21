@@ -28,7 +28,7 @@ int	main( void )
 {
 //vector
 //	testVector();
-	atexit(check_leaks);
+//	atexit(check_leaks);
 //	testIs_integral();
 //	testEnable_if();
 //	testPair();
