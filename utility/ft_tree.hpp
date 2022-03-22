@@ -887,41 +887,47 @@ namespace	ft
 			}
 
 			void
+			move_data( tree<key_type, mapped_type, key_compare, allocator_type>& other )
+			{
+				(void)other;
+			}
+
+			void
 			swap( tree<key_type, mapped_type, key_compare, allocator_type>& other )
 			{
-			/*	if (this->root() == 0)
+				if (this->_root() == 0)
 				{
-					if (other.root() != 0)
+					if (other._root() != 0)
 					{
 						this->_root() = other._root();
 						this->_leftmost() = other._leftmost();
 						this->_rightmost() = other._rightmost();
-						this->_root()->parent = this->end();
+						this->_root()->parent = this->_end();
 						other._root() = 0;
-						other.the_leftmost() = other.end();
-						other._rightmost() = other.end();
+						other._leftmost() = other._end();
+						other._rightmost() = other._end();
 					}
 					else
 					{
 						other._root() = this->_root();
 						other._leftmost() = this->_leftmost();
 						other._rightmost() = this->_rightmost();
-						other._root()->parent = other.end();
+						other._root()->parent = other._end();
 						this->_root() = 0;
-						this->_leftmost() = this->end();
-						this->_rightmost() = this->end();
+						this->_leftmost() = this->_end();
+						this->_rightmost() = this->_end();
 					}
 				}
 				else
-				{*/
+				{
 					std::swap(this->_root(), other._root());
 					std::swap(this->_leftmost(), other._leftmost());
 					std::swap(this->_rightmost(), other._rightmost());
 					this->_root()->parent = this->_end();
 					other._root()->parent = other._end();
-			//	}
-				std::swap(this->_key_compare, other._key_compare);
+				}
 				std::swap(this->_node_count, other._node_count);
+				std::swap(this->_key_compare, other._key_compare);
 				std::swap(this->_allocator, other._allocator);
 			}
 

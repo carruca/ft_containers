@@ -120,6 +120,17 @@ namespace	ft
 				}
 
 			template< typename InputIterator >
+				pointer
+				_range_construct_backward( InputIterator first, InputIterator last, pointer result )
+				{
+					pointer		current = result;
+
+					while (last != first)
+						this->allocator.construct(--current, *(--last));
+					return current;
+				}
+
+			template< typename InputIterator >
 				void
 				_range_destroy( InputIterator first, pointer last )
 				{
@@ -188,6 +199,7 @@ namespace	ft
 					}
 					else
 					{
+			//			if ( other_len <= this->size() )
 						this->_range_destroy(this->start, this->finish);
 						this->finish = this->_range_construct(first, last, this->start);
 					}
@@ -200,7 +212,6 @@ namespace	ft
 				if ( this != &other )
 				{
 //					const size_type	other_len = other.size();
-
 					this->_range_assign(other.begin(), other.end(), other.size());
 /*
 //					if ( other_len > this->capacity() )

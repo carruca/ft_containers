@@ -13,7 +13,8 @@ MAP_TEST		= lower_bound.cpp					\
 				  size.cpp							\
 				  find.cpp							\
 				  value_comp.cpp					\
-				  relationals.cpp
+				  relationals.cpp					\
+				  swap.cpp
 
 VECTOR_DIR		= vector/
 TEST_VECTOR		= test.cpp							\

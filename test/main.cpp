@@ -16,6 +16,7 @@ void	map_size_test( void );
 void	map_find_test( void );
 void	map_value_comp( void );
 void	map_relational_oper( void );
+void	map_swap( void );
 
 void	pop_stack_test( void );
 
@@ -42,9 +43,10 @@ int	main( void )
 //	map_upper_bound();
 //	map_equal_range();
 //	map_size_test();
-	map_find_test();
+//	map_find_test();
 //	map_value_comp();
 //	map_relational_oper();
+	map_swap();
 
 //stack
 //	pop_stack_test();
