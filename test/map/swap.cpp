@@ -10,7 +10,7 @@ map_type	melon_map = map_type();
 
 void	map_swap( void )
 {
-/*	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 50; i++)
 		melon_map.insert(map_type::value_type(i, "string"));
 	std::cout << "melon map created:" << std::endl;
 	print_map<int, std::string>(melon_map);
@@ -29,12 +29,11 @@ void	map_swap( void )
 	mango_map.swap(melon_map);
 	std::cout << "mango map swap melon_map:" << std::endl;
 	print_map<int, std::string>(mango_map);
-*/
-	ft::map<int, std::string> ft_m1, ft_m2;
-	for (size_t i = 0; i < 1e6; i++)
-	{
-		ft_m1.insert(ft::make_pair(i, "string2"));
-	}
 
+	ft::map<int, std::string> ft_m1, ft_m2;
+
+	for (size_t i = 0; i < 100; i++)
+		ft_m1.insert(ft::make_pair(i, "holayadios"));
 	ft_m2.swap(ft_m1);
+	print_map<int, std::string>(ft_m2);
 }
