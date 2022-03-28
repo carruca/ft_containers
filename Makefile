@@ -1,68 +1,11 @@
-NAME			= ft_containers
-
-TEST_DIR		= test/
-
-STACK_DIR		= stack/
-STACK_TEST		= top.cpp
-
-MAP_DIR			= map/
-MAP_TEST		= lower_bound.cpp					\
-				  upper_bound.cpp					\
-				  create_empty.cpp					\
-				  equal_range.cpp					\
-				  size.cpp							\
-				  find.cpp							\
-				  value_comp.cpp					\
-				  relationals.cpp					\
-				  swap.cpp
-
-VECTOR_DIR		= vector/
-TEST_VECTOR		= test.cpp							\
-				  constructor.cpp					\
-				  erase.cpp
-
-TEST_UTILS		= pairTest.cpp						\
-				  equalTest.cpp						\
-				  lexicographical_compareTest.cpp 	\
-				  reverse_iteratorTest.cpp
-				  #enable_ifTest.cpp				\
-				  is_integralTest.cpp
-
-
-CONTAINER_DIR	= containers/
-VECTOR_INC		= vector.hpp						\
-				  map.hpp							\
-				  stack.hpp
-
-ITER_DIR		= iterator/
-ITER_INC		= ft_iterators_traits.hpp			\
-				  ft_reverse_iterator.hpp			\
-				  ft_normal_iterator.hpp			\
-				  ft_tree_iterator.hpp
-
-TYPES_DIR		= types/
-TYPES_INC		= ft_is_integral.hpp				\
-				  ft_enable_if.hpp
-
-ALG_DIR			= algorithm/
-ALG_INC			= ft_equal.hpp						\
-				  ft_lexicographical_compare.hpp
-
-UTIL_DIR		= utility/
-UTIL_INC		= ft_pair.hpp						\
-				  ft_tree.hpp
-
-SRC				= $(addprefix $(TEST_DIR),						\
-				  main.cpp										\
-				  $(TEST_UTILS)									\
-				  $(addprefix $(VECTOR_DIR), $(TEST_VECTOR))	\
-				  $(addprefix $(MAP_DIR), $(MAP_TEST))			\
-				  $(addprefix $(STACK_DIR), $(STACK_TEST)))
+NAME			= ft_containers_tester
 
 INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR) -I$(TEST_DIR)
 
+SRCS			= $(SRC)
+
 OBJ_DIR			= obj/
-OBJ				= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRC:.cpp=.o))
+OBJ				= $(patsubst $(TEST_DIR)%, $(OBJ_DIR)%, $(SRCS:.cpp=.o))
 DEPS			= $(OBJ:.o=.d)
 
 CXXFLAGS		= -Wall -Wextra -Werror -pedantic -O3 -MD $(INC) $(COMMONFLAGS) -std=c++98
@@ -75,8 +18,14 @@ STD_FLAG		= -D USING_STD=1
 DEBUG			= -g3
 SANITIZE		= -fsanitize=address
 
+OUTPUT_FT		= output_ft
+OUTPUT_STD		= output_std
+DIFF_OUTPUT		= diff_output
+
 all:		$(NAME)
 #all:		sanitize
+
+-include	sources.mk headers.mk
 
 -include	$(DEPS)
 
@@ -101,19 +50,19 @@ run:		all
 	./$(NAME)
 
 ft:			$(NAME)
-	./$(NAME) > ft_output
+	./$(NAME) > $(OUTPUT_FT)
 
 std:		CXXFLAGS += $(STD_FLAG)
 std:		$(NAME)
-	./$(NAME) > std_output
+	./$(NAME) > $(OUTPUT_STD)
 
 test:
 	$(MAKE) fclean std
 	$(MAKE) fclean ft
-	diff std_output ft_output > diff_output
+	diff $(OUTPUT_STD) $(OUTPUT_FT) > $(DIFF_OUTPUT)
 
 test_clean:
-	$(RM) std_output ft_output diff_output
+	$(RM) $(OUTPUT_STD) $(OUTPUT_FT) $(DIFF_OUTPUT)
 
 tag:
 	ctags $(SRC)

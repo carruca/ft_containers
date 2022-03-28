@@ -199,7 +199,6 @@ namespace	ft
 					}
 					else
 					{
-			//			if ( other_len <= this->size() )
 						this->_range_destroy(this->start, this->finish);
 						this->finish = this->_range_construct(first, last, this->start);
 					}
@@ -210,30 +209,7 @@ namespace	ft
 			operator=( const vector& other )
 			{
 				if ( this != &other )
-				{
-//					const size_type	other_len = other.size();
 					this->_range_assign(other.begin(), other.end(), other.size());
-/*
-//					if ( other_len > this->capacity() )
-//					{
-//						pointer	tmp = this->allocate(other_len);
-
-					//	std::copy(other.begin(), other.end(), tmp);
-						this->_range_construct(other.begin(), other.end(), tmp);
-						this->_range_destroy(this->start, this->finish);
-						this->deallocate(this->start, this->capacity());
-						this->start = tmp;
-						this->end_of_storage = this->start + other_len;
-					}
-					else
-					{
-					//	if ( other_len <= this->size() )
-						this->_range_destroy(this->start, this->finish);
-						this->_range_construct(other.begin(), other.end(), this->start);
-				//		std::copy(other.begin(), other.end(), this->start);
-					}
-					this->finish = this->start + other_len;*/
-				}
 				return *this;
 			}
 
@@ -256,7 +232,6 @@ namespace	ft
 				}
 				else
 				{
-				//	std::fill_n(this->start, n, value);
 					this->_fill_construct(this->start, len, value);
 					if (len > this->size())
 						this->finish += (len - this->size());
@@ -264,43 +239,6 @@ namespace	ft
 						this->_erase_at_end(this->start + len);
 				}
 			}
-/*
-			template< typename InputIterator >
-				void
-				_range_assign( InputIterator first, InputIterator last)
-				{
-				//	InputIterator	mid = first;
-				//	pointer			tmp;
-					const size_type	len = std::distance(first, last);
-
-					this->_copy_vector(first, last, len);
-
-					if ( len > this->capacity() )
-					{
-						tmp = this->allocate(len);
-					//	std::copy(first, last, tmp);
-						this->_range_construct(first, last, tmp);
-						this->_range_destroy(this->start, this->finish);
-						this->deallocate(this->start, this->capacity());
-						this->start = tmp;
-						this->finish = this->start + len;
-						this->end_of_storage = this->start + len;
-					}
-					else if ( len <= this->size() )
-					{
-					//	std::copy(first, last, this->start);
-						tmp = this->_range_construct(first, last, this->start);
-						this->_erase_at_end(tmp);
-					}
-					else
-					{
-				//		mid = first;
-						std::advance(mid, this->size());
-				//		std::copy(first, mid, this->start);
-						this->_range_construct(first, mid, this->start);
-						this->finish = this->_range_construct(mid, last, this->finish);
-					}
-				}*/
 
 		public:
 			void
@@ -413,7 +351,6 @@ namespace	ft
 					const size_type	size = this->size();
 					pointer			tmp = this->allocate(cap);
 
-				//	std::copy(this->start, this->finish, tmp);
 					this->_range_construct(this->start, this->finish, tmp);
 					this->_range_destroy(this->start, this->finish);
 					this->deallocate(this->start, this->capacity());
@@ -515,22 +452,11 @@ namespace	ft
 				pointer			new_start(this->allocate(new_len));
 				pointer			new_finish(new_start);
 				pointer			new_mid(new_start + elems_before);
-	//			pointer			new_end_of(new_start + new_len);
 
-		//		new_finish = std::copy(this->start, position.base(), new_start);
 				new_finish = this->_range_construct(this->start,
 												position.base(), new_start);
-		//		std::fill_n(new_mid, n, value);
-		//		std::cout << "1. new_finish = " << new_finish << std::endl;
 				this->_fill_construct(new_mid, len, value);
-		//		std::cout << "2. new_finish = " << new_finish << std::endl;
 				new_finish += len;
-	//			new_finish = std::copy(position.base(), this->finish, new_finish);
-		//		std::cout << "len = " << len << std::endl;
-		//		std::cout << "new_len = " << new_len << " elems_before  = " << elems_before << std::endl;
-		//		std::cout << "new_start = " << new_start << " new_finish = " << new_finish << std::endl;
-		//		std::cout << "new_end_of_storage = " << new_end_of << std::endl;
-		//		std::cout << "position = " << position.base() << " this->finish = " << this->finish << std::endl;
 				new_finish = this->_range_construct(position.base(),
 												this->finish, new_finish);
 				this->_range_destroy(this->start, this->finish);
@@ -563,7 +489,6 @@ namespace	ft
 			}
 
 		public:
-
 			void
 			push_back( const value_type& value )
 			{
@@ -595,7 +520,6 @@ namespace	ft
 					{
 						std::copy_backward(position, this->end(),
 										this->finish + difference_type(len));
-				//		std::fill(position.base(), position.base() + len, value);
 						this->_fill_construct(position.base(), len, value);
 						this->finish += len;
 					}

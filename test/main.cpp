@@ -1,4 +1,6 @@
 #include <cstdlib>
+#include <iostream>
+#include <sys/time.h>
 
 void	testIs_integral( void );
 void	testEnable_if( void );
@@ -25,10 +27,23 @@ void	check_leaks( void )
 	system("leaks ft_containers");
 }
 
+unsigned long	get_time( void )
+{
+	struct timeval	tvp;
+
+	gettimeofday(&tvp, NULL);
+	return tvp.tv_sec * 1000 + tvp.tv_usec / 1000;
+}
+
 int	main( void )
 {
+
+	unsigned long	begin;
+	unsigned long	end;
+	unsigned long	diff;
 //vector
-//	testVector();
+	begin = get_time();
+	testVector();
 //	atexit(check_leaks);
 //	testIs_integral();
 //	testEnable_if();
@@ -38,17 +53,23 @@ int	main( void )
 //	testReverseIterator();
 
 //map
-//	map_lower_bound();
-//	map_create_empty();
-//	map_upper_bound();
-//	map_equal_range();
-//	map_size_test();
-//	map_find_test();
-//	map_value_comp();
-//	map_relational_oper();
+	map_lower_bound();
+	map_create_empty();
+	map_upper_bound();
+	map_equal_range();
+	map_size_test();
+	map_find_test();
+	map_value_comp();
+	map_relational_oper();
 	map_swap();
 
 //stack
-//	pop_stack_test();
+	pop_stack_test();
+	end = get_time();
+
+	diff = end - begin;
+	std::cout << "begin duration = " << begin << std::endl;
+	std::cout << "end duration = " << end << std::endl;
+	std::cout << "time duration = " << diff << std::endl;
 	return 0;
 }
