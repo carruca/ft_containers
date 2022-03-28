@@ -30,10 +30,10 @@ void	map_swap( void )
 	std::cout << "mango map swap melon_map:" << std::endl;
 	print_map<int, std::string>(mango_map);
 
-	ft::map<int, std::string> ft_m1, ft_m2;
+	map_type ft_m1, ft_m2;
 
 	for (size_t i = 0; i < 100; i++)
-		ft_m1.insert(ft::make_pair(i, "holayadios"));
+		ft_m1.insert(map_type::value_type(i, "holayadios"));
 	ft_m2.swap(ft_m1);
 	print_map<int, std::string>(ft_m2);
 }
