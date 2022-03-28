@@ -35,5 +35,5 @@ void	map_swap( void )
 	for (size_t i = 0; i < 100; i++)
 		ft_m1.insert(ft::make_pair(i, "holayadios"));
 	ft_m2.swap(ft_m1);
-//	print_map<int, std::string>(ft_m2);
+	print_map<int, std::string>(ft_m2);
 }
