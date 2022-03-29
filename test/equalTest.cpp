@@ -1,4 +1,5 @@
-#include "ft_equal.hpp"
+#include "equal.hpp"
+
 #include <algorithm>
 #include <vector>
 #include <iostream>

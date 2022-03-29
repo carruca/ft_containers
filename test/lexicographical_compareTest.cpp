@@ -1,4 +1,5 @@
-#include "ft_lexicographical_compare.hpp"
+#include "lexicographical_compare.hpp"
+
 #include <algorithm>
 #include <vector>
 #include <iostream>

@@ -1,9 +1,10 @@
 #ifndef FT_MAP_HPP
 # define FT_MAP_HPP
 
+# include "pair.hpp"
+# include "tree.hpp"
+
 # include <functional>
-# include "ft_pair.hpp"
-# include "ft_tree.hpp"
 
 namespace	ft
 {

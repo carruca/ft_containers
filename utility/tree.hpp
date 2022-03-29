@@ -1,21 +1,21 @@
 #ifndef FT_TREE_HPP
 # define FT_TREE_HPP
 
-# include "../iterator/ft_tree_iterator.hpp"
-# include "../iterator/ft_reverse_iterator.hpp"
-# include "../utility/ft_pair.hpp"
-# include "../algorithm/ft_equal.hpp"
-# include "../algorithm/ft_lexicographical_compare.hpp"
-# include "../types/ft_enable_if.hpp"
-# include "../types/ft_is_integral.hpp"
+# include "../iterator/tree_iterator.hpp"
+# include "../iterator/reverse_iterator.hpp"
+# include "../utility/pair.hpp"
+# include "../algorithm/equal.hpp"
+# include "../algorithm/lexicographical_compare.hpp"
+# include "../types/enable_if.hpp"
+# include "../types/is_integral.hpp"
 /*
-# include "ft_tree_iterator.hpp"
-# include "ft_reverse_iterator.hpp"
-# include "ft_pair.hpp"
-# include "ft_equal.hpp"
-# include "ft_lexicographical_compare.hpp"
-# include "ft_enable_if.hpp"
-# include "ft_is_integral.hpp"
+# include "tree_iterator.hpp"
+# include "reverse_iterator.hpp"
+# include "pair.hpp"
+# include "equal.hpp"
+# include "lexicographical_compare.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
 */
 # include <iostream>
 # include <cstddef>

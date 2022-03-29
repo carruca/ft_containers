@@ -4,20 +4,20 @@ VECTOR_INC		= vector.hpp						\
 				  stack.hpp
 
 ITER_DIR		= iterator/
-ITER_INC		= ft_iterators_traits.hpp			\
-				  ft_reverse_iterator.hpp			\
-				  ft_normal_iterator.hpp			\
-				  ft_tree_iterator.hpp
+ITER_INC		= iterators_traits.hpp			\
+				  reverse_iterator.hpp			\
+				  normal_iterator.hpp			\
+				  tree_iterator.hpp
 
 TYPES_DIR		= types/
-TYPES_INC		= ft_is_integral.hpp				\
-				  ft_enable_if.hpp
+TYPES_INC		= is_integral.hpp				\
+				  enable_if.hpp
 
 ALG_DIR			= algorithm/
-ALG_INC			= ft_equal.hpp						\
-				  ft_lexicographical_compare.hpp
+ALG_INC			= equal.hpp						\
+				  lexicographical_compare.hpp
 
 UTIL_DIR		= utility/
-UTIL_INC		= ft_pair.hpp						\
-				  ft_tree.hpp
+UTIL_INC		= pair.hpp						\
+				  tree.hpp
 

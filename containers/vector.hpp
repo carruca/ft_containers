@@ -1,12 +1,12 @@
 #ifndef FT_VECTOR_HPP
 # define FT_VECTOR_HPP
 
-# include "ft_normal_iterator.hpp"
-# include "ft_reverse_iterator.hpp"
-# include "ft_lexicographical_compare.hpp"
-# include "ft_equal.hpp"
-# include "ft_is_integral.hpp"
-# include "ft_enable_if.hpp"
+# include "normal_iterator.hpp"
+# include "reverse_iterator.hpp"
+# include "lexicographical_compare.hpp"
+# include "equal.hpp"
+# include "is_integral.hpp"
+# include "enable_if.hpp"
 
 # include <cstddef>
 # include <memory>

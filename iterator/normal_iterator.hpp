@@ -1,7 +1,7 @@
 #ifndef FT_NORMAL_ITERATOR_HPP
 # define FT_NORMAL_ITERATOR_HPP
 
-# include "ft_iterators_traits.hpp"
+# include "iterators_traits.hpp"
 
 namespace	ft
 {
