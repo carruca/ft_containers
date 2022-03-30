@@ -19,6 +19,7 @@ void	map_find_test( void );
 void	map_value_comp( void );
 void	map_relational_oper( void );
 void	map_swap( void );
+void	map_insert( void );
 
 void	pop_stack_test( void );
 
@@ -38,12 +39,12 @@ unsigned long	get_time( void )
 int	main( void )
 {
 
-	unsigned long	begin;
-	unsigned long	end;
-	unsigned long	diff;
+//	unsigned long	begin;
+//	unsigned long	end;
+//	unsigned long	diff;
 //vector
-	begin = get_time();
-	testVector();
+//	begin = get_time();
+//	testVector();
 //	atexit(check_leaks);
 //	testIs_integral();
 //	testEnable_if();
@@ -53,7 +54,7 @@ int	main( void )
 //	testReverseIterator();
 
 //map
-	map_lower_bound();
+/*	map_lower_bound();
 	map_create_empty();
 	map_upper_bound();
 	map_equal_range();
@@ -62,14 +63,16 @@ int	main( void )
 	map_value_comp();
 	map_relational_oper();
 	map_swap();
+*/	map_insert();
 
 //stack
-	pop_stack_test();
+/*	pop_stack_test();
 	end = get_time();
 
 	diff = end - begin;
 	std::cout << "begin duration = " << begin << std::endl;
 	std::cout << "end duration = " << end << std::endl;
 	std::cout << "time duration = " << diff << std::endl;
+*/
 	return 0;
 }

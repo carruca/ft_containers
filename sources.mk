@@ -12,7 +12,8 @@ MAP_TEST		= lower_bound.cpp					\
 				  find.cpp							\
 				  value_comp.cpp					\
 				  relationals.cpp					\
-				  swap.cpp
+				  swap.cpp							\
+				  insert.cpp
 
 VECTOR_DIR		= vector/
 TEST_VECTOR		= test.cpp							\
