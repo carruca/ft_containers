@@ -578,12 +578,56 @@ namespace	ft
 						if (node->left == 0)
 							rightmost = node->parent;
 						else
-							rightmost = tree::_minimum(child);
+							rightmost = tree::_maximum(child);
 					}
 				}
 				if (current->color != red)
 				{
-					//TODO
+					while (child != root
+							&& (child == 0 || child->color == black))
+					{
+						if (child == parent->left)
+						{
+							node_ptr	right_sibling = parent->right;
+
+							if (right_sibling->color == red)
+							{
+								right_sibling->color = black;
+								parent->color = red;
+								tree::_rotate_left(parent, root);
+							}
+							if ((right_sibling->left == 0 || right_sibling->left->color == black)
+									&& (right_sibling == 0 || right_sibling->left->color == black))
+							{
+								right_sibling->color = red;
+								child = parent;
+								parent = parent->parent;
+							}
+							else
+							{
+								if (right_sibling->right == 0
+										|| right_sibling->right->color == black)
+								{
+									right_sibling->left->color = black;
+									right_sibling->color = red;
+									tree::_rotate_right(right_sibling, root);
+									right_sibling = parent->right;
+								}
+								right_sibling->color = parent->color;
+								parent->color = black;
+								if (right_sibling->right)
+									right_sibling->right->color = black;
+								tree::_rotate_left(parent, root);
+								break;
+							}
+						}
+						else
+						{
+							//same as above
+						}
+						if (child)
+							child->color = black;
+					}
 				}
 				return current;
 			}
