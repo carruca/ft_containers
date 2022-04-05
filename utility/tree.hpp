@@ -623,7 +623,38 @@ namespace	ft
 						}
 						else
 						{
-							//same as above
+							node_ptr	left_sibling = parent->left;
+
+							if (left_sibling->color == red)
+							{
+								left_sibling->color = black;
+								parent->color = red;
+								tree::_rotate_right(parent, root);
+							}
+							if ((left_sibling->right == 0 || left_sibling->right->color == black)
+									&& (left_sibling == 0 || left_sibling->right->color == black))
+							{
+								left_sibling->color = red;
+								child = parent;
+								parent = parent->parent;
+							}
+							else
+							{
+								if (left_sibling->left == 0
+										|| left_sibling->left->color == black)
+								{
+									left_sibling->right->color = black;
+									left_sibling->color = red;
+									tree::_ratate_left(left_sibling, root);
+									left_sibling = parent->left;
+								}
+								left_sibling->color = parent->color;
+								parent->color = black;
+								if (left_sibling->left)
+									left_sibling->left->color = black;
+								tree::_rotate_right(parent, root);
+								break ;
+							}
 						}
 						if (child)
 							child->color = black;
