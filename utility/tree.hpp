@@ -397,6 +397,25 @@ namespace	ft
 				x->parent = y;
 			}
 
+			void
+			_rotate_left( node_ptr node )
+			{
+				node_ptr	child = node->right;
+
+				node->right = child->left;
+				if (child->left != 0)
+					child->left->parent = node;
+				child->parent = node->parent;
+				if (node == this->_sentinel.parent)
+					this->_sentinel.parent = child;
+				else if (node == node->parent->left)
+					node->parent->left = child;
+				else
+					node->parent->right = child;
+				child->left = node;
+				node->parent = child;
+			}
+
 			static void
 			_rotate_right( node_ptr x, node_ptr& root )
 			{
@@ -417,6 +436,25 @@ namespace	ft
 			}
 
 			void
+			_rotate_right( node_ptr node )
+			{
+				node_ptr	child = node->left;
+
+				node->left = child->right;
+				if (child->right != 0)
+					child->right->parent = node;
+				child->parent = node->parent;
+				if (node == this->_sentinel.parent)
+					this->_sentinel.parent = child;
+				else if (node == node->parent->right)
+					node->parent->right = child;
+				else
+					node->parent->left = child;
+				child->right = node;
+				node->parent = child;
+			}
+
+			void
 			_init_child_node( node_ptr node, node_ptr parent )
 			{
 				node->parent = parent;
@@ -426,8 +464,58 @@ namespace	ft
 			}
 
 			void
+			_rebalance_right_uncle( node_ptr& node, node_ptr const& gparent )
+			{
+				node_ptr const	uncle = gparent->right;
+
+				if (uncle && uncle->color == red)
+				{
+					node->parent->color = black;
+					uncle->color = black;
+					gparent->color = red;
+					node = gparent;
+				}
+				else
+				{
+					if (node == node->parent->right)
+					{
+						node = node->parent;
+						this->_rotate_left(node);
+					}
+					node->parent->color = black;
+					gparent->color = red;
+					this->_rotate_right(gparent);
+				}
+			}
+
+			void
+			_rebalance_left_uncle( node_ptr& node, node_ptr const& gparent )
+			{
+				node_ptr const	uncle = gparent->left;
+
+				if (uncle && uncle->color == red)
+				{
+					node->parent->color = black;
+					uncle->color = black;
+					gparent->color = red;
+					node = gparent;
+				}
+				else
+				{
+					if (node == node->parent->left)
+					{
+						node = node->parent;
+						this->_rotate_right(node);
+					}
+					node->parent->color = black;
+					gparent->color = red;
+					this->_rotate_left(gparent);
+				}
+			}
+
+			void
 			_insert_and_rebalance( const bool insert_left,
-								node_ptr node, node_ptr parent )
+					node_ptr node, node_ptr parent )
 			{
 				node_ptr&	root = this->_sentinel.parent;
 
@@ -457,7 +545,8 @@ namespace	ft
 
 					if (gparent && node->parent == gparent->left)
 					{
-						node_ptr const	y = gparent->right;
+						this->_rebalance_right_uncle(node, gparent);
+/*						node_ptr const	y = gparent->right;
 
 						if (y && y->color == red)
 						{
@@ -476,11 +565,12 @@ namespace	ft
 							node->parent->color = black;
 							gparent->color = red;
 							tree::_rotate_right(gparent, root);
-						}
+						}*/
 					}
 					else
 					{
-						node_ptr const	y = gparent->left;
+						this->_rebalance_left_uncle(node, gparent);
+/*						node_ptr const	y = gparent->left;
 
 						if (y && y->color == red)
 						{
@@ -499,11 +589,13 @@ namespace	ft
 							node->parent->color = black;
 							gparent->color = red;
 							tree::_rotate_left(gparent, root);
-						}
+						}*/
 					}
 				}
 				root->color = black;
 			}
+
+
 
 			node_ptr
 			_rebalance_before_erase( node_ptr node )
@@ -645,7 +737,7 @@ namespace	ft
 								{
 									left_sibling->right->color = black;
 									left_sibling->color = red;
-									tree::_ratate_left(left_sibling, root);
+									tree::_rotate_left(left_sibling, root);
 									left_sibling = parent->left;
 								}
 								left_sibling->color = parent->color;
