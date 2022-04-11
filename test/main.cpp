@@ -42,9 +42,10 @@ int	main( void )
 //	unsigned long	begin;
 //	unsigned long	end;
 //	unsigned long	diff;
-//vector
+
 //	begin = get_time();
-//	testVector();
+//vector
+	testVector();
 //	atexit(check_leaks);
 //	testIs_integral();
 //	testEnable_if();
@@ -54,7 +55,7 @@ int	main( void )
 //	testReverseIterator();
 
 //map
-/*	map_lower_bound();
+	map_lower_bound();
 	map_create_empty();
 	map_upper_bound();
 	map_equal_range();
@@ -63,7 +64,7 @@ int	main( void )
 	map_value_comp();
 	map_relational_oper();
 	map_swap();
-*/	map_insert();
+	map_insert();
 
 //stack
 /*	pop_stack_test();

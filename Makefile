@@ -1,4 +1,4 @@
-NAME			= ft_containers_tester
+NAME			= ft_tester
 
 INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR) -I$(TEST_DIR)
 

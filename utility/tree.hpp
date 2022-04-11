@@ -38,11 +38,11 @@ namespace	ft
 			typedef node_type*			node_ptr;
 			typedef const node_type*	const_node_ptr;
 
-			tree_color	color;
 			node_ptr	parent;
 			node_ptr	left;
 			node_ptr	right;
 			value_type	content;
+			tree_color	color;
 
 			tree_node( void )
 			{}
@@ -87,13 +87,13 @@ namespace	ft
 			}
 
 			static bool
-			is_left_sibling( node_ptr x )
+			is_left_child( node_ptr x )
 			{
 				return x != 0 && x == x->parent->left;
 			}
 
 			static bool
-			is_right_sibling( node_ptr x )
+			is_right_child( node_ptr x )
 			{
 				return x != 0 && x == x->parent->right;
 			}
@@ -247,7 +247,7 @@ namespace	ft
 			node_ptr
 			_clone_node( const_node_ptr x )
 			{
-				node_ptr	tmp = this->_create_node(x->content);
+				node_ptr	tmp(this->_create_node(x->content));
 
 				tmp->color = x->color;
 				tmp->left = 0;
@@ -268,9 +268,8 @@ namespace	ft
 			node_ptr
 			_assign_node( const_node_ptr root, node_ptr parent )
 			{
-				node_ptr	node;
+				node_ptr	node(this->_clone_node(root));
 
-				node = this->_clone_node(root);
 				node->parent = parent;
 				if (root->right)
 					node->right = this->_copy_tree(root->right, node);
@@ -526,70 +525,29 @@ namespace	ft
 					parent->left = node;
 					if (parent == &this->_sentinel)
 					{
-						this->_sentinel.parent = node;
-						this->_sentinel.right = node;
+						this->_root() = node;
+						this->_rightmost() = node;
 					}
-					else if (parent == this->_sentinel.left)
-						this->_sentinel.left = node;
+					else if (parent == this->_leftmost())
+						this->_leftmost() = node;
 				}
 				else
 				{
 					parent->right = node;
-					if (parent == this->_sentinel.right)
-						this->_sentinel.right= node;
+					if (parent == this->_rightmost())
+						this->_rightmost() = node;
 				}
 				//rebalance
 				while (node != root && node->parent->color == red)
 				{
 					node_ptr const	gparent = node->parent->parent;
 
-					if (gparent && node->parent == gparent->left)
+					if (gparent)
 					{
-						this->_rebalance_right_uncle(node, gparent);
-/*						node_ptr const	y = gparent->right;
-
-						if (y && y->color == red)
-						{
-							node->parent->color = black;
-							y->color = black;
-							gparent->color = red;
-							node = gparent;
-						}
+						if (gparent->left == node->parent)
+							this->_rebalance_right_uncle(node, gparent);
 						else
-						{
-							if (node == node->parent->right)
-							{
-								node = node->parent;
-								tree::_rotate_left(node, root);
-							}
-							node->parent->color = black;
-							gparent->color = red;
-							tree::_rotate_right(gparent, root);
-						}*/
-					}
-					else
-					{
-						this->_rebalance_left_uncle(node, gparent);
-/*						node_ptr const	y = gparent->left;
-
-						if (y && y->color == red)
-						{
-							node->parent->color = black;
-							y->color = black;
-							gparent->color = red;
-							node = gparent;
-						}
-						else
-						{
-							if (node == node->parent->left)
-							{
-								node = node->parent;
-								tree::_rotate_right(node, root);
-							}
-							node->parent->color = black;
-							gparent->color = red;
-							tree::_rotate_left(gparent, root);
-						}*/
+							this->_rebalance_left_uncle(node, gparent);
 					}
 				}
 				root->color = black;
@@ -605,13 +563,6 @@ namespace	ft
 				else
 					return true;
 				return false;
-			}
-
-			void
-			_relink_left_child_node_parent( node_ptr& current, node_ptr& node )
-			{
-				node->left->parent = current;
-				current->left = node->left;
 			}
 
 			void
@@ -658,7 +609,8 @@ namespace	ft
 				{
 					current = tree::_minimum(node->right);
 					child = current->right;
-					this->_relink_left_child_node_parent(current, node);
+					node->left->parent = current;
+					current->left = node->left;
 					this->_relink_child_parent(parent, child, current, node);
 					if (this->_root() == node)
 						this->_root() = current;
@@ -684,7 +636,7 @@ namespace	ft
 			}
 
 			bool
-			_rebalance_right_sibling( node_ptr& child, node_ptr& parent )
+			_rebalance_from_right_sibling( node_ptr& child, node_ptr& parent )
 			{
 				node_ptr	sibling = parent->right;
 
@@ -722,7 +674,7 @@ namespace	ft
 			}
 
 			bool
-			_rebalance_left_sibling( node_ptr& child, node_ptr& parent )
+			_rebalance_from_left_sibling( node_ptr& child, node_ptr& parent )
 			{
 				node_ptr	sibling = parent->left;
 
@@ -774,12 +726,12 @@ namespace	ft
 					{
 						if (child == parent->left)
 						{
-							if (this->_rebalance_right_sibling(child, parent))
+							if (this->_rebalance_from_right_sibling(child, parent))
 								break ;
 						}
 						else
 						{
-							if (this->_rebalance_left_sibling(child, parent))
+							if (this->_rebalance__from_left_sibling(child, parent))
 								break ;
 						}
 					}
@@ -789,8 +741,8 @@ namespace	ft
 			}
 
 			void
-			_fill_sentinel_and_count( const tree<key_type, mapped_type,
-									key_compare, allocator_type>& other )
+			_copy_sentinel_and_count( const tree<key_type, mapped_type,
+					key_compare, allocator_type>& other )
 			{
 				this->_sentinel.parent = this->_copy_tree(other._root(), &this->_sentinel);
 				this->_sentinel.left = tree::_minimum(this->_root());
@@ -827,7 +779,7 @@ namespace	ft
 			{
 				this->_init_empty_tree();
 				if (!other.empty())
-					this->_fill_sentinel_and_count(other);
+					this->_copy_sentinel_and_count(other);
 			}
 
 			~tree( void )
@@ -844,7 +796,7 @@ namespace	ft
 					this->_key_compare = rhs._key_compare;
 					this->_allocator = rhs._allocator;
 					if (!rhs.empty())
-						this->_fill_sentinel_and_count(rhs);
+						this->_copy_sentinel_and_count(rhs);
 				}
 				return *this;
 			}
@@ -952,7 +904,8 @@ namespace	ft
 			}
 
 			iterator
-			_insert( node_ptr pos, node_ptr parent, const value_type& value )
+			_insert( node_ptr pos, node_ptr parent,
+					const value_type& value )
 			{
 				bool		insert_left = (pos != 0 || parent == &this->_sentinel
 										|| this->_key_compare(value.first, tree::_key(parent)));
@@ -967,34 +920,16 @@ namespace	ft
 			iterator
 			_insert_before_position( iterator position, const value_type& value )
 			{
-	//			iterator	before = position;
-
 				if (position.node == this->_leftmost())
 					return this->_insert(this->_leftmost(), this->_leftmost(), value);
-/*				else if (this->_key_compare(tree::_key((--before).node), value.first))
-				{
-					if (before.node->right == 0)
-						return this->_insert(0, before.node, value);
-				else
-					return this->_insert(position.node, position.node, value);
-				}*/
 				return (this->insert(value).first);
 			}
 
 			iterator
 			_insert_after_position( iterator position, const value_type& value )
 			{
-	//			iterator	after = position;
-
 				if (position.node == this->_rightmost())
 					return this->_insert(0, this->_rightmost(), value);
-/*				else if (this->_key_compare(value.first, tree::_key((++after).node)))
-				{
-					if (after.node->right == 0)
-						return this->_insert(0, position.node, value);
-					else
-						return this->_insert(after.node, after.node, value);
-				}*/
 				return (this->insert(value)).first;
 			}
 
@@ -1049,7 +984,7 @@ namespace	ft
 				{
 					for (; first != last; ++first)
 						this->insert(this->end(), *first);
-			//		this->debug();
+					this->debug();
 				}
 
 			void
@@ -1082,12 +1017,6 @@ namespace	ft
 					while (first != last)
 						this->erase(first++);
 				}
-			}
-
-			void
-			move_data( tree<key_type, mapped_type, key_compare, allocator_type>& other )
-			{
-				(void)other;
 			}
 
 			void
@@ -1354,7 +1283,7 @@ namespace	ft
 			{
 				if (node != 0)
 				{
-					std::cout << prefix << (left ? "├──" : "└──") << tree::_key(node) << std::endl;
+					std::cout << prefix << (left ? "├──" : "└──") << tree::_key(node) << ": " << node->color << std::endl;
 
 					graph_display(node->left, prefix + (left ? "│   " : "    "), true);
 					graph_display(node->right, prefix + (left ? "│   " : "    "), false);
