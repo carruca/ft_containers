@@ -406,7 +406,7 @@ namespace	ft
 				if (child->left != 0)
 					child->left->parent = node;
 				child->parent = node->parent;
-				if (node == this->_sentinel.parent)
+				if (node == this->_root())
 					this->_sentinel.parent = child;
 				else if (node == node->parent->left)
 					node->parent->left = child;
@@ -444,7 +444,7 @@ namespace	ft
 				if (child->right != 0)
 					child->right->parent = node;
 				child->parent = node->parent;
-				if (node == this->_sentinel.parent)
+				if (node == this->_root())
 					this->_sentinel.parent = child;
 				else if (node == node->parent->right)
 					node->parent->right = child;
@@ -595,164 +595,197 @@ namespace	ft
 				root->color = black;
 			}
 
-
-
-			node_ptr
-			_rebalance_before_erase( node_ptr node )
+			bool
+			_has_both_child( node_ptr current, node_ptr& child )
 			{
-				node_ptr&	root = this->_sentinel.parent;
-				node_ptr&	leftmost = this->_sentinel.left;
-				node_ptr&	rightmost = this->_sentinel.right;
-				node_ptr	current = node;
-				node_ptr	child = 0;
-				node_ptr	parent = 0;
-
-				if (current->left == 0) // is left child null
+				if (current->left == 0)
 					child = current->right;
-				else if (current->right == 0) // is right child null
+				else if (current->right == 0)
 					child = current->left;
-				else // no null child
-				{
-					current = current->right;
-					while (current->left != 0)
-						current = current->left;
-					child = current->right;
-				}
-				if (current != node)
-				{
-					// relink left child of node with new parent current
-					node->left->parent = current;
-					current->left = node->left;
+				else
+					return true;
+				return false;
+			}
 
-					if (current != node->right)
-					{
-						parent = current->parent;
-						if (child)
-							child->parent = current->parent;
-						current->parent->left = child;
-						current->right = node->right;
-						node->right->parent = current;
-					}
+			void
+			_relink_left_child_node_parent( node_ptr& current, node_ptr& node )
+			{
+				node->left->parent = current;
+				current->left = node->left;
+			}
+
+			void
+			_relink_child_parent( node_ptr& parent, node_ptr& child,
+					node_ptr& current, node_ptr& node )
+			{
+				if (current != node->right)
+				{
+					parent = current->parent;
+					if (child)
+						child->parent = parent;
+					current->parent->left = child;
+					current->right = node->right;
+					node->right->parent = current;
+				}
+				else
+					parent = current;
+			}
+
+			void
+			_relink_left_and_rightmost_node( node_ptr node, node_ptr child )
+			{
+				if (this->_leftmost() == node)
+				{
+					if (node->right == 0)
+						this->_leftmost() = node->parent;
 					else
-						parent = current;
-					// change parent pointers
-					if (root == node)
-						root = current;
+						this->_leftmost() = tree::_minimum(child);
+				}
+				if (this->_rightmost() == node)
+				{
+					if (node->left == 0)
+						this->_rightmost() = node->parent;
+					else
+						this->_rightmost() = tree::_maximum(child);
+				}
+			}
+
+			void
+			_replace_node( node_ptr node, node_ptr& current,
+					node_ptr& child, node_ptr& parent )
+			{
+				if (this->_has_both_child(current, child))
+				{
+					current = tree::_minimum(node->right);
+					child = current->right;
+					this->_relink_left_child_node_parent(current, node);
+					this->_relink_child_parent(parent, child, current, node);
+					if (this->_root() == node)
+						this->_root() = current;
 					else if (node->parent->left == node)
 						node->parent->left = current;
 					else
 						node->parent->right = current;
 					current->parent = node->parent;
 					std::swap(current->color, node->color);
-					//current points to the node to be deleted
-					current = node;
 				}
 				else
 				{
-					parent = current->parent;
-					if (child)
-						child->parent = current->parent;
-					if (root == node)
-						root = child;
+					parent = node->parent;
+					child->parent = parent;
+					if (this->_root() == node)
+						this->_root() = child;
 					else if (node->parent->left == node)
 						node->parent->left = child;
 					else
 						node->parent->right = child;
-					if (leftmost == node)
-					{
-						if (node->right == 0)
-							leftmost = node->parent;
-						else
-							leftmost = tree::_minimum(child);
-					}
-					if (rightmost == node)
-					{
-						if (node->left == 0)
-							rightmost = node->parent;
-						else
-							rightmost = tree::_maximum(child);
-					}
+					this->_relink_left_and_rightmost_node(node, child);
 				}
-				if (current->color != red)
+			}
+
+			bool
+			_rebalance_right_sibling( node_ptr& child, node_ptr& parent )
+			{
+				node_ptr	sibling = parent->right;
+
+				if (sibling->color == red)
 				{
-					while (child != root
+					sibling->color = black;
+					parent->color = red;
+					this->_rotate_left(parent);
+				}
+				if ((sibling->left == 0 || sibling->left->color == black)
+						&& (sibling->right == 0 || sibling->right->color == black))
+				{
+					sibling->color = red;
+					child = parent;
+					parent = parent->parent;
+				}
+				else
+				{
+					if (sibling->right == 0
+							|| sibling->right->color == black)
+					{
+						sibling->left->color = black;
+						sibling->color = red;
+						this->_rotate_right(sibling);
+						sibling = parent->right;
+					}
+					sibling->color = parent->color;
+					parent->color = black;
+					if (sibling->right)
+						sibling->right->color = black;
+					this->_rotate_left(parent);
+					return true;
+				}
+				return false;
+			}
+
+			bool
+			_rebalance_left_sibling( node_ptr& child, node_ptr& parent )
+			{
+				node_ptr	sibling = parent->left;
+
+				if (sibling->color == red)
+				{
+					sibling->color = black;
+					parent->color = red;
+					this->_rotate_right(parent);
+				}
+				if ((sibling->right == 0 || sibling->right->color == black)
+						&& (sibling->left == 0 || sibling->left->color == black))
+				{
+					sibling->color = red;
+					child = parent;
+					parent = parent->parent;
+				}
+				else
+				{
+					if (sibling->left == 0
+							|| sibling->left->color == black)
+					{
+						sibling->right->color = black;
+						sibling->color = red;
+						this->_rotate_left(sibling);
+						sibling = parent->left;
+					}
+					sibling->color = parent->color;
+					parent->color = black;
+					if (sibling->left)
+					sibling->left->color = black;
+					this->_rotate_right(parent);
+					return true;
+				}
+				return false;
+			}
+
+			void
+			_rebalance_before_erase( node_ptr node )
+			{
+				node_ptr	current(node);
+				node_ptr	child(0);
+				node_ptr	parent(0);
+
+				this->_replace_node(node, current, child, parent);
+				if (node->color != red)
+				{
+					while (child != this->_root()
 							&& (child == 0 || child->color == black))
 					{
 						if (child == parent->left)
 						{
-							node_ptr	right_sibling = parent->right;
-
-							if (right_sibling->color == red)
-							{
-								right_sibling->color = black;
-								parent->color = red;
-								tree::_rotate_left(parent, root);
-							}
-							if ((right_sibling->left == 0 || right_sibling->left->color == black)
-									&& (right_sibling == 0 || right_sibling->left->color == black))
-							{
-								right_sibling->color = red;
-								child = parent;
-								parent = parent->parent;
-							}
-							else
-							{
-								if (right_sibling->right == 0
-										|| right_sibling->right->color == black)
-								{
-									right_sibling->left->color = black;
-									right_sibling->color = red;
-									tree::_rotate_right(right_sibling, root);
-									right_sibling = parent->right;
-								}
-								right_sibling->color = parent->color;
-								parent->color = black;
-								if (right_sibling->right)
-									right_sibling->right->color = black;
-								tree::_rotate_left(parent, root);
-								break;
-							}
+							if (this->_rebalance_right_sibling(child, parent))
+								break ;
 						}
 						else
 						{
-							node_ptr	left_sibling = parent->left;
-
-							if (left_sibling->color == red)
-							{
-								left_sibling->color = black;
-								parent->color = red;
-								tree::_rotate_right(parent, root);
-							}
-							if ((left_sibling->right == 0 || left_sibling->right->color == black)
-									&& (left_sibling == 0 || left_sibling->right->color == black))
-							{
-								left_sibling->color = red;
-								child = parent;
-								parent = parent->parent;
-							}
-							else
-							{
-								if (left_sibling->left == 0
-										|| left_sibling->left->color == black)
-								{
-									left_sibling->right->color = black;
-									left_sibling->color = red;
-									tree::_rotate_left(left_sibling, root);
-									left_sibling = parent->left;
-								}
-								left_sibling->color = parent->color;
-								parent->color = black;
-								if (left_sibling->left)
-									left_sibling->left->color = black;
-								tree::_rotate_right(parent, root);
+							if (this->_rebalance_left_sibling(child, parent))
 								break ;
-							}
 						}
-						if (child)
-							child->color = black;
 					}
+					if (child)
+						child->color = black;
 				}
-				return current;
 			}
 
 			void
@@ -1022,10 +1055,8 @@ namespace	ft
 			void
 			erase( iterator position )
 			{
-				node_ptr	node;
-
-				node = this->_rebalance_before_erase(position.node);
-				this->_destroy_node(node);
+				this->_rebalance_before_erase(position.node);
+				this->_destroy_node(position.node);
 				--this->_node_count;
 			}
 
