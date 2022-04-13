@@ -377,29 +377,10 @@ namespace	ft
 				return tree_node_type::decrement(x);
 			}
 
-			static void
-			_rotate_left( node_ptr x, node_ptr& root )
-			{
-				node_ptr	y = x->right;
-
-				x->right = y->left;
-				if (y->left != 0)
-					y->left->parent = x;
-				y->parent = x->parent;
-				if (x == root)
-					root = y;
-				else if (x == x->parent->left)
-					x->parent->left = y;
-				else
-					x->parent->right = y;
-				y->left = x;
-				x->parent = y;
-			}
-
 			void
-			_rotate_left( node_ptr node )
+			_rotate_left( node_ptr const node )
 			{
-				node_ptr	child = node->right;
+				node_ptr const	child = node->right;
 
 				node->right = child->left;
 				if (child->left != 0)
@@ -415,29 +396,10 @@ namespace	ft
 				node->parent = child;
 			}
 
-			static void
-			_rotate_right( node_ptr x, node_ptr& root )
-			{
-				node_ptr	y = x->left;
-
-				x->left = y->right;
-				if (y->right != 0)
-					y->right->parent = x;
-				y->parent = x->parent;
-				if (x == root)
-					root = y;
-				else if (x == x->parent->right)
-					x->parent->right = y;
-				else
-					x->parent->left = y;
-				y->right = x;
-				x->parent = y;
-			}
-
 			void
-			_rotate_right( node_ptr node )
+			_rotate_right( node_ptr const node )
 			{
-				node_ptr	child = node->left;
+				node_ptr const	child = node->left;
 
 				node->left = child->right;
 				if (child->right != 0)
@@ -624,7 +586,8 @@ namespace	ft
 				else
 				{
 					parent = node->parent;
-					child->parent = parent;
+					if (child)
+						child->parent = parent;
 					if (this->_root() == node)
 						this->_root() = child;
 					else if (node->parent->left == node)
@@ -633,6 +596,19 @@ namespace	ft
 						node->parent->right = child;
 					this->_relink_left_and_rightmost_node(node, child);
 				}
+			}
+
+			bool
+			_is_node_black( node_ptr node )
+			{
+				return node == 0 || node->color == black;
+			}
+
+			bool
+			_are_both_child_black( node_ptr node )
+			{
+				return this->_is_node_black(node->left)
+						&& this->_is_node_black(node->right);
 			}
 
 			bool
@@ -646,8 +622,7 @@ namespace	ft
 					parent->color = red;
 					this->_rotate_left(parent);
 				}
-				if ((sibling->left == 0 || sibling->left->color == black)
-						&& (sibling->right == 0 || sibling->right->color == black))
+				if (this->_are_both_child_black(sibling))
 				{
 					sibling->color = red;
 					child = parent;
@@ -655,8 +630,7 @@ namespace	ft
 				}
 				else
 				{
-					if (sibling->right == 0
-							|| sibling->right->color == black)
+					if (this->_is_node_black(sibling->right))
 					{
 						sibling->left->color = black;
 						sibling->color = red;
@@ -684,8 +658,7 @@ namespace	ft
 					parent->color = red;
 					this->_rotate_right(parent);
 				}
-				if ((sibling->right == 0 || sibling->right->color == black)
-						&& (sibling->left == 0 || sibling->left->color == black))
+				if (this->_are_both_child_black(sibling))
 				{
 					sibling->color = red;
 					child = parent;
@@ -693,8 +666,7 @@ namespace	ft
 				}
 				else
 				{
-					if (sibling->left == 0
-							|| sibling->left->color == black)
+					if (this->_is_node_black(sibling->left))
 					{
 						sibling->right->color = black;
 						sibling->color = red;
@@ -704,7 +676,7 @@ namespace	ft
 					sibling->color = parent->color;
 					parent->color = black;
 					if (sibling->left)
-					sibling->left->color = black;
+						sibling->left->color = black;
 					this->_rotate_right(parent);
 					return true;
 				}
@@ -726,12 +698,13 @@ namespace	ft
 					{
 						if (child == parent->left)
 						{
-							if (this->_rebalance_from_right_sibling(child, parent))
+							if (parent->right == 0
+									|| this->_rebalance_from_right_sibling(child, parent))
 								break ;
 						}
 						else
 						{
-							if (this->_rebalance__from_left_sibling(child, parent))
+							if (this->_rebalance_from_left_sibling(child, parent))
 								break ;
 						}
 					}
@@ -984,7 +957,8 @@ namespace	ft
 				{
 					for (; first != last; ++first)
 						this->insert(this->end(), *first);
-					this->debug();
+					//debug
+//					this->debug();
 				}
 
 			void
@@ -993,6 +967,8 @@ namespace	ft
 				this->_rebalance_before_erase(position.node);
 				this->_destroy_node(position.node);
 				--this->_node_count;
+				//debug
+//				this->debug();
 			}
 
 			size_type
@@ -1283,7 +1259,8 @@ namespace	ft
 			{
 				if (node != 0)
 				{
-					std::cout << prefix << (left ? "├──" : "└──") << tree::_key(node) << ": " << node->color << std::endl;
+					std::cout << prefix << (left ? "├──" : "└──") << tree::_key(node);
+					std::cout << ": " << ((node->color == red) ? "r" : "b") << std::endl;
 
 					graph_display(node->left, prefix + (left ? "│   " : "    "), true);
 					graph_display(node->right, prefix + (left ? "│   " : "    "), false);

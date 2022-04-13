@@ -20,6 +20,7 @@ void	map_value_comp( void );
 void	map_relational_oper( void );
 void	map_swap( void );
 void	map_insert( void );
+void	map_erase( void );
 
 void	pop_stack_test( void );
 
@@ -39,11 +40,11 @@ unsigned long	get_time( void )
 int	main( void )
 {
 
-//	unsigned long	begin;
-//	unsigned long	end;
-//	unsigned long	diff;
+	unsigned long	begin;
+	unsigned long	end;
+	unsigned long	diff;
 
-//	begin = get_time();
+	begin = get_time();
 //vector
 	testVector();
 //	atexit(check_leaks);
@@ -65,15 +66,16 @@ int	main( void )
 	map_relational_oper();
 	map_swap();
 	map_insert();
+	map_erase();
 
 //stack
-/*	pop_stack_test();
+	pop_stack_test();
 	end = get_time();
 
 	diff = end - begin;
-	std::cout << "begin duration = " << begin << std::endl;
+/*	std::cout << "begin duration = " << begin << std::endl;
 	std::cout << "end duration = " << end << std::endl;
-	std::cout << "time duration = " << diff << std::endl;
-*/
+*/	std::cout << "time duration = " << diff << std::endl;
+
 	return 0;
 }
