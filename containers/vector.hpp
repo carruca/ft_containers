@@ -348,13 +348,13 @@ namespace	ft
 			{
 				if (cap > this->capacity())
 				{
-					const size_type	size = this->size();
-					pointer			tmp = this->allocate(cap);
+					const size_type	size(this->size());
+					pointer			new_start(this->allocate(cap));
 
-					this->_range_construct(this->start, this->finish, tmp);
+					this->_range_construct(this->start, this->finish, new_start);
 					this->_range_destroy(this->start, this->finish);
 					this->deallocate(this->start, this->capacity());
-					this->start = tmp;
+					this->start = new_start;
 					this->finish = this->start + size;
 					this->end_of_storage = this->start + cap;
 				}
