@@ -1,90 +1,33 @@
 #include "vector.hpp"
+#include "global.hpp"
+#include "utils.hpp"
+#include "struct.hpp"
 
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <stdexcept>
-#include <list>
 
-#define NAMESPACE	ft
-
-void	display_weapon(Weapon* weapon)
+void	vector_assign( void )
 {
-	std::cout << "Weapon of type " << weapon->getType() << std::endl;
-}
+	vector_type		v1;
+	vector_type		v2(v1.get_allocator());
+	vector_type		v3;
+	vector_type		v4;
 
-class	Weapon
-{
-public:
-	Weapon(std::string& type)
-	: _type(type)
-	{
-		std::cout << "Weapon of type " << this->_type << " created" << std::endl;
-	}
-	~Weapon(void)
-	{
-		std::cout << "Weapon of type " this->_type << " destroyed" << std::endl;
-	}
+	v1.assign(3, 12);
+	v2.assign(400000, 300);
+	v3.assign(v1.begin(), v1.end());
+	v4.assign(100 + v2.begin(), v2.end());
 
-	const std::string&	getType(void) const
-	{
-		return this->_type;
-	}
+	if (v1.size() == v3.size())
+		std::cout << "after assign both vectors are equal size" << std::endl;
+	if (v2.size() != v4.size())
+		std::cout << "after assign both vectors are diferent size" << std::endl;
 
-private:
-	std::string		_type;
+	for_each(v1.begin(), v1.end(), display<int>);
+	for_each(v4.begin(), v4.end(), display<int>);
 
-	Weapon(void);
-	Weapon(const Weapon& other);
-	const Warrior&	operator=(const Warrior& rhs);
-};
+	v2.erase(v2.begin(), v2.end());
 
-class	Warrior
-{
-public:
-	Warrior(void)
-	{
-		std::cout << "I became a Warrior in this battle" << std::endl;
-		std::cout << "I have " << this->_invt.size();
-		std::cout << " weapons in my inventory now." << std::enl;
-	}
-	Warrior(const Warrior& other)
-	{
-		this->_invt = other._invt;
-	}
-	~Warrior(void)
-	{
-		std::cout << "I died." << std::endl;
-	}
-
-	const Warrior&	operator=(const Warrior& rhs)
-	{
-		if (this != &other)
-			this->_invt = other._invt;
-		return *this;
-	}
-
-	void	equipWeapon(std::size_t n, Weapon* value)
-	{
-		this->_invt.assign(n, value);
-		std::cout << "I equiped my inventory with " << this->_invt.size();
-		std::cout << " new weapons of type " << this->getType() << "." << std::endl;
-	}
-
-	void	equipWeapon(std::size_t n, NAMESPACE::vector<Weapon *>& value_vector)
-	{
-		this->_invt.assign(std::size_t n, value_vector.begin(), value_vector.end();
-		std::cout << "I equiped my inventory with:" << std::endl;
-		for_each(this->_invt.begin(), this->_invt.end(), display_weapon);
-	}
-
-private:
-	std::string&				_name;
-	NAMESPACE::vector<Weapon *>	_invt;
-};
-
-
-void	episode_one(void)
-{
-	Character	jim;
+	std::cout << "vector 2 is " << (v2.empty() ? "empty" : "not empty") << std::endl;
 }

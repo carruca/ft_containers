@@ -1,7 +1,9 @@
 TEST_DIR		= test/
 
 STACK_DIR		= stack/
-STACK_TEST		= top.cpp
+STACK_TEST		= top.cpp							\
+				  size.cpp							\
+				  relationals.cpp
 
 MAP_DIR			= map/
 MAP_TEST		= lower_bound.cpp					\
@@ -13,20 +15,23 @@ MAP_TEST		= lower_bound.cpp					\
 				  value_comp.cpp					\
 				  relationals.cpp					\
 				  swap.cpp							\
-				  insert.cpp							\
+				  insert.cpp						\
 				  erase.cpp
 
 VECTOR_DIR		= vector/
-TEST_VECTOR		= test.cpp							\
+TEST_VECTOR		= old_test.cpp						\
 				  constructor.cpp					\
-				  erase.cpp
+				  swap.cpp							\
+				  const_iterators.cpp				\
+				  assign.cpp						\
+				  size.cpp							\
+				  insert.cpp						\
+				  reserve.cpp
 
 TEST_UTILS		= pairTest.cpp						\
 				  equalTest.cpp						\
 				  lexicographical_compareTest.cpp 	\
 				  reverse_iteratorTest.cpp
-				  #enable_ifTest.cpp				\
-				  is_integralTest.cpp
 
 SRC				= $(addprefix $(TEST_DIR),						\
 				  main.cpp										\

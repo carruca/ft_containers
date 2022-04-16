@@ -6,8 +6,6 @@
 
 # include <map>
 
-//# define NAMESPACE	ft
-
 typedef NAMESPACE::map<int, std::string>						map_type;
 typedef map_type::iterator										map_iterator;
 typedef map_type::const_iterator								map_const_iterator;

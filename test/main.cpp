@@ -1,53 +1,33 @@
+#include "global.hpp"
+#include "test.hpp"
+
 #include <cstdlib>
 #include <iostream>
 #include <sys/time.h>
 
-void	testIs_integral( void );
-void	testEnable_if( void );
-void	testPair( void );
-void	testEqual( void );
-void	testLexicographical_compare( void );
-void	testReverseIterator( void );
-void	testVector( void );
+unsigned long	get_time( void )
+{
+	struct timeval	tvp;
 
-void	map_lower_bound( void );
-void	map_upper_bound( void );
-void	map_create_empty( void );
-void	map_equal_range( void );
-void	map_size_test( void );
-void	map_find_test( void );
-void	map_value_comp( void );
-void	map_relational_oper( void );
-void	map_swap( void );
-void	map_insert( void );
-void	map_erase( void );
-
-void	pop_stack_test( void );
+	gettimeofday(&tvp, 0);
+	return tvp.tv_sec * 1000 + tvp.tv_usec / 1000;
+}
 
 void	check_leaks( void )
 {
 	system("leaks ft_containers");
 }
 
-unsigned long	get_time( void )
-{
-	struct timeval	tvp;
-
-	gettimeofday(&tvp, NULL);
-	return tvp.tv_sec * 1000 + tvp.tv_usec / 1000;
-}
-
 int	main( void )
 {
+//	atexit(check_leaks);
 
-	unsigned long	begin;
-	unsigned long	end;
-	unsigned long	diff;
+	unsigned long	begin, end;
 
 	begin = get_time();
-//vector
-	testVector();
-//	atexit(check_leaks);
+
+//utils
+
 //	testIs_integral();
 //	testEnable_if();
 //	testPair();
@@ -55,7 +35,21 @@ int	main( void )
 //	testLexicographical_compare();
 //	testReverseIterator();
 
+//	vector_old_test();
+
+//vector
+
+	vector_default_constructor();
+	vector_swap();
+	vector_resize();
+	vector_assign();
+	vector_const_iterators();
+	vector_reserve();
+	vector_insert();
+	vector_swap();
+
 //map
+
 	map_lower_bound();
 	map_create_empty();
 	map_upper_bound();
@@ -69,13 +63,13 @@ int	main( void )
 	map_erase();
 
 //stack
-	pop_stack_test();
-	end = get_time();
 
-	diff = end - begin;
-/*	std::cout << "begin duration = " << begin << std::endl;
-	std::cout << "end duration = " << end << std::endl;
-*/	std::cout << "time duration = " << diff << std::endl;
+	stack_pop();
+	stack_size();
+	stack_relationals();
+
+	end = get_time();
+	std::cout << "time duration = " << end - begin << std::endl;
 
 	return 0;
 }

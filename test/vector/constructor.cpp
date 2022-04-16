@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <list>
 
-void	default_constructor_test( void )
+void	vector_default_constructor( void )
 {
 	std::vector<int>	vect_std;
 	ft::vector<int>		vect_ft;
@@ -18,9 +18,4 @@ void	default_constructor_test( void )
 	}
 	else
 		std::cout << "Default constructor is wrong" << std::endl;
-}
-
-void	explicit_constructor_test( void )
-{
-	
 }

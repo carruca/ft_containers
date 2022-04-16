@@ -214,45 +214,36 @@ namespace	ft
 			}
 
 			void
-			_put_node( node_ptr current )
+			_put_node( node_ptr node )
 			{
-				this->_allocator.deallocate(current, 1);
+				this->_allocator.deallocate(node, 1);
 			}
 
 			void
-			_destroy_node( node_ptr x )
+			_destroy_node( node_ptr node )
 			{
-				this->_allocator.destroy(x);
-				this->_put_node(x);
+				this->_allocator.destroy(node);
+				this->_put_node(node);
 			}
 
 			node_ptr
 			_create_node( const value_type& value )
 			{
-				node_ptr	tmp;
+				node_ptr	node(this->_get_node());
 
-		//		try
-		//		{
-					tmp = this->_get_node();
-					this->_allocator.construct(tmp, value);
-		//		}
-		//		catch (...)
-		//		{
-		//			this->_put_node(tmp);
-		//			throw ;
-		//		}
-				return tmp;
+				this->_allocator.construct(node, value);
+				return node;
 			}
 
 			node_ptr
-			_clone_node( const_node_ptr x )
+			_clone_node( const_node_ptr node )
 			{
-				node_ptr	tmp(this->_create_node(x->content));
+				node_ptr	clone(this->_create_node(node->content));
 
-				tmp->color = x->color;
-				tmp->left = 0;
-				tmp->right = 0;
-				return tmp;
+				clone->color = node->color;
+				clone->left = 0;
+				clone->right = 0;
+				return clone;
 			}
 
 			void
@@ -880,7 +871,7 @@ namespace	ft
 			_insert( node_ptr pos, node_ptr parent,
 					const value_type& value )
 			{
-				bool		insert_left = (pos != 0 || parent == &this->_sentinel
+				bool		insert_left = (pos != 0 || parent == this->_end()
 										|| this->_key_compare(value.first, tree::_key(parent)));
 
 				node_ptr	node = this->_create_node(value);
