@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-void	testPair( void )
+void	test_pair( void )
 {
 	std::pair<std::string, int>	std_p1;
 	std::pair<std::string, int>	std_p2( "tomatoes", 12 );

@@ -4,7 +4,7 @@
 #include <iterator>
 #include <iostream>
 
-void	testReverseIterator( void )
+void	test_reverse_iterator( void )
 {
 	std::vector<int>										intVector;
 	std::map<int, int>										intMap;

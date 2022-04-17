@@ -1,12 +1,12 @@
 #ifndef TEST_HPP
 # define TEST_HPP
 
-void	testIs_integral( void );
-void	testEnable_if( void );
-void	testPair( void );
-void	testEqual( void );
-void	testLexicographical_compare( void );
-void	testReverseIterator( void );
+void	test_is_integral( void );
+void	test_enable_if( void );
+void	test_pair( void );
+void	test_equal( void );
+void	test_lexicographical_compare( void );
+void	test_reverse_iterator( void );
 
 void	vector_old_test( void );
 void	vector_default_constructor( void );

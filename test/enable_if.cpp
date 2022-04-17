@@ -15,7 +15,7 @@ typename ft::enable_if<ft::is_integral<T>::value, bool>::type ft_isOdd( T i )
 	return i % 2;
 }
 
-void	testEnable_if( void )
+void	test_enable_if( void )
 {
 	short int	i = 2;
 

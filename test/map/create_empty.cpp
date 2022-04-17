@@ -40,7 +40,7 @@ void	map_create_empty(void)
 
 	std::cout  << "Best player is = " << play_map[20] << std::endl;
 
-	map_type		play_map3;
+	map_type		play_map3(play_map2.begin(), play_map2.end());
 	map_iterator	map3_it = play_map3.end();
 
 	play_map3.insert(play_map3.begin(), map_type::value_type(1, "Courtois"));

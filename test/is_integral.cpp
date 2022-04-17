@@ -4,7 +4,7 @@
 
 class	A {};
 
-void	testIs_integral( void )
+void	test_is_integral( void )
 {
 	std::cout << std::endl << "* utils: is_integral TEST: *" << std::endl; 
 

@@ -10,7 +10,7 @@ bool	pred( int x, int y )
 	return x == y;
 }
 
-void	testEqual( void )
+void	test_equal( void )
 {
 	int					a[] = { 10, 21, 22, 45, 12, 34 };
 	std::vector<int>	v1( a, a + 5 );

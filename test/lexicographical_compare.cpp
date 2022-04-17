@@ -9,7 +9,7 @@ bool	cmp( char c1, char c2 )
 	return c1 < c2;
 }
 
-void	testLexicographical_compare( void )
+void	test_lexicographical_compare( void )
 {
 	char				a[] = { 'a', 'b', 'c', 'd', 'e' };
 	std::vector<char>	v1(	a, a + 5 );

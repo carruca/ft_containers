@@ -22,20 +22,16 @@ int	main( void )
 {
 //	atexit(check_leaks);
 
-	unsigned long	begin, end;
-
-	begin = get_time();
+	unsigned long	begin(get_time());
 
 //utils
 
-//	testIs_integral();
-//	testEnable_if();
-//	testPair();
-//	testEqual();
-//	testLexicographical_compare();
-//	testReverseIterator();
+	test_pair();
+	test_equal();
+	test_lexicographical_compare();
+	test_reverse_iterator();
 
-//	vector_old_test();
+	vector_old_test();
 
 //vector
 
@@ -68,8 +64,7 @@ int	main( void )
 	stack_size();
 	stack_relationals();
 
-	end = get_time();
-	std::cout << "time duration = " << end - begin << std::endl;
+	std::cout << "time duration = " << (get_time() - begin) << std::endl;
 
 	return 0;
 }

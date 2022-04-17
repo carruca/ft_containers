@@ -177,10 +177,7 @@ namespace	ft
 			ft::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-				ft::pair<iterator, bool>	ret(this->_tree.insert(value));
-
-			//	this->_tree.debug();
-				return ret;
+				return ft::pair<iterator, bool>(this->_tree.insert(value));
 			}
 
 			iterator

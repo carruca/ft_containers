@@ -28,10 +28,10 @@ TEST_VECTOR		= old_test.cpp						\
 				  insert.cpp						\
 				  reserve.cpp
 
-TEST_UTILS		= pairTest.cpp						\
-				  equalTest.cpp						\
-				  lexicographical_compareTest.cpp 	\
-				  reverse_iteratorTest.cpp
+TEST_UTILS		= pair.cpp						\
+				  equal.cpp						\
+				  lexicographical_compare.cpp 	\
+				  reverse_iterator.cpp
 
 SRC				= $(addprefix $(TEST_DIR),						\
 				  main.cpp										\
