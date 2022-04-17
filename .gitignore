@@ -1,4 +1,5 @@
-ft_tester
+tester
 tags
 obj/
 *.swp
+*output

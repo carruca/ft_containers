@@ -1,4 +1,4 @@
-NAME			= ft_tester
+NAME			= tester
 
 INC				= -I$(CONTAINER_DIR) -I$(ITER_DIR) -I$(TYPES_DIR) -I$(ALG_DIR) -I$(UTIL_DIR) -I$(TEST_DIR)
 
@@ -18,9 +18,9 @@ STD_FLAG		= -D USING_STD=1
 DEBUG			= -g3
 SANITIZE		= -fsanitize=address
 
-OUTPUT_FT		= output_ft
-OUTPUT_STD		= output_std
-DIFF_OUTPUT		= diff_output
+OUTPUT_FT		= ft_output
+OUTPUT_STD		= std_output
+OUTPUT_DIFF		= diff_output
 
 all:		$(NAME)
 #all:		sanitize
@@ -49,25 +49,26 @@ sanitize:	$(NAME)
 run:		all
 	./$(NAME)
 
-ft:			$(NAME)
-	./$(NAME) > $(OUTPUT_FT)
-
 std:		CXXFLAGS += $(STD_FLAG)
-std:		$(NAME)
+std:		re
+
+output_std:	std
 	./$(NAME) > $(OUTPUT_STD)
 
-test:
-	$(MAKE) fclean std
-	$(MAKE) fclean ft
-	diff $(OUTPUT_STD) $(OUTPUT_FT) > $(DIFF_OUTPUT)
+output_ft:	re
+	./$(NAME) > $(OUTPUT_FT)
+
+test:		output_std
+	$(MAKE) output_ft
+	diff $(OUTPUT_STD) $(OUTPUT_FT) > $(OUTPUT_DIFF)
 
 test_clean:
-	$(RM) $(OUTPUT_STD) $(OUTPUT_FT) $(DIFF_OUTPUT)
+	$(RM) $(OUTPUT_STD) $(OUTPUT_FT) $(OUTPUT_DIFF)
 
 tag:
-	ctags $(SRC)
+	ctags $(SRCS)
 
 re:			fclean all
 
-.SILENT: run tag fclean clean
-.PHONY: all clean fclean re std ft test test_clean
+.SILENT: run tag clean fclean test_clean
+.PHONY: all clean fclean re std output_std run test test_clean sanitize

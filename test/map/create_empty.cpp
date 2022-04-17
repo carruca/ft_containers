@@ -65,7 +65,7 @@ void	map_create_empty(void)
 	std::cout << "-----------------------" << std::endl;
 
 	std::cout << "SIZEOF MAP_TYPE" << std::endl;
-	std::cout << "size of string = " << sizeof(std::string) << std::endl;
-	std::cout << "size of string map = " << sizeof(map_type) << std::endl;
-	std::cout << "size of int map = " << sizeof(intMap_type) << std::endl;
+	std::cout << "sizeof string = " << sizeof(std::string) << std::endl;
+	std::cout << "sizeof string map = " << sizeof(map_type) << std::endl;
+	std::cout << "sizeof int map = " << sizeof(intMap_type) << std::endl;
 }
