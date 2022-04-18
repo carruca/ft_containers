@@ -29,6 +29,7 @@ void	map_relational_oper( void );
 void	map_swap( void );
 void	map_insert( void );
 void	map_erase( void );
+void	map_count( void );
 
 void	stack_pop( void );
 void	stack_size( void );

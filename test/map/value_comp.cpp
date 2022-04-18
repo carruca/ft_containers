@@ -30,4 +30,8 @@ void	map_value_comp( void )
 	ret = foo_map.value_comp()(*west, *mid);
 	if (!ret)
 		std::cout << "node : first = " << mid->first << " : second = " << mid->second << " is smaller" << std::endl;
+
+	intMap_type::key_compare	comp(foo_map.key_comp());
+
+	std::cout << "the first is " << (comp(bar_map.begin()->first, (++bar_map.begin())->first) ? "" : "NOT") << " the smallest one" << std::endl;
 }

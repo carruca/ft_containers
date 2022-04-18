@@ -33,11 +33,7 @@ void	vector_const_iterators( void )
 	std::cout << "max_size of const vector 3 = " << v3.max_size() << std::endl;
 	std::cout << "capacity of const vector 3 = " << v3.capacity() << std::endl;
 	std::cout << "vector 2 is " << (v2.empty() ? "empty" : "not empty") << std::endl;
-
-	const vector_reverse_iterator	start(v1.rend());
-
 	std::cout << "size of const vector 1 = " << v3.size() << std::endl;
-	std::cout << "first position of const vector 1 = " << *start << std::endl;
 	std::cout << "third position of const vector 1 = " << v1[3] << std::endl;
 
 	try

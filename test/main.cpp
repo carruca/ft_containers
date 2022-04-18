@@ -57,6 +57,7 @@ int	main( void )
 	map_swap();
 	map_insert();
 	map_erase();
+	map_count();
 
 //stack
 

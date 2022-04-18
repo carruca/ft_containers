@@ -183,10 +183,7 @@ namespace	ft
 			iterator
 			insert( iterator position, const value_type& value )
 			{
-				iterator	ret(this->_tree.insert(position, value));
-
-			//	this->_tree.debug();
-				return ret;
+				return iterator(this->_tree.insert(position, value));
 			}
 
 			template< typename InputIterator >

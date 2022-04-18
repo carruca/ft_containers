@@ -16,7 +16,8 @@ MAP_TEST		= lower_bound.cpp					\
 				  relationals.cpp					\
 				  swap.cpp							\
 				  insert.cpp						\
-				  erase.cpp
+				  erase.cpp							\
+				  count.cpp
 
 VECTOR_DIR		= vector/
 TEST_VECTOR		= old_test.cpp						\
